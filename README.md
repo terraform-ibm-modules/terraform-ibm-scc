@@ -13,7 +13,7 @@ Update status and "latest release" badges:
 [![semantic-release](https://img.shields.io/badge/%20%20%F0%9F%93%A6%F0%9F%9A%80-semantic--release-e10079.svg)](https://github.com/semantic-release/semantic-release)
 
 <!-- Add a description of module(s) in this repo -->
-TODO: Replace me with description of the module(s) in this repo
+This module creates a security and compliance center instance in IBM Cloud Account.
 
 
 <!-- Below content is automatically populated via pre-commit hook -->
@@ -22,7 +22,6 @@ TODO: Replace me with description of the module(s) in this repo
 * [terraform-ibm-scc](#terraform-ibm-scc)
 * [Examples](./examples)
     * [Basic example](./examples/basic)
-    * [Complete example](./examples/complete)
 * [Contributing](#contributing)
 <!-- END OVERVIEW HOOK -->
 
@@ -40,6 +39,13 @@ https://terraform-ibm-modules.github.io/documentation/#/implementation-guideline
 ## terraform-ibm-scc
 
 ### Usage
+
+  source            = "terraform-ibm-modules/scc/ibm"
+  version           = "X.X.X" # Replace "X.X.X" with a release version to lock into a specific release
+  instance_name     = "my-scc-instance"
+  plan              = "security-compliance-center-standard-plan"
+  region            = "us-south"
+  resource_group_id = "xxXXxxXXxXxXXXXxxXxxxXXXXxXXXXX"
 
 <!--
 Add an example of the use of the module in the following code block.
@@ -66,12 +72,8 @@ Manage > Access (IAM) > Access groups > Access policies.
 You need the following permissions to run this module.
 
 - Account Management
-    - **Sample Account Service** service
-        - `Editor` platform access
-        - `Manager` service access
-    - IAM Services
-        - **Sample Cloud Service** service
-            - `Administrator` platform access
+    - Security and Compliance Center service
+        - `Administrator` access
 -->
 
 <!-- NO PERMISSIONS FOR MODULE
@@ -89,6 +91,7 @@ statement instead the previous block.
 | Name | Version |
 |------|---------|
 | <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) | >= 1.3.0, <1.6.0 |
+| <a name="requirement_ibm"></a> [ibm](#requirement\_ibm) | 1.61.0 |
 
 ### Modules
 
@@ -96,15 +99,28 @@ No modules.
 
 ### Resources
 
-No resources.
+| Name | Type |
+|------|------|
+| [ibm_resource_instance.scc_instance](https://registry.terraform.io/providers/IBM-Cloud/ibm/1.61.0/docs/resources/resource_instance) | resource |
 
 ### Inputs
 
-No inputs.
+| Name | Description | Type | Default | Required |
+|------|-------------|------|---------|:--------:|
+| <a name="input_instance_name"></a> [instance\_name](#input\_instance\_name) | Name of the security and compliance instance that will be provisioned by this module | `string` | n/a | yes |
+| <a name="input_plan"></a> [plan](#input\_plan) | Pricing plan to create SCC instance. Options include Standard or Trial | `string` | n/a | yes |
+| <a name="input_region"></a> [region](#input\_region) | Region where SCC instance will be created | `string` | n/a | yes |
+| <a name="input_resource_group_id"></a> [resource\_group\_id](#input\_resource\_group\_id) | The id of the resource group to create the SCC instance | `string` | n/a | yes |
+| <a name="input_resource_tags"></a> [resource\_tags](#input\_resource\_tags) | A list of tags applied to the resources created by the module | `list(string)` | `[]` | no |
 
 ### Outputs
 
-No outputs.
+| Name | Description |
+|------|-------------|
+| <a name="output_instance_id"></a> [instance\_id](#output\_instance\_id) | The id of the SCC instance created by this module |
+| <a name="output_instance_name"></a> [instance\_name](#output\_instance\_name) | The name of the SCC instance created by this module |
+| <a name="output_location"></a> [location](#output\_location) | The location of the SCC instance created by this module |
+| <a name="output_plan"></a> [plan](#output\_plan) | The plan of the SCC instance created by this module |
 <!-- END OF PRE-COMMIT-TERRAFORM DOCS HOOK -->
 
 <!-- Leave this section as is so that your module has a link to local development environment set up steps for contributors to follow -->

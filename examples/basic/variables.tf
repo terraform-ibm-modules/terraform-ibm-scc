@@ -17,7 +17,7 @@ variable "region" {
 variable "prefix" {
   type        = string
   description = "Prefix to append to all resources created by this example"
-  default     = "basic"
+  default     = "test"
 }
 
 variable "resource_group" {
@@ -30,4 +30,10 @@ variable "resource_tags" {
   type        = list(string)
   description = "Optional list of tags to be added to created resources"
   default     = []
+}
+
+variable "plan" {
+  description = "Pricing plan to create SCC instance. Options include Standard or Trial"
+  type        = string
+  default     = "security-compliance-center-standard-plan"
 }
