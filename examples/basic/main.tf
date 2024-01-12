@@ -8,7 +8,6 @@ module "resource_group" {
 module "create_scc_instance" {
   source            = "../.."
   instance_name     = "${var.prefix}-scc-instance"
-  plan              = var.plan
   region            = var.region
   resource_group_id = module.resource_group.resource_group_id
   resource_tags     = var.resource_tags

@@ -7,32 +7,32 @@ output "resource_group_id" {
   value       = module.resource_group.resource_group_id
 }
 
-output "instance_id" {
+output "id" {
   description = "The id of the SCC instance created by this module"
   value       = module.create_scc_instance.id
 }
 
-output "instance_guid" {
+output "guid" {
   description = "The GUID of the SCC instance created by this module"
   value       = module.create_scc_instance.guid
 }
 
-output "instance_crn" {
+output "crn" {
   description = "The CRN of the SCC instance created by this module"
   value       = module.create_scc_instance.crn
 }
 
-output "instance_name" {
+output "name" {
   description = "The name of the SCC instance created by this module"
   value       = module.create_scc_instance.name
 }
 
-output "instance_location" {
+output "location" {
   description = "The location of the SCC instance created by this module"
   value       = module.create_scc_instance.location
 }
 
-output "instance_plan" {
+output "plan" {
   description = "The pricing plan used to create SCC instance in this module"
   value       = module.create_scc_instance.plan
 }
