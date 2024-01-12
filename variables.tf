@@ -15,11 +15,23 @@ variable "instance_name" {
 }
 
 variable "plan" {
-  description = "Pricing plan to create SCC instance. Options include Standard or Trial"
+  description = "Pricing plan to create SCC instance. Options include security-compliance-center-standard-plan or security-compliance-center-trial-plan"
   type        = string
+  default     = "security-compliance-center-standard-plan"
+
+  validation {
+    condition     = contains(["security-compliance-center-standard-plan", "security-compliance-center-trial-plan"], var.plan)
+    error_message = "Invalid input, options include: \"security-compliance-center-standard-plan\", \"security-compliance-center-trial-plan\"."
+  }
 }
 
 variable "region" {
   description = "Region where SCC instance will be created"
   type        = string
+  default     = "us-south"
+
+  validation {
+    condition     = contains(["us-south", "ca-tor", "eu-es", "eu-de"], var.region)
+    error_message = "Invalid input, options: \"us-south\", \"ca-tor\", \"eu-es\", \"eu-de\"."
+  }
 }

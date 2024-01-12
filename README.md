@@ -1,19 +1,15 @@
 <!-- Update the title -->
 # IBM Security and Compliance Center module
 
-<!--
-Update status and "latest release" badges:
-  1. For the status options, see https://terraform-ibm-modules.github.io/documentation/#/badge-status
-  2. Update the "latest release" badge to point to the correct module's repo. Replace "terraform-ibm-module-template" in two places.
--->
-[![Incubating (Not yet consumable)](https://img.shields.io/badge/status-Incubating%20(Not%20yet%20consumable)-red)](https://terraform-ibm-modules.github.io/documentation/#/badge-status)
+[![Graduated (Supported)](https://img.shields.io/badge/Status-Graduated%20(Supported)-brightgreen)](https://terraform-ibm-modules.github.io/documentation/#/badge-status)
 [![latest release](https://img.shields.io/github/v/release/terraform-ibm-modules/terraform-ibm-scc?logo=GitHub&sort=semver)](https://github.com/terraform-ibm-modules/terraform-ibm-scc/releases/latest)
 [![pre-commit](https://img.shields.io/badge/pre--commit-enabled-brightgreen?logo=pre-commit&logoColor=white)](https://github.com/pre-commit/pre-commit)
 [![Renovate enabled](https://img.shields.io/badge/renovate-enabled-brightgreen.svg)](https://renovatebot.com/)
 [![semantic-release](https://img.shields.io/badge/%20%20%F0%9F%93%A6%F0%9F%9A%80-semantic--release-e10079.svg)](https://github.com/semantic-release/semantic-release)
 
 <!-- Add a description of module(s) in this repo -->
-This module creates a security and compliance center instance in IBM Cloud Account.
+This module configures an IBM Cloud Security and Compliance instance.
+Currently, this module lacks the capability to configure an SCC instance with a Cloud Object Storage bucket. However, there is a provider issue to track this addition - https://github.com/IBM-Cloud/terraform-provider-ibm/issues/4881
 
 
 <!-- Below content is automatically populated via pre-commit hook -->
@@ -91,7 +87,7 @@ statement instead the previous block.
 | Name | Version |
 |------|---------|
 | <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) | >= 1.3.0, <1.6.0 |
-| <a name="requirement_ibm"></a> [ibm](#requirement\_ibm) | 1.61.0 |
+| <a name="requirement_ibm"></a> [ibm](#requirement\_ibm) | >=1.61.0, <2.0.0 |
 
 ### Modules
 
@@ -101,15 +97,15 @@ No modules.
 
 | Name | Type |
 |------|------|
-| [ibm_resource_instance.scc_instance](https://registry.terraform.io/providers/IBM-Cloud/ibm/1.61.0/docs/resources/resource_instance) | resource |
+| [ibm_resource_instance.scc_instance](https://registry.terraform.io/providers/IBM-Cloud/ibm/latest/docs/resources/resource_instance) | resource |
 
 ### Inputs
 
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
 | <a name="input_instance_name"></a> [instance\_name](#input\_instance\_name) | Name of the security and compliance instance that will be provisioned by this module | `string` | n/a | yes |
-| <a name="input_plan"></a> [plan](#input\_plan) | Pricing plan to create SCC instance. Options include Standard or Trial | `string` | n/a | yes |
-| <a name="input_region"></a> [region](#input\_region) | Region where SCC instance will be created | `string` | n/a | yes |
+| <a name="input_plan"></a> [plan](#input\_plan) | Pricing plan to create SCC instance. Options include security-compliance-center-standard-plan or security-compliance-center-trial-plan | `string` | `"security-compliance-center-standard-plan"` | no |
+| <a name="input_region"></a> [region](#input\_region) | Region where SCC instance will be created | `string` | `"us-south"` | no |
 | <a name="input_resource_group_id"></a> [resource\_group\_id](#input\_resource\_group\_id) | The id of the resource group to create the SCC instance | `string` | n/a | yes |
 | <a name="input_resource_tags"></a> [resource\_tags](#input\_resource\_tags) | A list of tags applied to the resources created by the module | `list(string)` | `[]` | no |
 
@@ -117,10 +113,12 @@ No modules.
 
 | Name | Description |
 |------|-------------|
-| <a name="output_instance_id"></a> [instance\_id](#output\_instance\_id) | The id of the SCC instance created by this module |
-| <a name="output_instance_name"></a> [instance\_name](#output\_instance\_name) | The name of the SCC instance created by this module |
+| <a name="output_crn"></a> [crn](#output\_crn) | The CRN of the SCC instance created by this module |
+| <a name="output_guid"></a> [guid](#output\_guid) | The GUID of the SCC instance created by this module |
+| <a name="output_id"></a> [id](#output\_id) | The id of the SCC instance created by this module |
 | <a name="output_location"></a> [location](#output\_location) | The location of the SCC instance created by this module |
-| <a name="output_plan"></a> [plan](#output\_plan) | The plan of the SCC instance created by this module |
+| <a name="output_name"></a> [name](#output\_name) | The name of the SCC instance created by this module |
+| <a name="output_plan"></a> [plan](#output\_plan) | The pricing plan used to create SCC instance in this module |
 <!-- END OF PRE-COMMIT-TERRAFORM DOCS HOOK -->
 
 <!-- Leave this section as is so that your module has a link to local development environment set up steps for contributors to follow -->

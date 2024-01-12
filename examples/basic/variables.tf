@@ -33,7 +33,6 @@ variable "resource_tags" {
 }
 
 variable "plan" {
-  description = "Pricing plan to create SCC instance. Options include Standard or Trial"
+  description = "Pricing plan to create SCC instance. Options include security-compliance-center-standard-plan or security-compliance-center-trial-plan"
   type        = string
-  default     = "security-compliance-center-standard-plan"
 }

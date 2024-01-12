@@ -22,7 +22,7 @@ repository:
 
   # Uncomment this description property
   # and update the description to the current repo description.
-  description: "Creates security and compliance instance in IBM Cloud account"
+  description: "Configures an IBM Cloud Security and Compliance instance"
 
   # Use a comma-separated list of topics to set on the repo (ensure not to use any caps in the topic string).
-  topics: terraform, ibm-cloud, terraform-module
+  topics: terraform, ibm-cloud, terraform-module, core-team, supported, stable, scc, security, compliance
