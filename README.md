@@ -9,6 +9,7 @@
 
 <!-- Add a description of module(s) in this repo -->
 This module configures an IBM Cloud Security and Compliance instance.
+## Current Limitation
 Currently, this module lacks the capability to configure an SCC instance with a Cloud Object Storage bucket. However, there is a provider issue to track this addition - https://github.com/IBM-Cloud/terraform-provider-ibm/issues/4881
 
 
@@ -35,50 +36,22 @@ https://terraform-ibm-modules.github.io/documentation/#/implementation-guideline
 ## terraform-ibm-scc
 
 ### Usage
-
+```hcl
   source            = "terraform-ibm-modules/scc/ibm"
   version           = "X.X.X" # Replace "X.X.X" with a release version to lock into a specific release
   instance_name     = "my-scc-instance"
   plan              = "security-compliance-center-standard-plan"
   region            = "us-south"
   resource_group_id = "xxXXxxXXxXxXXXXxxXxxxXXXXxXXXXX"
-
-<!--
-Add an example of the use of the module in the following code block.
-
-Use real values instead of "var.<var_name>" or other placeholder values
-unless real values don't help users know what to change.
--->
-
-```hcl
-
 ```
 
 ### Required IAM access policies
 
-<!-- PERMISSIONS REQUIRED TO RUN MODULE
-If this module requires permissions, uncomment the following block and update
-the sample permissions, following the format.
-Replace the sample Account and IBM Cloud service names and roles with the
-information in the console at
-Manage > Access (IAM) > Access groups > Access policies.
--->
-
-<!--
 You need the following permissions to run this module.
 
 - Account Management
     - Security and Compliance Center service
         - `Administrator` access
--->
-
-<!-- NO PERMISSIONS FOR MODULE
-If no permissions are required for the module, uncomment the following
-statement instead the previous block.
--->
-
-<!-- No permissions are needed to run this module.-->
-
 
 <!-- Below content is automatically populated via pre-commit hook -->
 <!-- BEGINNING OF PRE-COMMIT-TERRAFORM DOCS HOOK -->

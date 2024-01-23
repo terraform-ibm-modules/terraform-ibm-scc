@@ -14,11 +14,11 @@ const basicExampleDir = "examples/basic"
 
 func setupOptions(t *testing.T, prefix string, dir string) *testhelper.TestOptions {
 	options := testhelper.TestOptionsDefaultWithVars(&testhelper.TestOptions{
-		Testing:       t,
-		TerraformDir:  dir,
-		Prefix:        prefix,
-		ResourceGroup: resourceGroup,
-		Region:        "us-south", // Locking into us-south as SCC instances can only be created in one of the following regions ["us-south", "ca-tor", "eu-es", "eu-de", "eu-fr2"]
+		Testing:            t,
+		TerraformDir:       dir,
+		Prefix:             prefix,
+		ResourceGroup:      resourceGroup,
+		BestRegionYAMLPath: "../common-dev-assets/common-go-assets/cloudinfo-region-scc-prefs.yaml",
 	})
 	return options
 }
