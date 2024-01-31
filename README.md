@@ -19,6 +19,7 @@ Currently, this module lacks the capability to configure an SCC instance with a 
 * [terraform-ibm-scc](#terraform-ibm-scc)
 * [Examples](./examples)
     * [Basic example](./examples/basic)
+    * [Complete example](./examples/complete)
 * [Contributing](#contributing)
 <!-- END OVERVIEW HOOK -->
 
@@ -37,12 +38,14 @@ https://terraform-ibm-modules.github.io/documentation/#/implementation-guideline
 
 ### Usage
 ```hcl
+module "create_scc_instance" {
   source            = "terraform-ibm-modules/scc/ibm"
   version           = "X.X.X" # Replace "X.X.X" with a release version to lock into a specific release
   instance_name     = "my-scc-instance"
   plan              = "security-compliance-center-standard-plan"
   region            = "us-south"
   resource_group_id = "xxXXxxXXxXxXXXXxxXxxxXXXXxXXXXX"
+}
 ```
 
 ### Required IAM access policies
@@ -60,7 +63,7 @@ You need the following permissions to run this module.
 | Name | Version |
 |------|---------|
 | <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) | >= 1.3.0, <1.6.0 |
-| <a name="requirement_ibm"></a> [ibm](#requirement\_ibm) | >=1.61.0, <2.0.0 |
+| <a name="requirement_ibm"></a> [ibm](#requirement\_ibm) | >=1.62.0 |
 
 ### Modules
 
@@ -71,11 +74,15 @@ No modules.
 | Name | Type |
 |------|------|
 | [ibm_resource_instance.scc_instance](https://registry.terraform.io/providers/IBM-Cloud/ibm/latest/docs/resources/resource_instance) | resource |
+| [ibm_scc_instance_settings.scc_instance_settings](https://registry.terraform.io/providers/IBM-Cloud/ibm/latest/docs/resources/scc_instance_settings) | resource |
 
 ### Inputs
 
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
+| <a name="input_cos_bucket"></a> [cos\_bucket](#input\_cos\_bucket) | The name of the Cloud Object Storage bucket to be used in SCC instance | `string` | n/a | yes |
+| <a name="input_cos_instance_crn"></a> [cos\_instance\_crn](#input\_cos\_instance\_crn) | CRN of the Cloud Object Storage to store SCC data | `string` | n/a | yes |
+| <a name="input_en_instance_crn"></a> [en\_instance\_crn](#input\_en\_instance\_crn) | The CRN of Event Notifications instance to be used with SCC | `any` | `{}` | no |
 | <a name="input_instance_name"></a> [instance\_name](#input\_instance\_name) | Name of the security and compliance instance that will be provisioned by this module | `string` | n/a | yes |
 | <a name="input_plan"></a> [plan](#input\_plan) | Pricing plan to create SCC instance. Options include security-compliance-center-standard-plan or security-compliance-center-trial-plan | `string` | `"security-compliance-center-standard-plan"` | no |
 | <a name="input_region"></a> [region](#input\_region) | Region where SCC instance will be created | `string` | `"us-south"` | no |
