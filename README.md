@@ -55,6 +55,11 @@ You need the following permissions to run this module.
 - Account Management
     - Security and Compliance Center service
         - `Administrator` access
+- IAM Services
+    - Cloud Object Storage
+        - `Reader` access
+    - Event Notifications
+        - `Reader` access
 
 <!-- Below content is automatically populated via pre-commit hook -->
 <!-- BEGINNING OF PRE-COMMIT-TERRAFORM DOCS HOOK -->
