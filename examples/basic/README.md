@@ -8,5 +8,5 @@ The text below should describe exactly what resources are provisioned / configur
 
 A basic example that will provision the following:
 - A new resource group if one is not passed in.
-- A new Security and Compliance Center instance with new COS bucket configuration
+- A new Security and Compliance Center instance with COS bucket configuration
 - SCC and COS Service to service authorization policy.
