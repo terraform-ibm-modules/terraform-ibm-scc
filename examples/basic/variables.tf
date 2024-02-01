@@ -31,15 +31,3 @@ variable "resource_tags" {
   description = "Optional list of tags to be added to created resources"
   default     = []
 }
-
-variable "zone_vpc_crn_list" {
-  type        = list(string)
-  default     = []
-  description = "VPC CRN for the zones"
-}
-
-variable "zone_service_ref_list" {
-  description = "Service reference for the zone creation"
-  type        = list(string)
-  default     = ["cloud-object-storage", "compliance"]
-}

@@ -11,6 +11,33 @@ resource "ibm_resource_instance" "scc_instance" {
   tags              = var.resource_tags
 }
 
+data "ibm_iam_account_settings" "iam_account_settings" {
+}
+
+resource "ibm_iam_authorization_policy" "compliance-center_cos-s2s-access" {
+  count                       = var.skip_cos_iam_authorization_policy ? 1 : 0
+  source_service_name         = "compliance"
+  source_resource_instance_id = ibm_resource_instance.scc_instance.guid
+  roles                       = ["Writer"]
+
+  resource_attributes {
+    name     = "serviceName"
+    operator = "stringEquals"
+    value    = "cloud-object-storage"
+  }
+
+  resource_attributes {
+    name  = "serviceInstance"
+    value = var.cos_instance_crn
+  }
+
+  resource_attributes {
+    name     = "accountId"
+    operator = "stringEquals"
+    value    = data.ibm_iam_account_settings.iam_account_settings.account_id
+  }
+}
+
 resource "ibm_scc_instance_settings" "scc_instance_settings" {
   instance_id = resource.ibm_resource_instance.scc_instance.guid
   event_notifications {

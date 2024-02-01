@@ -57,7 +57,13 @@ variable "cos_bucket" {
 }
 
 variable "en_instance_crn" {
-  type        = any
-  default     = {} # temporary
+  type        = string
+  default     = ""
   description = "The CRN of Event Notifications instance to be used with SCC"
+}
+
+variable "skip_cos_iam_authorization_policy" {
+  type        = bool
+  default     = false
+  description = "Set to true to skip the creation of an IAM authorization policy that permits all SCC instances in the resource group to write to provided COS bucket"
 }
