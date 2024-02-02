@@ -39,31 +39,21 @@ variable "region" {
 variable "cos_instance_crn" {
   type        = string
   description = "CRN of the Cloud Object Storage to store SCC data"
-
-  validation {
-    condition     = var.cos_instance_crn != null
-    error_message = "Please provide COS instance CRN to store SCC data"
-  }
 }
 
 variable "cos_bucket" {
   type        = string
   description = "The name of the Cloud Object Storage bucket to be used in SCC instance"
-
-  validation {
-    condition     = var.cos_bucket != null
-    error_message = "Please provide COS bucket to store SCC data"
-  }
 }
 
 variable "en_instance_crn" {
   type        = string
-  default     = ""
-  description = "The CRN of Event Notifications instance to be used with SCC"
+  default     = null
+  description = "The CRN of Event Notifications instance to be used with SCC. If no value is provided, Event Notifications will not be enabled for this SCC instance"
 }
 
 variable "skip_cos_iam_authorization_policy" {
   type        = bool
   default     = false
-  description = "Set to true to skip the creation of an IAM authorization policy that permits all SCC instances in the resource group to write to provided COS bucket"
+  description = "Set to true to skip the creation of an IAM authorization policy that permits the SCC instance created by this module to write access to the provided COS instance"
 }

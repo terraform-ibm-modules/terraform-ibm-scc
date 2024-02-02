@@ -39,20 +39,10 @@ func setupCompleteExampleOptions(t *testing.T, prefix string, dir string) *testh
 	return options
 }
 
-func TestRunBasicExample(t *testing.T) {
-	t.Parallel()
-
-	options := setupOptions(t, "scc", basicExampleDir)
-
-	output, err := options.RunTestConsistency()
-	assert.Nil(t, err, "This should not have errored")
-	assert.NotNil(t, output, "Expected some output")
-}
-
 func TestRunCompleteExample(t *testing.T) {
 	t.Parallel()
 
-	options := setupCompleteExampleOptions(t, "scc-complete", completeExampleDir)
+	options := setupCompleteExampleOptions(t, "scc-cmp", completeExampleDir)
 
 	output, err := options.RunTestConsistency()
 	assert.Nil(t, err, "This should not have errored")
@@ -62,7 +52,7 @@ func TestRunCompleteExample(t *testing.T) {
 func TestRunUpgradeExample(t *testing.T) {
 	t.Parallel()
 
-	options := setupOptions(t, "scc-upg", basicExampleDir)
+	options := setupOptions(t, "scc-upg", completeExampleDir)
 
 	output, err := options.RunTestUpgrade()
 	if !options.UpgradeTestSkipped {

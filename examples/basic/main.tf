@@ -5,21 +5,15 @@ module "resource_group" {
   existing_resource_group_name = var.resource_group
 }
 
-resource "ibm_resource_instance" "cos_instance" {
-  name              = "${var.prefix}-cos-instance"
-  resource_group_id = module.resource_group.resource_group_id
-  service           = "cloud-object-storage"
-  plan              = "standard"
-  location          = "global"
+module "cos_instance" {
+  source                 = "terraform-ibm-modules/cos/ibm"
+  version                = "7.2.2"
+  cos_instance_name      = "${var.prefix}-cos19"
+  kms_encryption_enabled = false
+  retention_enabled      = false
+  resource_group_id      = module.resource_group.resource_group_id
+  bucket_name            = "${var.prefix}-b19"
 }
-
-resource "ibm_cos_bucket" "cos_bucket" {
-  bucket_name          = "${var.prefix}-cos-bucket"
-  resource_instance_id = ibm_resource_instance.cos_instance.id
-  region_location      = var.region
-  storage_class        = "standard"
-}
-
 
 module "create_scc_instance" {
   source                            = "../.."
@@ -27,8 +21,7 @@ module "create_scc_instance" {
   region                            = var.region
   resource_group_id                 = module.resource_group.resource_group_id
   resource_tags                     = var.resource_tags
-  cos_instance_crn                  = resource.ibm_resource_instance.cos_instance.crn
-  cos_bucket                        = resource.ibm_cos_bucket.cos_bucket.bucket_name
-  en_instance_crn                   = null
-  skip_cos_iam_authorization_policy = true
+  cos_instance_crn                  = module.cos_instance.cos_instance_id
+  cos_bucket                        = module.cos_instance.bucket_name
+  skip_cos_iam_authorization_policy = false
 }

@@ -44,10 +44,10 @@ output "en_crn" {
 
 output "cos_instance" {
   description = "The COS instance CRN created in this example"
-  value       = resource.ibm_resource_instance.cos_instance.crn
+  value       = module.cos_instance.cos_instance_id
 }
 
 output "cos_bucket" {
   description = "The COS bucket created in this example"
-  value       = resource.ibm_cos_bucket.cos_bucket.bucket_name
+  value       = module.cos_instance.bucket_name
 }
