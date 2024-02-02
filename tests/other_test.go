@@ -2,9 +2,9 @@
 package test
 
 import (
-	"testing"
-	"github.com/terraform-ibm-modules/ibmcloud-terratest-wrapper/testhelper"
 	"github.com/stretchr/testify/assert"
+	"github.com/terraform-ibm-modules/ibmcloud-terratest-wrapper/testhelper"
+	"testing"
 )
 
 func TestRunBasicExample(t *testing.T) {

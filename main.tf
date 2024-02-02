@@ -14,7 +14,7 @@ resource "ibm_resource_instance" "scc_instance" {
 data "ibm_iam_account_settings" "iam_account_settings" {
 }
 
-resource "ibm_iam_authorization_policy" "scc-cos-s2s-access" {
+resource "ibm_iam_authorization_policy" "scc_cos_s2s_access" {
   count                       = var.skip_cos_iam_authorization_policy ? 0 : 1
   source_service_name         = "compliance"
   source_resource_instance_id = ibm_resource_instance.scc_instance.guid
