@@ -10,7 +10,7 @@
 <!-- Add a description of module(s) in this repo -->
 This module configures an IBM Cloud Security and Compliance instance.
 ## Current Limitation
-Currently, this module lacks the capability to configure an SCC instance with a Cloud Object Storage bucket. However, there is a provider issue to track this addition - https://github.com/IBM-Cloud/terraform-provider-ibm/issues/4881
+Currently, this module lacks the capability to configure an SCC instance without an Event notification service integration. This issue is being tracked here - https://github.ibm.com/project-fortress/pm/issues/14661
 
 
 <!-- Below content is automatically populated via pre-commit hook -->
@@ -54,7 +54,10 @@ You need the following permissions to run this module.
 
 - Account Management
     - Security and Compliance Center service
-        - `Administrator` access
+        - `Administrator` platform access
+- IAM Services
+   - Event Notifications service
+        - `Manager` service access
 
 
 <!-- Below content is automatically populated via pre-commit hook -->
@@ -84,7 +87,8 @@ No modules.
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
 | <a name="input_cos_bucket"></a> [cos\_bucket](#input\_cos\_bucket) | The name of the Cloud Object Storage bucket to be used in SCC instance | `string` | n/a | yes |
-| <a name="input_cos_instance_crn"></a> [cos\_instance\_crn](#input\_cos\_instance\_crn) | CRN of the Cloud Object Storage to store SCC data | `string` | n/a | yes |
+| <a name="input_cos_instance_guid"></a> [cos\_instance\_guid](#input\_cos\_instance\_guid) | ID of the Cloud Object Storage to store SCC data | `string` | n/a | yes |
+| <a name="input_cos_instance_id"></a> [cos\_instance\_id](#input\_cos\_instance\_id) | ID of the Cloud Object Storage to store SCC data | `string` | n/a | yes |
 | <a name="input_en_instance_crn"></a> [en\_instance\_crn](#input\_en\_instance\_crn) | The CRN of Event Notifications instance to be used with SCC. If no value is provided, Event Notifications will not be enabled for this SCC instance | `string` | `null` | no |
 | <a name="input_instance_name"></a> [instance\_name](#input\_instance\_name) | Name of the security and compliance instance that will be provisioned by this module | `string` | n/a | yes |
 | <a name="input_plan"></a> [plan](#input\_plan) | Pricing plan to create SCC instance. Options include security-compliance-center-standard-plan or security-compliance-center-trial-plan | `string` | `"security-compliance-center-standard-plan"` | no |

@@ -7,6 +7,7 @@ import (
 	"testing"
 )
 
+// This test will fail till the SCC backend issue is fixed, tracking here https://github.ibm.com/project-fortress/pm/issues/14661
 func TestRunBasicExample(t *testing.T) {
 	t.Parallel()
 

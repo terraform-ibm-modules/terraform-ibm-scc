@@ -36,9 +36,14 @@ variable "region" {
   }
 }
 
-variable "cos_instance_crn" {
+variable "cos_instance_guid" {
   type        = string
-  description = "CRN of the Cloud Object Storage to store SCC data"
+  description = "ID of the Cloud Object Storage to store SCC data"
+}
+
+variable "cos_instance_id" {
+  type        = string
+  description = "ID of the Cloud Object Storage to store SCC data"
 }
 
 variable "cos_bucket" {

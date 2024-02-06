@@ -29,7 +29,7 @@ resource "ibm_iam_authorization_policy" "scc_cos_s2s_access" {
   resource_attributes {
     name     = "serviceInstance"
     operator = "stringEquals"
-    value    = var.cos_instance_crn
+    value    = var.cos_instance_guid
   }
 
   resource_attributes {
@@ -45,7 +45,7 @@ resource "ibm_scc_instance_settings" "scc_instance_settings" {
     instance_crn = var.en_instance_crn
   }
   object_storage {
-    instance_crn = var.cos_instance_crn
+    instance_crn = var.cos_instance_id
     bucket       = var.cos_bucket
   }
 }

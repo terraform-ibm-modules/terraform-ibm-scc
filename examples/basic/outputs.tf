@@ -37,12 +37,17 @@ output "plan" {
   value       = module.create_scc_instance.plan
 }
 
-output "cos_instance" {
-  description = "The COS instance CRN created in this example"
-  value       = module.cos_instance.cos_instance_id
+output "cos_instance_guid" {
+  description = "The COS instance ID created in this example"
+  value       = module.cos.cos_instance_guid
+}
+
+output "cos_instance_id" {
+  description = "The COS instance ID created in this example"
+  value       = module.cos.cos_instance_id
 }
 
 output "cos_bucket" {
   description = "The COS bucket created in this example"
-  value       = module.cos_instance.bucket_name
+  value       = module.cos.bucket_name
 }
