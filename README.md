@@ -9,9 +9,6 @@
 
 <!-- Add a description of module(s) in this repo -->
 This module configures an IBM Cloud Security and Compliance instance.
-## Current Limitation
-Currently, this module lacks the capability to configure an SCC instance without an Event notification service integration. This issue is being tracked here - https://github.ibm.com/project-fortress/pm/issues/14661
-
 
 <!-- Below content is automatically populated via pre-commit hook -->
 <!-- BEGIN OVERVIEW HOOK -->

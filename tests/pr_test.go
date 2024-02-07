@@ -49,6 +49,16 @@ func TestRunCompleteExample(t *testing.T) {
 	assert.NotNil(t, output, "Expected some output")
 }
 
+func TestRunBasicExample(t *testing.T) {
+	t.Parallel()
+
+	options := setupOptions(t, "scc", basicExampleDir)
+
+	output, err := options.RunTestConsistency()
+	assert.Nil(t, err, "This should not have errored")
+	assert.NotNil(t, output, "Expected some output")
+}
+
 func TestRunUpgradeExample(t *testing.T) {
 	t.Parallel()
 

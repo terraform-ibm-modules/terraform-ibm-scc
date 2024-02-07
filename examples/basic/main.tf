@@ -8,7 +8,7 @@ module "resource_group" {
 module "cos" {
   source                 = "terraform-ibm-modules/cos/ibm"
   version                = "7.2.2"
-  cos_instance_name      = "${var.prefix}-cos19"
+  cos_instance_name      = "${var.prefix}-cos"
   kms_encryption_enabled = false
   retention_enabled      = false
   resource_group_id      = module.resource_group.resource_group_id
@@ -25,4 +25,5 @@ module "create_scc_instance" {
   cos_bucket                        = module.cos.bucket_name
   cos_instance_id                   = module.cos.cos_instance_id
   skip_cos_iam_authorization_policy = false
+  skip_en_iam_authorization_policy  = true
 }

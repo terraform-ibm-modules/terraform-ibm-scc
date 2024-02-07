@@ -39,6 +39,31 @@ resource "ibm_iam_authorization_policy" "scc_cos_s2s_access" {
   }
 }
 
+resource "ibm_iam_authorization_policy" "scc_en_s2s_access" {
+  count                       = var.skip_en_iam_authorization_policy ? 0 : 1
+  source_service_name         = "compliance"
+  source_resource_instance_id = ibm_resource_instance.scc_instance.guid
+  roles                       = ["Event Source Manager"]
+
+  resource_attributes {
+    name     = "serviceName"
+    operator = "stringEquals"
+    value    = "event-notifications"
+  }
+
+  resource_attributes {
+    name     = "serviceInstance"
+    operator = "stringEquals"
+    value    = var.en_guid
+  }
+
+  resource_attributes {
+    name     = "accountId"
+    operator = "stringEquals"
+    value    = data.ibm_iam_account_settings.iam_account_settings.account_id
+  }
+}
+
 resource "ibm_scc_instance_settings" "scc_instance_settings" {
   instance_id = resource.ibm_resource_instance.scc_instance.guid
   event_notifications {
