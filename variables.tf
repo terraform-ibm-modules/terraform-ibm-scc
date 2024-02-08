@@ -57,20 +57,8 @@ variable "en_instance_crn" {
   description = "The CRN of Event Notifications instance to be used with SCC. If no value is provided, Event Notifications will not be enabled for this SCC instance"
 }
 
-variable "en_guid" {
-  type        = string
-  default     = null
-  description = "The GUID of Event Notifications instance to be used with SCC. If no value is provided, Event Notifications will not be enabled for this SCC instance"
-}
-
 variable "skip_cos_iam_authorization_policy" {
   type        = bool
   default     = false
   description = "Set to true to skip the creation of an IAM authorization policy that permits the SCC instance created by this module to write access to the provided COS instance"
-}
-
-variable "skip_en_iam_authorization_policy" {
-  type        = bool
-  default     = true
-  description = "Set to true to skip the creation of an IAM authorization policy that permits the SCC instance created by this module to access the Event notification service instance"
 }

@@ -36,7 +36,5 @@ module "create_scc_instance" {
   cos_bucket                        = module.cos.bucket_name
   cos_instance_id                   = module.cos.cos_instance_id
   en_instance_crn                   = module.event_notification.crn
-  en_guid                           = module.event_notification.guid
   skip_cos_iam_authorization_policy = false
-  skip_en_iam_authorization_policy  = false
 }

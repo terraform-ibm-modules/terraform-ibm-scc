@@ -37,11 +37,6 @@ output "plan" {
   value       = module.create_scc_instance.plan
 }
 
-output "en_guid" {
-  description = "The GUID of the event notification instance created in this module"
-  value       = module.event_notification.guid
-}
-
 output "en_crn" {
   description = "The CRN of the event notification instance created in this module"
   value       = module.event_notification.crn
