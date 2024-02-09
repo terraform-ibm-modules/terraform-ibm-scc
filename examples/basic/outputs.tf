@@ -37,11 +37,6 @@ output "plan" {
   value       = module.create_scc_instance.plan
 }
 
-output "cos_instance_guid" {
-  description = "The COS instance ID created in this example"
-  value       = module.cos.cos_instance_guid
-}
-
 output "cos_instance_id" {
   description = "The COS instance ID created in this example"
   value       = module.cos.cos_instance_id

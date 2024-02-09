@@ -42,11 +42,6 @@ output "en_crn" {
   value       = module.event_notification.crn
 }
 
-output "cos_instance_guid" {
-  description = "The COS instance ID created in this example"
-  value       = module.cos.cos_instance_guid
-}
-
 output "cos_instance_id" {
   description = "The COS instance ID created in this example"
   value       = module.cos.cos_instance_id
