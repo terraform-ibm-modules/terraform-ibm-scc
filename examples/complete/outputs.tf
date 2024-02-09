@@ -37,6 +37,11 @@ output "plan" {
   value       = module.create_scc_instance.plan
 }
 
+output "en_crn" {
+  description = "The CRN of the event notification instance created in this module"
+  value       = module.event_notification.crn
+}
+
 output "cos_instance_id" {
   description = "The COS instance ID created in this example"
   value       = module.cos.cos_instance_id
