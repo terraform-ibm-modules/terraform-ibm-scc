@@ -2,7 +2,7 @@
 package test
 
 import (
-	"math/rand"
+	// "math/rand"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
@@ -27,11 +27,11 @@ func setupBasicExampleOptions(t *testing.T, prefix string, dir string) *testhelp
 
 func setupCompleteExampleOptions(t *testing.T, prefix string, dir string) *testhelper.TestOptions {
 	// Use a region that is supported for both Event Notifications and SCC
-	validRegions := []string{
-		"us-south",
-		"eu-de",
-		"eu-es",
-	}
+	// validRegions := []string{
+	// 	"us-south",
+	// 	"eu-de",
+	// 	"eu-es",
+	// }
 	options := testhelper.TestOptionsDefaultWithVars(&testhelper.TestOptions{
 		Testing:      t,
 		TerraformDir: dir,
