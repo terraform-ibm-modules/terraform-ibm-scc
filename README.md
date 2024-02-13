@@ -10,6 +10,75 @@
 <!-- Add a description of module(s) in this repo -->
 This module configures an IBM Cloud Security and Compliance instance.
 
+## Known limitations
+There is currently a known issue with the IBM provider (https://github.com/IBM-Cloud/terraform-provider-ibm/issues/5131) where the provider is always trying to use the us-south endpoint when trying to configure the instance, even if the instance is not in us-south. You will see the following error on apply:
+```
+│ Error: UpdateSettingsWithContext failed The requested resource was not found
+│ {
+│     "StatusCode": 404,
+│     "Headers": {
+│         "Cache-Control": [
+│             "no-store"
+│         ],
+│         "Cf-Cache-Status": [
+│             "DYNAMIC"
+│         ],
+│         "Cf-Ray": [
+│             "854ebcb0de6ebb06-MXP"
+│         ],
+│         "Content-Type": [
+│             "application/json; charset=utf-8"
+│         ],
+│         "Date": [
+│             "Tue, 13 Feb 2024 17:19:35 GMT"
+│         ],
+│         "Server": [
+│             "cloudflare"
+│         ],
+│         "Strict-Transport-Security": [
+│             "max-age=31536000; includeSubDomains"
+│         ],
+│         "Transaction-Id": [
+│             "e2d78bad-a4c6-4dd9-8c47-ffe11088fcde"
+│         ],
+│         "X-Content-Type-Options": [
+│             "nosniff"
+│         ],
+│         "X-Correlation-Id": [
+│             "e2d78bad-a4c6-4dd9-8c47-ffe11088fcde"
+│         ],
+│         "X-Envoy-Upstream-Service-Time": [
+│             "27"
+│         ],
+│         "X-Request-Id": [
+│             "c3eaf1cb-f54b-4fcd-bda6-78f9da654e2c"
+│         ]
+│     },
+│     "Result": {
+│         "errors": [
+│             {
+│                 "code": "not_found",
+│                 "message": "The requested resource was not found",
+│                 "more_info": "https://cloud.ibm.com/apidocs/security-compliance-admin"
+│             }
+│         ],
+│         "status_code": 404,
+│         "trace": "e2d78bad-a4c6-4dd9-8c47-ffe11088fcde"
+│     },
+│     "RawResult": null
+│ }
+│
+│
+│   with module.create_scc_instance.ibm_scc_instance_settings.scc_instance_settings,
+│   on ../../main.tf line 42, in resource "ibm_scc_instance_settings" "scc_instance_settings":
+│   42: resource "ibm_scc_instance_settings" "scc_instance_settings" {
+```
+As a workaround, you can set the following environment variable before running apply:
+```
+export IBMCLOUD_SCC_API_ENDPOINT=https://REGION.compliance.cloud.ibm.com
+```
+where `REGION` is the value you have set for the modules `region` input variable.
+
 <!-- Below content is automatically populated via pre-commit hook -->
 <!-- BEGIN OVERVIEW HOOK -->
 ## Overview

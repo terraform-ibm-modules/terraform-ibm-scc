@@ -15,11 +15,12 @@ const completeExampleDir = "examples/complete"
 
 func setupBasicExampleOptions(t *testing.T, prefix string, dir string) *testhelper.TestOptions {
 	options := testhelper.TestOptionsDefaultWithVars(&testhelper.TestOptions{
-		Testing:            t,
-		TerraformDir:       dir,
-		Prefix:             prefix,
-		ResourceGroup:      resourceGroup,
-		BestRegionYAMLPath: "../common-dev-assets/common-go-assets/cloudinfo-region-scc-prefs.yaml",
+		Testing:       t,
+		TerraformDir:  dir,
+		Prefix:        prefix,
+		ResourceGroup: resourceGroup,
+		Region:        "us-south", // need to use us-south until this is fixed https://github.com/IBM-Cloud/terraform-provider-ibm/issues/5131
+		// BestRegionYAMLPath: "../common-dev-assets/common-go-assets/cloudinfo-region-scc-prefs.yaml",
 	})
 	return options
 }
@@ -35,7 +36,8 @@ func setupCompleteExampleOptions(t *testing.T, prefix string, dir string) *testh
 		Testing:      t,
 		TerraformDir: dir,
 		Prefix:       prefix,
-		Region:       validRegions[rand.Intn(len(validRegions))],
+		// Region:       validRegions[rand.Intn(len(validRegions))],
+		Region: "us-south", // need to use us-south until this is fixed https://github.com/IBM-Cloud/terraform-provider-ibm/issues/5131
 		/*
 		 To prevent clashes, comment out the 'ResourceGroup' input in the tests to create a unique resource group,
 		 as only one instance of Event Notification (Lite) is allowed per resource group.
