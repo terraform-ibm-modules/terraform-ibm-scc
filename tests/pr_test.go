@@ -70,7 +70,7 @@ func TestRunBasicExample(t *testing.T) {
 func TestRunCompleteExampleUpgrade(t *testing.T) {
 	t.Parallel()
 
-	options := setupCompleteExampleOptions(t, "scc-upg", basicExampleDir)
+	options := setupCompleteExampleOptions(t, "scc-upg", completeExampleDir)
 
 	output, err := options.RunTestUpgrade()
 	if !options.UpgradeTestSkipped {
