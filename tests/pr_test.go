@@ -8,12 +8,11 @@ import (
 	"github.com/terraform-ibm-modules/ibmcloud-terratest-wrapper/testhelper"
 )
 
-// Use existing resource group
-const resourceGroup = "geretain-test-resources"
+const resourceGroup = "geretain-test-resources" // Use existing resource group
 const basicExampleDir = "examples/basic"
 const completeExampleDir = "examples/complete"
 
-func setupOptions(t *testing.T, prefix string, dir string) *testhelper.TestOptions {
+func setupBasicExampleOptions(t *testing.T, prefix string, dir string) *testhelper.TestOptions {
 	options := testhelper.TestOptionsDefaultWithVars(&testhelper.TestOptions{
 		Testing:            t,
 		TerraformDir:       dir,
@@ -25,11 +24,17 @@ func setupOptions(t *testing.T, prefix string, dir string) *testhelper.TestOptio
 }
 
 func setupCompleteExampleOptions(t *testing.T, prefix string, dir string) *testhelper.TestOptions {
+	// Use a region that is supported for both Event Notifications and SCC
+	validRegions := []string{
+		"us-south",
+		"eu-de",
+		"eu-es",
+	}
 	options := testhelper.TestOptionsDefaultWithVars(&testhelper.TestOptions{
-		Testing:            t,
-		TerraformDir:       dir,
-		Prefix:             prefix,
-		BestRegionYAMLPath: "../common-dev-assets/common-go-assets/cloudinfo-region-scc-prefs.yaml",
+		Testing:      t,
+		TerraformDir: dir,
+		Prefix:       prefix,
+		Region:       validRegions[rand.Intn(len(validRegions))],
 		/*
 		 To prevent clashes, comment out the 'ResourceGroup' input in the tests to create a unique resource group,
 		 as only one instance of Event Notification (Lite) is allowed per resource group.
