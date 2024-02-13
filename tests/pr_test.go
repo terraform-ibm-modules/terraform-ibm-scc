@@ -2,34 +2,42 @@
 package test
 
 import (
+	// "math/rand"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
 	"github.com/terraform-ibm-modules/ibmcloud-terratest-wrapper/testhelper"
 )
 
-// Use existing resource group
-const resourceGroup = "geretain-test-resources"
+const resourceGroup = "geretain-test-resources" // Use existing resource group
 const basicExampleDir = "examples/basic"
 const completeExampleDir = "examples/complete"
 
-func setupOptions(t *testing.T, prefix string, dir string) *testhelper.TestOptions {
+func setupBasicExampleOptions(t *testing.T, prefix string, dir string) *testhelper.TestOptions {
 	options := testhelper.TestOptionsDefaultWithVars(&testhelper.TestOptions{
-		Testing:            t,
-		TerraformDir:       dir,
-		Prefix:             prefix,
-		ResourceGroup:      resourceGroup,
-		BestRegionYAMLPath: "../common-dev-assets/common-go-assets/cloudinfo-region-scc-prefs.yaml",
+		Testing:       t,
+		TerraformDir:  dir,
+		Prefix:        prefix,
+		ResourceGroup: resourceGroup,
+		Region:        "us-south", // need to use us-south until this is fixed https://github.com/IBM-Cloud/terraform-provider-ibm/issues/5131
+		// BestRegionYAMLPath: "../common-dev-assets/common-go-assets/cloudinfo-region-scc-prefs.yaml",
 	})
 	return options
 }
 
 func setupCompleteExampleOptions(t *testing.T, prefix string, dir string) *testhelper.TestOptions {
+	// Use a region that is supported for both Event Notifications and SCC
+	// validRegions := []string{
+	// 	"us-south",
+	// 	"eu-de",
+	// 	"eu-es",
+	// }
 	options := testhelper.TestOptionsDefaultWithVars(&testhelper.TestOptions{
-		Testing:            t,
-		TerraformDir:       dir,
-		Prefix:             prefix,
-		BestRegionYAMLPath: "../common-dev-assets/common-go-assets/cloudinfo-region-scc-prefs.yaml",
+		Testing:      t,
+		TerraformDir: dir,
+		Prefix:       prefix,
+		// Region:       validRegions[rand.Intn(len(validRegions))],
+		Region: "us-south", // need to use us-south until this is fixed https://github.com/IBM-Cloud/terraform-provider-ibm/issues/5131
 		/*
 		 To prevent clashes, comment out the 'ResourceGroup' input in the tests to create a unique resource group,
 		 as only one instance of Event Notification (Lite) is allowed per resource group.
@@ -52,17 +60,17 @@ func TestRunCompleteExample(t *testing.T) {
 func TestRunBasicExample(t *testing.T) {
 	t.Parallel()
 
-	options := setupOptions(t, "scc", basicExampleDir)
+	options := setupBasicExampleOptions(t, "scc", basicExampleDir)
 
 	output, err := options.RunTestConsistency()
 	assert.Nil(t, err, "This should not have errored")
 	assert.NotNil(t, output, "Expected some output")
 }
 
-func TestRunUpgradeExample(t *testing.T) {
+func TestRunCompleteExampleUpgrade(t *testing.T) {
 	t.Parallel()
 
-	options := setupOptions(t, "scc-upg", basicExampleDir)
+	options := setupCompleteExampleOptions(t, "scc-upg", completeExampleDir)
 
 	output, err := options.RunTestUpgrade()
 	if !options.UpgradeTestSkipped {
