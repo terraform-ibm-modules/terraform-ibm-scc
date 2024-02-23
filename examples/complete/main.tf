@@ -37,3 +37,32 @@ module "create_scc_instance" {
   en_instance_crn                   = module.event_notification.crn
   skip_cos_iam_authorization_policy = false
 }
+
+locals {
+  scope = {
+    environment = var.scc_scope_environment
+    properties = [
+      {
+        name  = "scope_id"
+        value = module.resource_group.resource_group_id
+      },
+      {
+        name  = "scope_type"
+        value = "account.resource_group"
+      }
+    ]
+  }
+}
+
+module "create_profile_attachment" {
+  count                  = var.scc_profile_id == null ? 0 : 1
+  source                 = "../../modules/attachments/"
+  profile_id             = var.scc_profile_id
+  scc_instance_id        = module.create_scc_instance.id
+  attachment_name        = var.scc_attachment_name
+  attachment_description = var.scc_attachment_description
+  attachment_schedule    = var.scc_attachment_schedule
+  attachment_status      = var.scc_attachment_status
+  environment            = local.scope.environment
+  scope_properties       = local.scope.properties
+}

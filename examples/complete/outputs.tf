@@ -51,3 +51,9 @@ output "cos_bucket" {
   description = "The COS bucket created in this example"
   value       = module.cos.bucket_name
 }
+
+# output "scc_profile_attachment" {
+#   description = "value"
+#   value = module.create_profile_attachment.profile_attachment
+
+# }

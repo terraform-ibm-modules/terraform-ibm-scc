@@ -83,6 +83,7 @@ where `REGION` is the value you have set for the modules `region` input variable
 <!-- BEGIN OVERVIEW HOOK -->
 ## Overview
 * [terraform-ibm-scc](#terraform-ibm-scc)
+* [Submodules](./modules)
 * [Examples](./examples)
     * [Basic example](./examples/basic)
     * [Complete example](./examples/complete)
