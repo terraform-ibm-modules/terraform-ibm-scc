@@ -84,6 +84,6 @@ module "create_scc_profile" {
     }
   ]
   profile_name        = "${var.prefix}-profile"
-  profile_description = "terraform-ibm-scc custom example profile."
+  profile_description = "scc custom example profile."
   profile_type        = "predefined"
 }
