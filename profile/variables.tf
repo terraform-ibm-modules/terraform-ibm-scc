@@ -31,7 +31,7 @@ variable "controls" {
     control_id         = optional(string)
   }))
   default     = []
-  description = "A list of users that you want to create on the database. Multiple blocks are allowed. The user password must be in the range of 10-32 characters. Be warned that in most case using IAM service credentials (via the var.service_credential_names) is sufficient to control access to the Etcd instance. This blocks creates native etcd database users, more info on that can be found here https://cloud.ibm.com/docs/databases-for-etcd?topic=databases-for-etcd-user-management"
+  description = "The list of controls that are used to create the profile. Constraints: The maximum length is `600` items. The minimum length is `0` items."
 }
 
 variable "default_parameters" {
@@ -44,5 +44,5 @@ variable "default_parameters" {
     parameter_type          = optional(string)
   }))
   default     = []
-  description = "A list of users that you want to create on the database. Multiple blocks are allowed. The user password must be in the range of 10-32 characters. Be warned that in most case using IAM service credentials (via the var.service_credential_names) is sufficient to control access to the Etcd instance. This blocks creates native etcd database users, more info on that can be found here https://cloud.ibm.com/docs/databases-for-etcd?topic=databases-for-etcd-user-management"
+  description = "The default parameters of the profile. Constraints: The maximum length is `512` items. The minimum length is `0` items."
 }
