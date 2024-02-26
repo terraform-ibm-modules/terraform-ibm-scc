@@ -84,6 +84,6 @@ module "create_scc_profile" {
     }
   ]
   profile_name        = "${var.prefix}-profile"
-  profile_description = "scc_custom_profile."
+  profile_description = "scccustom."
   profile_type        = "predefined"
 }
