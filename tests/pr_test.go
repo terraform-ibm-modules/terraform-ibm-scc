@@ -60,8 +60,6 @@ func TestRunCompleteExample(t *testing.T) {
 func TestRunBasicExample(t *testing.T) {
 	t.Parallel()
 
-	t.Skip("Skipping upgrade test until initial code is in primary branch")
-
 	options := setupBasicExampleOptions(t, "scc", basicExampleDir)
 
 	output, err := options.RunTestConsistency()
@@ -71,8 +69,6 @@ func TestRunBasicExample(t *testing.T) {
 
 func TestRunCompleteExampleUpgrade(t *testing.T) {
 	t.Parallel()
-
-	t.Skip("Skipping upgrade test until initial code is in primary branch")
 
 	options := setupCompleteExampleOptions(t, "scc-upg", completeExampleDir)
 
