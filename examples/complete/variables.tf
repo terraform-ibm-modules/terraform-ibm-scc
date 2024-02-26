@@ -17,7 +17,7 @@ variable "region" {
 variable "prefix" {
   type        = string
   description = "Prefix to append to all resources created by this example"
-  default     = "scc"
+  default     = "scc-in"
 }
 
 variable "resource_group" {
@@ -30,4 +30,22 @@ variable "resource_tags" {
   type        = list(string)
   description = "Optional list of tags to be added to created resources"
   default     = []
+}
+
+variable "profile_description" {
+  type        = string
+  description = "The profile_description"
+  default     = "test-profile-1"
+}
+
+variable "profile_name" {
+  type        = string
+  description = "The profile_name"
+  default     = "test-profile-1"
+}
+
+variable "profile_type" {
+  type        = string
+  description = "The profile_type"
+  default     = "predefined"
 }
