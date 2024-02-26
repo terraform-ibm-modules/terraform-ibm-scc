@@ -75,9 +75,8 @@ resource "ibm_scc_control_library" "scc_control_library_instance" {
 }
 
 module "create_scc_profile" {
-  source           = "../../profile/."
-  ibmcloud_api_key = var.ibmcloud_api_key
-  instance_id      = module.create_scc_instance.guid
+  source      = "../../profile/."
+  instance_id = module.create_scc_instance.guid
   controls = [
     {
       control_library_id = ibm_scc_control_library.scc_control_library_instance.control_library_id
