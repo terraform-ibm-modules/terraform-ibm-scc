@@ -51,3 +51,18 @@ output "cos_bucket" {
   description = "The COS bucket created in this example"
   value       = module.cos.bucket_name
 }
+
+output "scc_control_library_id" {
+  description = "The scc control library created in this example"
+  value       = resource.ibm_scc_control_library.scc_control_library_instance.control_library_id
+}
+
+output "scc_controls" {
+  description = "The scc controls created in this example"
+  value       = resource.ibm_scc_control_library.scc_control_library_instance.controls
+}
+
+output "scc_profile_id" {
+  description = "The scc profile created in this example"
+  value       = module.create_scc_profile.profile_id
+}

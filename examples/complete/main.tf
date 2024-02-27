@@ -42,18 +42,23 @@ resource "ibm_scc_control_library" "scc_control_library_instance" {
   instance_id                 = module.create_scc_instance.guid
   control_library_description = "control_library_description"
   control_library_name        = "control_library_name"
-  control_library_type        = "predefined"
+  control_library_type        = "custom"
   latest                      = true
+  version_group_label         = "de38e8c4-2212-4e4b-8dcf-b021b98d8e43"
   controls {
-    control_id          = "032a81ca-6ef7-4ac2-81ac-20ee4a780e3b"
-    control_name        = "${var.prefix}-control-name"
+    control_name = "${var.prefix}-control-name"
+    # control_id          = "1785c436-e6b7-4ce2-8978-7776c674a465"
     control_description = "Boundary Protection"
     control_category    = "System and Communications Protection"
     control_requirement = true
     status              = "enabled"
-    control_docs {}
+    control_tags        = []
+    control_docs {
+      control_docs_id   = null
+      control_docs_type = null
+    }
     control_specifications {
-      control_specification_id          = "5c7d6f88-a92f-4734-9b49-bd22b0900184"
+      # control_specification_id          = "d40375fc-b5a7-41b5-9721-7f915bb1a036"
       control_specification_description = "IBM Cloud"
       component_id                      = "iam-identity"
       component_name                    = "IAM Identity Service"
@@ -74,16 +79,23 @@ resource "ibm_scc_control_library" "scc_control_library_instance" {
   }
 }
 
+data "ibm_scc_control_library" "scc_control_library_data" {
+  instance_id        = module.create_scc_instance.guid
+  control_library_id = resource.ibm_scc_control_library.scc_control_library_instance.control_library_id
+}
+
 module "create_scc_profile" {
   source      = "../../profile/."
   instance_id = module.create_scc_instance.guid
-  controls = [
+
+  controls = [for scc_ins in data.ibm_scc_control_library.scc_control_library_data.controls :
     {
-      control_library_id = ibm_scc_control_library.scc_control_library_instance.control_library_id
-      control_id         = "032a81ca-6ef7-4ac2-81ac-20ee4a780e3b"
+      control_library_id = resource.ibm_scc_control_library.scc_control_library_instance.control_library_id
+      control_id         = scc_ins.control_id
     }
   ]
+
   profile_name        = "${var.prefix}-profile"
-  profile_description = "scccustom"
-  profile_type        = "predefined"
+  profile_description = "scc-custom"
+  profile_type        = "custom"
 }
