@@ -11,12 +11,12 @@ resource "ibm_scc_profile" "scc_profile_instance" {
   dynamic "default_parameters" {
     for_each = var.default_parameters != null ? var.default_parameters : []
     content {
-      assessment_type         = users.value.assessment_type
-      assessment_id           = users.value.assessment_id
-      parameter_name          = users.value.parameter_name
-      parameter_default_value = users.value.parameter_default_value
-      parameter_display_name  = users.value.parameter_display_name
-      parameter_type          = users.value.parameter_type
+      assessment_type         = default_parameters.value.assessment_type
+      assessment_id           = default_parameters.value.assessment_id
+      parameter_name          = default_parameters.value.parameter_name
+      parameter_default_value = default_parameters.value.parameter_default_value
+      parameter_display_name  = default_parameters.value.parameter_display_name
+      parameter_type          = default_parameters.value.parameter_type
     }
   }
   profile_description = var.profile_description

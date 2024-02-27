@@ -38,50 +38,56 @@ module "create_scc_instance" {
   skip_cos_iam_authorization_policy = false
 }
 
-resource "ibm_scc_control_library" "scc_control_library_instance" {
-  instance_id                 = module.create_scc_instance.guid
-  control_library_description = "control_library_description"
+module "create_scc_controls" {
+  source      = "../../controls/."
+  instance_id = module.create_scc_instance.guid
   control_library_name        = "control_library_name"
+  control_library_description = "control_library_description"
   control_library_type        = "custom"
   latest                      = true
   version_group_label         = "de38e8c4-2212-4e4b-8dcf-b021b98d8e43"
-  controls {
-    control_name = "${var.prefix}-control-name"
-    # control_id          = "1785c436-e6b7-4ce2-8978-7776c674a465"
-    control_description = "Boundary Protection"
-    control_category    = "System and Communications Protection"
-    control_requirement = true
-    status              = "enabled"
-    control_tags        = []
-    control_docs {
-      control_docs_id   = null
-      control_docs_type = null
-    }
-    control_specifications {
-      # control_specification_id          = "d40375fc-b5a7-41b5-9721-7f915bb1a036"
-      control_specification_description = "IBM Cloud"
-      component_id                      = "iam-identity"
-      component_name                    = "IAM Identity Service"
-      environment                       = "ibm-cloud"
-      assessments {
-        assessment_type        = "automated"
-        assessment_method      = "ibm-cloud-rule"
-        assessment_id          = "rule-a637949b-7e51-46c4-afd4-b96619001bf1"
-        assessment_description = "All assessments related to iam_identity"
-        parameters {
-          parameter_name         = "session_invalidation_in_seconds"
-          parameter_display_name = "Sign out due to inactivity in seconds"
-          parameter_type         = "numeric"
+  controls = [
+    {
+      control_id          = "032a81ca-6ef7-4ac2-81ac-20ee4a780e3b"
+      control_name        = "${var.prefix}-control-name"
+      control_description = "Boundary Protection"
+      control_category    = "System and Communications Protection"
+      control_requirement = true
+      status              = "enabled"
+      control_tags = []
+      control_docs = [{}]
+      control_specifications = [
+        {
+          control_specification_id          = "5c7d6f88-a92f-4734-9b49-bd22b0900184"
+          control_specification_description = "IBM Cloud"
+          component_id                      = "iam-identity"
+          component_name                    = "IAM Identity Service"
+          environment                       = "ibm-cloud"
+          assessments = [
+            {
+              assessment_type        = "automated"
+              assessment_method      = "ibm-cloud-rule"
+              assessment_id          = "rule-a637949b-7e51-46c4-afd4-b96619001bf1"
+              assessment_description = "All assessments related to iam_identity"
+              parameters = [
+                {
+                  parameter_name         = "session_invalidation_in_seconds"
+                  parameter_display_name = "Sign out due to inactivity in seconds"
+                  parameter_type         = "numeric"
+                }
+              ]
+            }
+          ]
+          responsibility = "user"
         }
-      }
-      responsibility = "user"
+      ]
     }
-  }
+  ]
 }
 
 data "ibm_scc_control_library" "scc_control_library_data" {
   instance_id        = module.create_scc_instance.guid
-  control_library_id = resource.ibm_scc_control_library.scc_control_library_instance.control_library_id
+  control_library_id = module.create_scc_controls.control_library_id
 }
 
 module "create_scc_profile" {
@@ -90,7 +96,7 @@ module "create_scc_profile" {
 
   controls = [for scc_ins in data.ibm_scc_control_library.scc_control_library_data.controls :
     {
-      control_library_id = resource.ibm_scc_control_library.scc_control_library_instance.control_library_id
+      control_library_id = module.create_scc_controls.control_library_id
       control_id         = scc_ins.control_id
     }
   ]

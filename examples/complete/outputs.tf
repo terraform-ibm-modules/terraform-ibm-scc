@@ -54,12 +54,12 @@ output "cos_bucket" {
 
 output "scc_control_library_id" {
   description = "The scc control library created in this example"
-  value       = resource.ibm_scc_control_library.scc_control_library_instance.control_library_id
+  value       = module.create_scc_controls.control_library_id
 }
 
 output "scc_controls" {
   description = "The scc controls created in this example"
-  value       = resource.ibm_scc_control_library.scc_control_library_instance.controls
+  value       = module.create_scc_controls.controls
 }
 
 output "scc_profile_id" {
