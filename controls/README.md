@@ -1,6 +1,6 @@
-# SCC Profile Module
+# SCC Controls Module
 
-This module creates SCC Profile's (https://cloud.ibm.com/docs/security-compliance?topic=security-compliance-build-custom-profiles&interface=ui). A profile is a grouping of controls that can be evaluated for compliance.
+This module creates an SCC Control library (https://cloud.ibm.com/docs/security-compliance?topic=security-compliance-custom-library&interface=ui). A control library is a grouping of controls that are added to Security and Compliance Center.
 
 The module supports the following actions:
 - Create SCC Controls Library
@@ -156,6 +156,6 @@ No modules.
 
 | Name | Description |
 |------|-------------|
-| <a name="output_control_library_id"></a> [control\_library\_id](#output\_control\_library\_id) | The id of the SCC profile created by this module |
-| <a name="output_controls"></a> [controls](#output\_controls) | The scc controls created in this example |
+| <a name="output_control_library_id"></a> [control\_library\_id](#output\_control\_library\_id) | The id of the SCC control library created by this module |
+| <a name="output_controls"></a> [controls](#output\_controls) | The SCC controls created in this module |
 <!-- END OF PRE-COMMIT-TERRAFORM DOCS HOOK -->
