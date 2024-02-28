@@ -30,7 +30,7 @@ module "create_scc_profile" {
 }
 ```
 
-The above will create 6 new reserved ips as such and output them:
+The above will create a new scc profile output the `profile_id`:
 ```
   profile_id = "fc179109-3b0a-4e06-bbd8-7458706cc66d"
 ```
@@ -69,10 +69,10 @@ No modules.
 |------|-------------|------|---------|:--------:|
 | <a name="input_controls"></a> [controls](#input\_controls) | The list of controls that are used to create the profile. Constraints: The maximum length is `600` items. The minimum length is `0` items. | <pre>list(object({<br>    control_library_id = optional(string)<br>    control_id         = optional(string)<br>  }))</pre> | `[]` | no |
 | <a name="input_default_parameters"></a> [default\_parameters](#input\_default\_parameters) | The default parameters of the profile. Constraints: The maximum length is `512` items. The minimum length is `0` items. | <pre>list(object({<br>    assessment_type         = optional(string)<br>    assessment_id           = optional(string)<br>    parameter_name          = optional(string)<br>    parameter_default_value = optional(string)<br>    parameter_display_name  = optional(string)<br>    parameter_type          = optional(string)<br>  }))</pre> | `[]` | no |
-| <a name="input_instance_id"></a> [instance\_id](#input\_instance\_id) | The instance\_id | `string` | n/a | yes |
-| <a name="input_profile_description"></a> [profile\_description](#input\_profile\_description) | The profile\_description | `string` | `null` | no |
-| <a name="input_profile_name"></a> [profile\_name](#input\_profile\_name) | The profile\_name | `string` | `null` | no |
-| <a name="input_profile_type"></a> [profile\_type](#input\_profile\_type) | The profile\_type | `string` | `null` | no |
+| <a name="input_instance_id"></a> [instance\_id](#input\_instance\_id) | The ID of the SCC instance in a particular region. | `string` | n/a | yes |
+| <a name="input_profile_description"></a> [profile\_description](#input\_profile\_description) | The profile description. Constraints: The maximum length is `256` characters. The minimum length is `2` characters. The value must match regular expression `/[A-Za-z0-9]+/`. | `string` | n/a | yes |
+| <a name="input_profile_name"></a> [profile\_name](#input\_profile\_name) | The profile name. Constraints: The maximum length is `64` characters. The minimum length is `2` characters. The value must match regular expression `/[A-Za-z0-9]+/`. | `string` | n/a | yes |
+| <a name="input_profile_type"></a> [profile\_type](#input\_profile\_type) | The profile type, such as `custom` or `predefined`. Constraints: Allowable values are: `predefined`, `custom`. | `string` | n/a | yes |
 
 ### Outputs
 

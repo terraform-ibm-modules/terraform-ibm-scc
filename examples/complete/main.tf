@@ -12,7 +12,7 @@ module "cos" {
   kms_encryption_enabled = false
   retention_enabled      = false
   resource_group_id      = module.resource_group.resource_group_id
-  bucket_name            = "${var.prefix}-cb1"
+  bucket_name            = "${var.prefix}-cb"
 }
 
 module "event_notification" {

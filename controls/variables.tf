@@ -4,36 +4,32 @@
 
 variable "instance_id" {
   type        = string
-  description = "The instance_id"
+  description = "The ID of the SCC instance in a particular region."
 }
 
 variable "control_library_name" {
   type        = string
-  description = "The control_library_name"
-  default     = null
+  description = "The control library name. Constraints: The maximum length is `64` characters. The minimum length is `2` characters. The value must match regular expression `/^[a-zA-Z0-9_\\s\\-]*$/`."
 }
 
 variable "control_library_description" {
   type        = string
-  description = "The control_library_description"
-  default     = null
+  description = "The control library description. Constraints: The maximum length is `256` characters. The minimum length is `2` characters. The value must match regular expression `/[A-Za-z0-9]+/`."
 }
 
 variable "control_library_type" {
   type        = string
-  description = "The control_library_type"
-  default     = null
+  description = "The control library type. Constraints: Allowable values are: `predefined`, `custom`."
 }
 
 variable "version_group_label" {
   type        = string
-  description = "The version_group_label"
-  default     = null
+  description = "(Optional) The version group label. Constraints: The maximum length is `36` characters. The minimum length is `36` characters. The value must match regular expression `/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/`."
 }
 
 variable "latest" {
   type        = bool
-  description = "The latest"
+  description = "(Optional) The latest version of the control library."
   default     = true
 }
 
@@ -79,5 +75,5 @@ variable "controls" {
     profile_type        = optional(string)
   }))
   default     = []
-  description = "The list of controls that are used to create the profile. Constraints: The maximum length is `600` items. The minimum length is `0` items."
+  description = "The list of controls that are used to create the profile. Constraints: The maximum length is `600` items. The minimum length is `0` items. Full nested schema description can be found here: https://registry.terraform.io/providers/IBM-Cloud/ibm/latest/docs/resources/scc_control_library#controls."
 }

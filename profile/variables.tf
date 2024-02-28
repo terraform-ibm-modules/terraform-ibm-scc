@@ -4,25 +4,22 @@
 
 variable "instance_id" {
   type        = string
-  description = "The instance_id"
-}
-
-variable "profile_description" {
-  type        = string
-  description = "The profile_description"
-  default     = null
+  description = "The ID of the SCC instance in a particular region."
 }
 
 variable "profile_name" {
   type        = string
-  description = "The profile_name"
-  default     = null
+  description = "The profile name. Constraints: The maximum length is `64` characters. The minimum length is `2` characters. The value must match regular expression `/[A-Za-z0-9]+/`."
+}
+
+variable "profile_description" {
+  type        = string
+  description = "The profile description. Constraints: The maximum length is `256` characters. The minimum length is `2` characters. The value must match regular expression `/[A-Za-z0-9]+/`."
 }
 
 variable "profile_type" {
   type        = string
-  description = "The profile_type"
-  default     = null
+  description = "The profile type, such as `custom` or `predefined`. Constraints: Allowable values are: `predefined`, `custom`."
 }
 
 variable "controls" {
