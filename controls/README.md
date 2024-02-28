@@ -61,22 +61,24 @@ No modules.
 
 | Name | Type |
 |------|------|
-| [ibm_scc_profile.scc_profile_instance](https://registry.terraform.io/providers/IBM-Cloud/ibm/1.62.0/docs/resources/scc_profile) | resource |
+| [ibm_scc_control_library.scc_control_library_instance](https://registry.terraform.io/providers/IBM-Cloud/ibm/1.62.0/docs/resources/scc_control_library) | resource |
 
 ### Inputs
 
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
-| <a name="input_controls"></a> [controls](#input\_controls) | The list of controls that are used to create the profile. Constraints: The maximum length is `600` items. The minimum length is `0` items. | <pre>list(object({<br>    control_library_id = optional(string)<br>    control_id         = optional(string)<br>  }))</pre> | `[]` | no |
-| <a name="input_default_parameters"></a> [default\_parameters](#input\_default\_parameters) | The default parameters of the profile. Constraints: The maximum length is `512` items. The minimum length is `0` items. | <pre>list(object({<br>    assessment_type         = optional(string)<br>    assessment_id           = optional(string)<br>    parameter_name          = optional(string)<br>    parameter_default_value = optional(string)<br>    parameter_display_name  = optional(string)<br>    parameter_type          = optional(string)<br>  }))</pre> | `[]` | no |
+| <a name="input_control_library_description"></a> [control\_library\_description](#input\_control\_library\_description) | The control\_library\_description | `string` | `null` | no |
+| <a name="input_control_library_name"></a> [control\_library\_name](#input\_control\_library\_name) | The control\_library\_name | `string` | `null` | no |
+| <a name="input_control_library_type"></a> [control\_library\_type](#input\_control\_library\_type) | The control\_library\_type | `string` | `null` | no |
+| <a name="input_controls"></a> [controls](#input\_controls) | The list of controls that are used to create the profile. Constraints: The maximum length is `600` items. The minimum length is `0` items. | <pre>list(object({<br>    control_id              = optional(string)<br>    control_library_version = optional(string)<br>    control_name            = optional(string)<br>    control_description     = optional(string)<br>    control_category        = optional(string)<br>    control_parent          = optional(string)<br>    status                  = optional(string)<br>    control_tags            = optional(list(string))<br>    control_requirement     = optional(string)<br>    control_docs = list(object({<br>      control_docs_id   = optional(string)<br>      control_docs_type = optional(string)<br>    }))<br>    control_specifications_count = optional(string)<br>    control_specifications = list(object({<br>      control_specification_id          = optional(string)<br>      responsibility                    = optional(string)<br>      component_id                      = optional(string)<br>      component_name                    = optional(string)<br>      environment                       = optional(string)<br>      control_specification_description = optional(string)<br>      assessments_count                 = optional(string)<br>      assessments = list(object({<br>        assessment_id          = optional(string)<br>        assessment_method      = optional(string)<br>        assessment_type        = optional(string)<br>        assessment_description = optional(string)<br>        parameter_count        = optional(string)<br>        parameters = list(object({<br>          parameter_name         = optional(string)<br>          parameter_display_name = optional(string)<br>          parameter_type         = optional(string)<br>        }))<br>      }))<br>    }))<br>    profile_description = optional(string)<br>    profile_name        = optional(string)<br>    profile_type        = optional(string)<br>  }))</pre> | `[]` | no |
 | <a name="input_instance_id"></a> [instance\_id](#input\_instance\_id) | The instance\_id | `string` | n/a | yes |
-| <a name="input_profile_description"></a> [profile\_description](#input\_profile\_description) | The profile\_description | `string` | `null` | no |
-| <a name="input_profile_name"></a> [profile\_name](#input\_profile\_name) | The profile\_name | `string` | `null` | no |
-| <a name="input_profile_type"></a> [profile\_type](#input\_profile\_type) | The profile\_type | `string` | `null` | no |
+| <a name="input_latest"></a> [latest](#input\_latest) | The latest | `bool` | `true` | no |
+| <a name="input_version_group_label"></a> [version\_group\_label](#input\_version\_group\_label) | The version\_group\_label | `string` | `null` | no |
 
 ### Outputs
 
 | Name | Description |
 |------|-------------|
-| <a name="output_profile_id"></a> [profile\_id](#output\_profile\_id) | The id of the SCC profile created by this module |
+| <a name="output_control_library_id"></a> [control\_library\_id](#output\_control\_library\_id) | The id of the SCC profile created by this module |
+| <a name="output_controls"></a> [controls](#output\_controls) | The scc controls created in this example |
 <!-- END OF PRE-COMMIT-TERRAFORM DOCS HOOK -->

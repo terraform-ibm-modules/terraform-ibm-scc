@@ -12,7 +12,7 @@ module "cos" {
   kms_encryption_enabled = false
   retention_enabled      = false
   resource_group_id      = module.resource_group.resource_group_id
-  bucket_name            = "${var.prefix}-cb"
+  bucket_name            = "${var.prefix}-cb1"
 }
 
 module "event_notification" {
@@ -39,8 +39,8 @@ module "create_scc_instance" {
 }
 
 module "create_scc_controls" {
-  source      = "../../controls/."
-  instance_id = module.create_scc_instance.guid
+  source                      = "../../controls/."
+  instance_id                 = module.create_scc_instance.guid
   control_library_name        = "control_library_name"
   control_library_description = "control_library_description"
   control_library_type        = "custom"
@@ -54,8 +54,8 @@ module "create_scc_controls" {
       control_category    = "System and Communications Protection"
       control_requirement = true
       status              = "enabled"
-      control_tags = []
-      control_docs = [{}]
+      control_tags        = []
+      control_docs        = [{}]
       control_specifications = [
         {
           control_specification_id          = "5c7d6f88-a92f-4734-9b49-bd22b0900184"
