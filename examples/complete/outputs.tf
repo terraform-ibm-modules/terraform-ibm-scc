@@ -51,3 +51,8 @@ output "cos_bucket" {
   description = "The COS bucket created in this example"
   value       = module.cos.bucket_name
 }
+
+output "wp_crn" {
+  description = "CRN of created SCC WP instance."
+  value       = module.scc_wp.crn
+}
