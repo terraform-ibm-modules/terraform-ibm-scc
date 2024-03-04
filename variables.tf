@@ -31,8 +31,8 @@ variable "region" {
   default     = "us-south"
 
   validation {
-    condition     = contains(["us-south", "ca-tor", "eu-es", "eu-de"], var.region)
-    error_message = "Invalid input, options: \"us-south\", \"ca-tor\", \"eu-es\", \"eu-de\"."
+    condition     = contains(["us-south", "ca-tor", "eu-es", "eu-de", "eu-fr2"], var.region)
+    error_message = "Invalid input, options: \"us-south\", \"ca-tor\", \"eu-es\", \"eu-de\", \"eu-fr2\"."
   }
 }
 
