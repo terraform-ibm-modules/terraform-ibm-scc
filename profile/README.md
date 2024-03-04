@@ -39,19 +39,19 @@ The above will create a new scc profile output the `profile_id`:
 You need the following permissions to run this module.
 
 - Account Management
-    - **Resource Group** service
-        - `Viewer` platform access
+    - Security and Compliance Center service
+        - `Administrator` platform access
 - IAM Services
-    - **VPC Infrastructure Services** service
-        - `Editor` platform access
+   - Event Notifications service
+        - `Manager` service access
 
 <!-- BEGINNING OF PRE-COMMIT-TERRAFORM DOCS HOOK -->
 ### Requirements
 
 | Name | Version |
 |------|---------|
-| <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) | >= 1.3.0, <1.6.0 |
-| <a name="requirement_ibm"></a> [ibm](#requirement\_ibm) | 1.62.0 |
+| <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) | >= 1.3.0, <1.7.0 |
+| <a name="requirement_ibm"></a> [ibm](#requirement\_ibm) | >= 1.62.0, <2.0.0 |
 
 ### Modules
 
@@ -61,7 +61,7 @@ No modules.
 
 | Name | Type |
 |------|------|
-| [ibm_scc_profile.scc_profile_instance](https://registry.terraform.io/providers/IBM-Cloud/ibm/1.62.0/docs/resources/scc_profile) | resource |
+| [ibm_scc_profile.scc_profile_instance](https://registry.terraform.io/providers/IBM-Cloud/ibm/latest/docs/resources/scc_profile) | resource |
 
 ### Inputs
 
@@ -72,7 +72,6 @@ No modules.
 | <a name="input_instance_id"></a> [instance\_id](#input\_instance\_id) | The ID of the SCC instance in a particular region. | `string` | n/a | yes |
 | <a name="input_profile_description"></a> [profile\_description](#input\_profile\_description) | The profile description. Constraints: The maximum length is `256` characters. The minimum length is `2` characters. The value must match regular expression `/[A-Za-z0-9]+/`. | `string` | n/a | yes |
 | <a name="input_profile_name"></a> [profile\_name](#input\_profile\_name) | The profile name. Constraints: The maximum length is `64` characters. The minimum length is `2` characters. The value must match regular expression `/[A-Za-z0-9]+/`. | `string` | n/a | yes |
-| <a name="input_profile_type"></a> [profile\_type](#input\_profile\_type) | The profile type, such as `custom` or `predefined`. Constraints: Allowable values are: `predefined`, `custom`. | `string` | n/a | yes |
 
 ### Outputs
 

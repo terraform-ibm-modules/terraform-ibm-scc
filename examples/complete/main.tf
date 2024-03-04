@@ -103,5 +103,4 @@ module "create_scc_profile" {
 
   profile_name        = "${var.prefix}-profile"
   profile_description = "scc-custom"
-  profile_type        = "custom"
 }

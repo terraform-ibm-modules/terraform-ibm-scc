@@ -21,5 +21,5 @@ resource "ibm_scc_profile" "scc_profile_instance" {
   }
   profile_description = var.profile_description
   profile_name        = var.profile_name
-  profile_type        = var.profile_type
+  profile_type        = "custom"
 }

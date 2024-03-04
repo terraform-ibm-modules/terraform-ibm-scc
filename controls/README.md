@@ -116,19 +116,19 @@ scc_controls = tolist([
 You need the following permissions to run this module.
 
 - Account Management
-    - **Resource Group** service
-        - `Viewer` platform access
+    - Security and Compliance Center service
+        - `Administrator` platform access
 - IAM Services
-    - **VPC Infrastructure Services** service
-        - `Editor` platform access
+   - Event Notifications service
+        - `Manager` service access
 
 <!-- BEGINNING OF PRE-COMMIT-TERRAFORM DOCS HOOK -->
 ### Requirements
 
 | Name | Version |
 |------|---------|
-| <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) | >= 1.3.0, <1.6.0 |
-| <a name="requirement_ibm"></a> [ibm](#requirement\_ibm) | 1.62.0 |
+| <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) | >= 1.3.0, <1.7.0 |
+| <a name="requirement_ibm"></a> [ibm](#requirement\_ibm) | >= 1.62.0, <2.0.0 |
 
 ### Modules
 
@@ -138,7 +138,7 @@ No modules.
 
 | Name | Type |
 |------|------|
-| [ibm_scc_control_library.scc_control_library_instance](https://registry.terraform.io/providers/IBM-Cloud/ibm/1.62.0/docs/resources/scc_control_library) | resource |
+| [ibm_scc_control_library.scc_control_library_instance](https://registry.terraform.io/providers/IBM-Cloud/ibm/latest/docs/resources/scc_control_library) | resource |
 
 ### Inputs
 
@@ -149,8 +149,8 @@ No modules.
 | <a name="input_control_library_type"></a> [control\_library\_type](#input\_control\_library\_type) | The control library type. Constraints: Allowable values are: `predefined`, `custom`. | `string` | n/a | yes |
 | <a name="input_controls"></a> [controls](#input\_controls) | The list of controls that are used to create the profile. Constraints: The maximum length is `600` items. The minimum length is `0` items. Full nested schema description can be found here: https://registry.terraform.io/providers/IBM-Cloud/ibm/latest/docs/resources/scc_control_library#controls. | <pre>list(object({<br>    control_id              = optional(string)<br>    control_library_version = optional(string)<br>    control_name            = optional(string)<br>    control_description     = optional(string)<br>    control_category        = optional(string)<br>    control_parent          = optional(string)<br>    status                  = optional(string)<br>    control_tags            = optional(list(string))<br>    control_requirement     = optional(string)<br>    control_docs = list(object({<br>      control_docs_id   = optional(string)<br>      control_docs_type = optional(string)<br>    }))<br>    control_specifications_count = optional(string)<br>    control_specifications = list(object({<br>      control_specification_id          = optional(string)<br>      responsibility                    = optional(string)<br>      component_id                      = optional(string)<br>      component_name                    = optional(string)<br>      environment                       = optional(string)<br>      control_specification_description = optional(string)<br>      assessments_count                 = optional(string)<br>      assessments = list(object({<br>        assessment_id          = optional(string)<br>        assessment_method      = optional(string)<br>        assessment_type        = optional(string)<br>        assessment_description = optional(string)<br>        parameter_count        = optional(string)<br>        parameters = list(object({<br>          parameter_name         = optional(string)<br>          parameter_display_name = optional(string)<br>          parameter_type         = optional(string)<br>        }))<br>      }))<br>    }))<br>    profile_description = optional(string)<br>    profile_name        = optional(string)<br>    profile_type        = optional(string)<br>  }))</pre> | `[]` | no |
 | <a name="input_instance_id"></a> [instance\_id](#input\_instance\_id) | The ID of the SCC instance in a particular region. | `string` | n/a | yes |
-| <a name="input_latest"></a> [latest](#input\_latest) | (Optional) The latest version of the control library. | `bool` | `true` | no |
-| <a name="input_version_group_label"></a> [version\_group\_label](#input\_version\_group\_label) | (Optional) The version group label. Constraints: The maximum length is `36` characters. The minimum length is `36` characters. The value must match regular expression `/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/`. | `string` | n/a | yes |
+| <a name="input_latest"></a> [latest](#input\_latest) | Choose whether you want the latest version of the control library. | `bool` | `true` | no |
+| <a name="input_version_group_label"></a> [version\_group\_label](#input\_version\_group\_label) | (Optional) The version group label. Constraints: The maximum length is `36` characters. The minimum length is `36` characters. The value must match regular expression `/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/`. | `string` | `null` | no |
 
 ### Outputs
 
