@@ -14,21 +14,15 @@ variable "instance_name" {
   description = "Name of the security and compliance instance that will be provisioned by this module"
 }
 
-variable "provider_type_instance_name" {
+variable "wp_instance_crn" {
   type        = string
-  description = "The name for the provider_type instance"
+  description = "Optionally pass the CRN of an existing SCC Workload Protection instance to attach it to the SCC instance."
   default     = null
 }
 
-variable "attributes" {
-  type        = map(string)
-  description = "The attributes for connecting to the provider type instance"
-  default     = {}
-}
-
-variable "provider_type_id" {
+variable "provider_type_name" {
   type        = string
-  description = "The unique identifier of the provider type instance."
+  description = "The name of the provider type instance."
   default     = null
 }
 
@@ -59,13 +53,6 @@ variable "cos_instance_crn" {
   description = "CRN of the Cloud Object Storage to store SCC data"
 }
 
-
-variable "wp_instance_crn" {
-  type        = string
-  description = "CRN of the Workload Protection instance to attach to SCC instance"
-  default     = null
-}
-
 variable "cos_bucket" {
   type        = string
   description = "The name of the Cloud Object Storage bucket to be used in SCC instance"
@@ -81,10 +68,4 @@ variable "skip_cos_iam_authorization_policy" {
   type        = bool
   default     = false
   description = "Set to true to skip the creation of an IAM authorization policy that permits the SCC instance created by this module to write access to the provided COS instance"
-}
-
-variable "attach_wp" {
-  type        = bool
-  default     = false
-  description = "Set to true to attach a Workload Protection instance to an SCC instance"
 }

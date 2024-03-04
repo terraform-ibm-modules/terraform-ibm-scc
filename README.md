@@ -134,6 +134,7 @@ You need the following permissions to run this module.
 |------|---------|
 | <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) | >= 1.3.0, <1.7.0 |
 | <a name="requirement_ibm"></a> [ibm](#requirement\_ibm) | >=1.62.0, <2.0.0 |
+| <a name="requirement_time"></a> [time](#requirement\_time) | 0.9.1 |
 
 ### Modules
 
@@ -148,26 +149,25 @@ No modules.
 | [ibm_resource_instance.scc_instance](https://registry.terraform.io/providers/IBM-Cloud/ibm/latest/docs/resources/resource_instance) | resource |
 | [ibm_scc_instance_settings.scc_instance_settings](https://registry.terraform.io/providers/IBM-Cloud/ibm/latest/docs/resources/scc_instance_settings) | resource |
 | [ibm_scc_provider_type_instance.scc_provider_type_instance_instance](https://registry.terraform.io/providers/IBM-Cloud/ibm/latest/docs/resources/scc_provider_type_instance) | resource |
+| [time_sleep.wait_for_authorization_policy](https://registry.terraform.io/providers/hashicorp/time/0.9.1/docs/resources/sleep) | resource |
 | [ibm_iam_account_settings.iam_account_settings](https://registry.terraform.io/providers/IBM-Cloud/ibm/latest/docs/data-sources/iam_account_settings) | data source |
+| [ibm_scc_provider_type.scc_provider_type](https://registry.terraform.io/providers/IBM-Cloud/ibm/latest/docs/data-sources/scc_provider_type) | data source |
 
 ### Inputs
 
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
-| <a name="input_attach_wp"></a> [attach\_wp](#input\_attach\_wp) | Set to true to attach a Workload Protection instance to an SCC instance | `bool` | `false` | no |
-| <a name="input_attributes"></a> [attributes](#input\_attributes) | The attributes for connecting to the provider type instance | `map(string)` | `{}` | no |
 | <a name="input_cos_bucket"></a> [cos\_bucket](#input\_cos\_bucket) | The name of the Cloud Object Storage bucket to be used in SCC instance | `string` | n/a | yes |
 | <a name="input_cos_instance_crn"></a> [cos\_instance\_crn](#input\_cos\_instance\_crn) | CRN of the Cloud Object Storage to store SCC data | `string` | n/a | yes |
 | <a name="input_en_instance_crn"></a> [en\_instance\_crn](#input\_en\_instance\_crn) | The CRN of Event Notifications instance to be used with SCC. If no value is provided, Event Notifications will not be enabled for this SCC instance | `string` | `null` | no |
 | <a name="input_instance_name"></a> [instance\_name](#input\_instance\_name) | Name of the security and compliance instance that will be provisioned by this module | `string` | n/a | yes |
 | <a name="input_plan"></a> [plan](#input\_plan) | Pricing plan to create SCC instance. Options include security-compliance-center-standard-plan or security-compliance-center-trial-plan | `string` | `"security-compliance-center-standard-plan"` | no |
-| <a name="input_provider_type_id"></a> [provider\_type\_id](#input\_provider\_type\_id) | The unique identifier of the provider type instance. | `string` | `null` | no |
-| <a name="input_provider_type_instance_name"></a> [provider\_type\_instance\_name](#input\_provider\_type\_instance\_name) | The name for the provider\_type instance | `string` | `null` | no |
+| <a name="input_provider_type_name"></a> [provider\_type\_name](#input\_provider\_type\_name) | The name of the provider type instance. | `string` | `null` | no |
 | <a name="input_region"></a> [region](#input\_region) | Region where SCC instance will be created | `string` | `"us-south"` | no |
 | <a name="input_resource_group_id"></a> [resource\_group\_id](#input\_resource\_group\_id) | The id of the resource group to create the SCC instance | `string` | n/a | yes |
 | <a name="input_resource_tags"></a> [resource\_tags](#input\_resource\_tags) | A list of tags applied to the resources created by the module | `list(string)` | `[]` | no |
 | <a name="input_skip_cos_iam_authorization_policy"></a> [skip\_cos\_iam\_authorization\_policy](#input\_skip\_cos\_iam\_authorization\_policy) | Set to true to skip the creation of an IAM authorization policy that permits the SCC instance created by this module to write access to the provided COS instance | `bool` | `false` | no |
-| <a name="input_wp_instance_crn"></a> [wp\_instance\_crn](#input\_wp\_instance\_crn) | CRN of the Workload Protection instance to attach to SCC instance | `string` | `null` | no |
+| <a name="input_wp_instance_crn"></a> [wp\_instance\_crn](#input\_wp\_instance\_crn) | Optionally pass the CRN of an existing SCC Workload Protection instance to attach it to the SCC instance. | `string` | `null` | no |
 
 ### Outputs
 

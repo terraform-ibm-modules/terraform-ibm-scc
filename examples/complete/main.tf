@@ -12,7 +12,7 @@ module "cos" {
   kms_encryption_enabled = false
   retention_enabled      = false
   resource_group_id      = module.resource_group.resource_group_id
-  bucket_name            = "${var.prefix}-cb2"
+  bucket_name            = "${var.prefix}-cb"
 }
 
 module "event_notification" {
@@ -35,12 +35,6 @@ module "scc_wp" {
   resource_tags     = var.resource_tags
 }
 
-locals {
-  attributes = {
-    "wp_crn" : module.scc_wp.crn
-  }
-}
-
 module "create_scc_instance" {
   source                            = "../.."
   instance_name                     = "${var.prefix}-instance"
@@ -51,9 +45,6 @@ module "create_scc_instance" {
   cos_instance_crn                  = module.cos.cos_instance_id
   en_instance_crn                   = module.event_notification.crn
   skip_cos_iam_authorization_policy = false
-  attach_wp                         = true
-  wp_instance_crn                   = module.scc_wp.id
-  attributes                        = local.attributes
-  provider_type_instance_name       = "${var.prefix}-provider-type"
-  provider_type_id                  = "9f19c940df5d3b12df2725f28c0ebb9b" # pragma: allowlist secret
+  wp_instance_crn                   = module.scc_wp.crn
+  provider_type_name                = "provider type 1"
 }
