@@ -21,22 +21,29 @@ variable "attachment_description" {
 variable "attachment_schedule" {
   type        = string
   description = "The schedule of an attachment evaluation. Allowable values are: daily, every_7_days, every_30_days"
+
+  validation {
+    condition     = contains(["daily", "every_7_days", "every_30_days"], var.attachment_schedule)
+    error_message = "Allowed schedule can be - daily, every_7_days, every_30_days."
+  }
 }
 
 variable "attachment_status" {
   type        = string
   description = "The status of an attachment evaluation. Allowable values are: enabled, disabled"
+  validation {
+    condition     = contains(["enabled", "disabled"], var.attachment_status)
+    error_message = "Allowed status can be enabled or disabled."
+  }
 }
 
-variable "environment" {
-  type        = string
-  description = "The environment that relates to this scope"
-}
-
-variable "scope_properties" {
+variable "scope" {
+  description = "The scope payload for the SCC profile attachment."
   type = list(object({
-    name  = string
-    value = string
+    environment = string
+    properties = list(object({
+      name  = string
+      value = string
+    }))
   }))
-  description = "(List) The properties supported for scoping by this environment"
 }

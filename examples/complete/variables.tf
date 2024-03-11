@@ -32,38 +32,14 @@ variable "resource_tags" {
   default     = []
 }
 
-variable "scc_profile_id" {
-  type        = string
-  description = "The SCC profile ID"
-  default     = null
-}
-
-variable "scc_attachment_name" {
-  type        = string
-  description = "The name of the SCC profile attachment"
-  default     = "scc-attachment-"
-}
-
-variable "scc_attachment_description" {
-  type        = string
-  description = "The description for the SCC profile attachment"
-  default     = "SCC profile attachment"
-}
-
-variable "scc_attachment_schedule" {
-  type        = string
-  description = "The schedule of an attachment evaluation. Allowable values are: daily, every_7_days, every_30_days"
-  default     = "daily"
-}
-
-variable "scc_attachment_status" {
-  type        = string
-  description = "The status of an attachment evaluation. Allowable values are: enabled, disabled"
-  default     = "enabled"
-}
-
-variable "scc_scope_environment" {
-  type        = string
-  description = "The environment that relates to this scope"
-  default     = "ibm-cloud"
+variable "scope" {
+  description = "The scope payload for the SCC profile attachment."
+  type = list(object({
+    environment = string
+    properties = list(object({
+      name  = string
+      value = string
+    }))
+  }))
+  default = null
 }

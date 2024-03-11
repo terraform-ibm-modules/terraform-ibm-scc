@@ -5,15 +5,26 @@ resource "ibm_scc_profile_attachment" "scc_profile_attachment" {
   description = var.attachment_description
   schedule    = var.attachment_schedule
   status      = var.attachment_status
-  scope {
-    environment = var.environment
-    dynamic "properties" {
-      for_each = var.scope_properties
-      iterator = property
-      content {
-        name  = property.value["name"]
-        value = property.value["value"]
+
+  dynamic "scope" {
+    for_each = var.scope
+    content {
+      environment = scope.value["environment"]
+      dynamic "properties" {
+        for_each = scope.value["properties"]
+        content {
+          name  = properties.value["name"]
+          value = properties.value["value"]
+        }
       }
+    }
+  }
+
+  notifications {
+    enabled = false
+    controls {
+      failed_control_ids = []
+      threshold_limit    = 14
     }
   }
 }
