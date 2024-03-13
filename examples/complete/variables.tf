@@ -31,15 +31,3 @@ variable "resource_tags" {
   description = "Optional list of tags to be added to created resources"
   default     = []
 }
-
-variable "scope" {
-  description = "The scope payload for the SCC profile attachment."
-  type = list(object({
-    environment = string
-    properties = list(object({
-      name  = string
-      value = string
-    }))
-  }))
-  default = null
-}

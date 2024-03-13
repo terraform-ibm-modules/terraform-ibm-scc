@@ -20,7 +20,8 @@ variable "attachment_description" {
 
 variable "attachment_schedule" {
   type        = string
-  description = "The schedule of an attachment evaluation. Allowable values are: daily, every_7_days, every_30_days"
+  description = "The schedule of an attachment evaluation. Allowable values are: daily, every_7_days, every_30_days. If no values are passed then no schedule will be set."
+  default     = null
 
   validation {
     condition     = contains(["daily", "every_7_days", "every_30_days"], var.attachment_schedule)
@@ -40,10 +41,40 @@ variable "attachment_status" {
 variable "scope" {
   description = "The scope payload for the SCC profile attachment."
   type = list(object({
-    environment = string
+    environment = optional(string, "ibm-cloud")
     properties = list(object({
       name  = string
       value = string
     }))
   }))
+}
+
+variable "attachment_parameters" {
+  description = "The request payload of the attachment parameters."
+  type = list(object({
+    parameter_name         = optional(string)
+    parameter_display_name = optional(string)
+    parameter_type         = optional(string)
+    parameter_value        = optional(string)
+    assessment_type        = optional(string)
+    assessment_id          = optional(string)
+  }))
+}
+
+variable "enable_notification" {
+  type        = bool
+  description = "To enable notifications"
+  default     = false
+}
+
+variable "failed_control_ids" {
+  type        = list(string)
+  description = "The failed control IDs"
+  default     = []
+}
+
+variable "threshold_limit" {
+  type        = number
+  description = "The threshold limit"
+  default     = 14
 }

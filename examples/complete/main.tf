@@ -55,12 +55,18 @@ locals {
 }
 
 module "create_profile_attachment" {
-  source                 = "../../modules/attachments/"
-  profile_id             = "f54b4962-06c6-46bb-bb04-396d9fa9bd60" # defaulted to SOC 2
+  source                 = "../../modules/attachment/"
+  profile_id             = "bfacb71d-4b84-41ac-9825-e8a3a3eb7405" # defaulted to SOC 2
   scc_instance_id        = module.create_scc_instance.guid
   attachment_name        = "${var.prefix}-attachment"
   attachment_description = "profile-attachment-description"
   attachment_schedule    = "every_7_days"
   attachment_status      = "enabled"
-  scope                  = var.scope != null ? var.scope : local.scope
+  scope                  = local.scope
+  attachment_parameters  = data.ibm_scc_profile.scc_profile.default_parameters
+}
+
+data "ibm_scc_profile" "scc_profile" {
+  instance_id = module.create_scc_instance.guid
+  profile_id  = "bfacb71d-4b84-41ac-9825-e8a3a3eb7405"
 }
