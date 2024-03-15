@@ -11,10 +11,8 @@ resource "ibm_resource_instance" "scc_instance" {
   tags              = var.resource_tags
 }
 
-data "ibm_scc_provider_type" "scc_provider_type" {
-  count              = var.wp_instance_crn != null ? 1 : 0
-  provider_type_name = var.provider_type_name
-  region             = var.region
+data "ibm_scc_provider_types" "scc_provider_types" {
+  count = var.wp_instance_crn != null ? 1 : 0
 }
 
 resource "ibm_scc_provider_type_instance" "scc_provider_type_instance_instance" {
@@ -23,7 +21,7 @@ resource "ibm_scc_provider_type_instance" "scc_provider_type_instance_instance" 
   instance_id      = ibm_resource_instance.scc_instance.id
   attributes       = { "wp_crn" : var.wp_instance_crn }
   name             = "workload-protection-instance"
-  provider_type_id = data.ibm_scc_provider_type.scc_provider_type.id
+  provider_type_id = { for k, v in data.ibm_scc_provider_types.scc_provider_types : k => v if v.name == "Security and Compliance Workload Protection" }[0].id
 }
 
 # workaround for https://github.com/IBM-Cloud/terraform-provider-ibm/issues/4478

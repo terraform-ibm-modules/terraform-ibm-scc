@@ -40,7 +40,7 @@ module "event_notification" {
 
 ##############################################################################
 # SCC Workload Protection Instance
-##############################################################################  
+##############################################################################
 
 module "scc_wp" {
   source            = "terraform-ibm-modules/scc-workload-protection/ibm"
@@ -56,14 +56,14 @@ module "scc_wp" {
 ##############################################################################
 
 module "create_scc_instance" {
-  source            = "../.."
-  instance_name     = "${var.prefix}-instance"
-  region            = var.region
-  resource_group_id = module.resource_group.resource_group_id
-  resource_tags     = var.resource_tags
-  cos_bucket        = module.cos.bucket_name
-  cos_instance_crn  = module.cos.cos_instance_id
-  en_instance_crn   = module.event_notification.crn
+  source                            = "../.."
+  instance_name                     = "${var.prefix}-instance"
+  region                            = var.region
+  resource_group_id                 = module.resource_group.resource_group_id
+  resource_tags                     = var.resource_tags
+  cos_bucket                        = module.cos.bucket_name
+  cos_instance_crn                  = module.cos.cos_instance_id
+  en_instance_crn                   = module.event_notification.crn
   skip_cos_iam_authorization_policy = false
   wp_instance_crn                   = module.scc_wp.crn
 }

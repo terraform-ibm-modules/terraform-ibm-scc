@@ -20,12 +20,6 @@ variable "wp_instance_crn" {
   default     = null
 }
 
-variable "provider_type_name" {
-  type        = string
-  description = "The name of the provider type instance."
-  default     = null
-}
-
 variable "plan" {
   description = "Pricing plan to create SCC instance. Options include security-compliance-center-standard-plan or security-compliance-center-trial-plan"
   type        = string
