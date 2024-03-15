@@ -7,7 +7,7 @@ module "resource_group" {
 
 module "cos" {
   source                 = "terraform-ibm-modules/cos/ibm"
-  version                = "7.5.0"
+  version                = "7.5.1"
   cos_instance_name      = "${var.prefix}-cos"
   kms_encryption_enabled = false
   retention_enabled      = false
@@ -56,12 +56,11 @@ locals {
 
 module "create_profile_attachment" {
   source                 = "../../modules/attachment/"
-  profile_id             = "bfacb71d-4b84-41ac-9825-e8a3a3eb7405" # defaulted to SOC 2
+  profile_id             = "bfacb71d-4b84-41ac-9825-e8a3a3eb7405" # defaulted to IBM Cloud Framework for Financial Services
   scc_instance_id        = module.create_scc_instance.guid
   attachment_name        = "${var.prefix}-attachment"
   attachment_description = "profile-attachment-description"
   attachment_schedule    = "every_7_days"
-  attachment_status      = "enabled"
   scope                  = local.scope
   attachment_parameters  = data.ibm_scc_profile.scc_profile.default_parameters
 }

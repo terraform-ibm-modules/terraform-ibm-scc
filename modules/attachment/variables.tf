@@ -20,21 +20,12 @@ variable "attachment_description" {
 
 variable "attachment_schedule" {
   type        = string
-  description = "The schedule of an attachment evaluation. Allowable values are: daily, every_7_days, every_30_days. If no values are passed then no schedule will be set."
+  description = "The schedule of an attachment evaluation. Allowable values are: daily, every_7_days, every_30_days, None. If no values are passed then no schedule will be set."
   default     = null
 
   validation {
-    condition     = contains(["daily", "every_7_days", "every_30_days"], var.attachment_schedule)
+    condition     = contains(["daily", "every_7_days", "every_30_days", "None"], var.attachment_schedule)
     error_message = "Allowed schedule can be - daily, every_7_days, every_30_days."
-  }
-}
-
-variable "attachment_status" {
-  type        = string
-  description = "The status of an attachment evaluation. Allowable values are: enabled, disabled"
-  validation {
-    condition     = contains(["enabled", "disabled"], var.attachment_status)
-    error_message = "Allowed status can be enabled or disabled."
   }
 }
 

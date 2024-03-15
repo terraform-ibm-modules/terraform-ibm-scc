@@ -3,9 +3,8 @@ resource "ibm_scc_profile_attachment" "scc_profile_attachment" {
   instance_id = var.scc_instance_id
   name        = var.attachment_name
   description = var.attachment_description
-  schedule    = var.attachment_schedule
-  status      = var.attachment_status
-
+  schedule    = var.attachment_schedule == "Null" ? null : var.attachment_schedule
+  status      = var.attachment_schedule == "Null" ? "disabled" : "enabled"
   dynamic "scope" {
     for_each = var.scope
     content {

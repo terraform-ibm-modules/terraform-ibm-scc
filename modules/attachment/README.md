@@ -19,11 +19,11 @@ module "create_scc_profile_attachment " {
   attachment_status         = "enabled"
 
   scope {
-    environment   = "ibm-cloud"
+    environment             = "ibm-cloud"
 
     properties {
-        name      = "scope-type"
-        value     = "account"
+        name                = "scope-type"
+        value               = "account"
     }
   }
 }
@@ -56,8 +56,7 @@ No modules.
 | <a name="input_attachment_description"></a> [attachment\_description](#input\_attachment\_description) | The description for the SCC profile attachment | `string` | n/a | yes |
 | <a name="input_attachment_name"></a> [attachment\_name](#input\_attachment\_name) | The name of the SCC profile attachment | `string` | n/a | yes |
 | <a name="input_attachment_parameters"></a> [attachment\_parameters](#input\_attachment\_parameters) | The request payload of the attachment parameters. | <pre>list(object({<br>    parameter_name         = optional(string)<br>    parameter_display_name = optional(string)<br>    parameter_type         = optional(string)<br>    parameter_value        = optional(string)<br>    assessment_type        = optional(string)<br>    assessment_id          = optional(string)<br>  }))</pre> | n/a | yes |
-| <a name="input_attachment_schedule"></a> [attachment\_schedule](#input\_attachment\_schedule) | The schedule of an attachment evaluation. Allowable values are: daily, every\_7\_days, every\_30\_days. If no values are passed then no schedule will be set. | `string` | `null` | no |
-| <a name="input_attachment_status"></a> [attachment\_status](#input\_attachment\_status) | The status of an attachment evaluation. Allowable values are: enabled, disabled | `string` | n/a | yes |
+| <a name="input_attachment_schedule"></a> [attachment\_schedule](#input\_attachment\_schedule) | The schedule of an attachment evaluation. Allowable values are: daily, every\_7\_days, every\_30\_days, None. If no values are passed then no schedule will be set. | `string` | `null` | no |
 | <a name="input_enable_notification"></a> [enable\_notification](#input\_enable\_notification) | To enable notifications | `bool` | `false` | no |
 | <a name="input_failed_control_ids"></a> [failed\_control\_ids](#input\_failed\_control\_ids) | The failed control IDs | `list(string)` | `[]` | no |
 | <a name="input_profile_id"></a> [profile\_id](#input\_profile\_id) | The profile ID | `string` | n/a | yes |
