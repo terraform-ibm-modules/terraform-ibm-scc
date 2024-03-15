@@ -50,6 +50,7 @@ output "cos_instance_id" {
 output "cos_bucket" {
   description = "The COS bucket created in this example"
   value       = module.cos.bucket_name
+  depends_on  = [module.create_scc_instance]
 }
 
 output "scc_profile_attachment_id" {

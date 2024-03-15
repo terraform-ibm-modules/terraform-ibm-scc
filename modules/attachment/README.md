@@ -24,8 +24,8 @@ module "create_scc_profile_attachment " {
   scope {
     environment   = "ibm-cloud"
     properties {
-        name      = "scope-type"
-        value     = "account"
+        name                = "scope-type"
+        value               = "account"
     }
   }
 }
