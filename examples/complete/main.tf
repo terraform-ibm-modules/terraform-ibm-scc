@@ -21,7 +21,6 @@ module "cos" {
   retention_enabled      = false
   resource_group_id      = module.resource_group.resource_group_id
   bucket_name            = "${var.prefix}-cb"
-  create_resource_key    = false
 }
 
 ##############################################################################
@@ -44,15 +43,14 @@ module "event_notification" {
 ##############################################################################
 
 module "create_scc_instance" {
-  source                            = "../.."
-  instance_name                     = "${var.prefix}-instance"
-  region                            = var.region
-  resource_group_id                 = module.resource_group.resource_group_id
-  resource_tags                     = var.resource_tags
-  cos_bucket                        = module.cos.bucket_name
-  cos_instance_crn                  = module.cos.cos_instance_id
-  en_instance_crn                   = module.event_notification.crn
-  skip_cos_iam_authorization_policy = false
+  source            = "../.."
+  instance_name     = "${var.prefix}-instance"
+  region            = var.region
+  resource_group_id = module.resource_group.resource_group_id
+  resource_tags     = var.resource_tags
+  cos_bucket        = module.cos.bucket_name
+  cos_instance_crn  = module.cos.cos_instance_id
+  en_instance_crn   = module.event_notification.crn
 }
 
 ##############################################################################
