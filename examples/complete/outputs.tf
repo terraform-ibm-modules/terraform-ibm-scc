@@ -53,6 +53,11 @@ output "cos_bucket" {
 }
 
 output "scc_profile_attachment_id" {
-  description = "SCC profile attachment details"
-  value       = module.create_profile_attachment
+  description = "SCC profile attachment ID"
+  value       = module.create_profile_attachment.id
+}
+
+output "scc_profile_attachment_parameters" {
+  description = "SCC profile attachment ID"
+  value       = module.create_profile_attachment.attachment_parameters
 }

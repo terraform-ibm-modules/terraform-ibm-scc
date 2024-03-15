@@ -1,3 +1,7 @@
+##############################################################################
+# Resource group
+##############################################################################
+
 module "resource_group" {
   source                       = "terraform-ibm-modules/resource-group/ibm"
   version                      = "1.1.5"
@@ -5,15 +9,24 @@ module "resource_group" {
   existing_resource_group_name = var.resource_group
 }
 
+##############################################################################
+# COS instance and bucket
+##############################################################################
+
 module "cos" {
   source                 = "terraform-ibm-modules/cos/ibm"
-  version                = "7.5.0"
+  version                = "7.5.1"
   cos_instance_name      = "${var.prefix}-cos"
   kms_encryption_enabled = false
   retention_enabled      = false
   resource_group_id      = module.resource_group.resource_group_id
   bucket_name            = "${var.prefix}-cb"
+  create_resource_key    = false
 }
+
+##############################################################################
+# Event Notifications
+##############################################################################
 
 module "event_notification" {
   source            = "terraform-ibm-modules/event-notifications/ibm"
@@ -25,6 +38,10 @@ module "event_notification" {
   service_endpoints = "public-and-private"
   region            = var.region
 }
+
+##############################################################################
+# SCC instance
+##############################################################################
 
 module "create_scc_instance" {
   source                            = "../.."
@@ -38,7 +55,18 @@ module "create_scc_instance" {
   skip_cos_iam_authorization_policy = false
 }
 
-locals {
+##############################################################################
+# SCC attachment
+##############################################################################
+
+module "create_profile_attachment" {
+  source                 = "../../modules/attachment"
+  profile_id             = "f54b4962-06c6-46bb-bb04-396d9fa9bd60" # temporarily default to SOC 2 profile until provider add support to do data lookup by name https://github.com/IBM-Cloud/terraform-provider-ibm/issues/5185)
+  scc_instance_id        = module.create_scc_instance.guid
+  attachment_name        = "${var.prefix}-attachment"
+  attachment_description = "profile-attachment-description"
+  attachment_schedule    = "every_7_days"
+  # scope the attachment to a specific resource group
   scope = [{
     environment = "ibm-cloud"
     properties = [
@@ -52,21 +80,4 @@ locals {
       }
     ]
   }]
-}
-
-module "create_profile_attachment" {
-  source                 = "../../modules/attachment/"
-  profile_id             = "bfacb71d-4b84-41ac-9825-e8a3a3eb7405" # defaulted to SOC 2
-  scc_instance_id        = module.create_scc_instance.guid
-  attachment_name        = "${var.prefix}-attachment"
-  attachment_description = "profile-attachment-description"
-  attachment_schedule    = "every_7_days"
-  attachment_status      = "enabled"
-  scope                  = local.scope
-  attachment_parameters  = data.ibm_scc_profile.scc_profile.default_parameters
-}
-
-data "ibm_scc_profile" "scc_profile" {
-  instance_id = module.create_scc_instance.guid
-  profile_id  = "bfacb71d-4b84-41ac-9825-e8a3a3eb7405"
 }
