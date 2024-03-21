@@ -12,18 +12,21 @@ locals {
 ##############################################################################
 
 resource "ibm_scc_rule" "scc_rule_instance" {
-  for_each = var.rules
+  count       = length(var.rules) > 0 ? length(var.rules) : 0
   instance_id = var.scc_instance_id
-  description = each.value.description
+  description = var.rules[count.index].description
 
-  import {
-    dynamic "parameters" {
-      for_each = each.value.import["parameters"]
-      content {
-        name = parameters.value.name
-        display_name = parameters.value.display_name
-        description = parameters.value.description
-        type = parameters.value.type
+  dynamic "import" {
+    for_each = length(var.rules[count.index].import.parameters) > 0 ? [var.rules[count.index].import] : []
+    content {
+      dynamic "parameters" {
+        for_each = import.value.parameters
+        content {
+          name         = parameters.value.name
+          display_name = parameters.value.display_name
+          description  = parameters.value.description
+          type         = parameters.value.type
+        }
       }
     }
   }
@@ -32,21 +35,21 @@ resource "ibm_scc_rule" "scc_rule_instance" {
     description = "description"
     and {
       description = "description"
-      property = "endpoints_restricted"
-      operator = "is_true"
+      property    = "endpoints_restricted"
+      operator    = "is_true"
     }
   }
 
   target {
-    service_name = each.value.target["service_name"]
-    service_display_name = each.value.target["service_display_name"]
-    resource_kind = each.value.target["resource_kind"]
+    service_name         = var.rules[count.index].target.service_name
+    service_display_name = var.rules[count.index].target.service_display_name
+    resource_kind        = var.rules[count.index].target.resource_kind
     dynamic "additional_target_attributes" {
-      for_each = each.value.target["additional_target_attributes"]
+      for_each = var.rules[count.index].target.additional_target_attributes
       content {
-        name = additional_target_attributes.value.name
+        name     = additional_target_attributes.value.name
         operator = additional_target_attributes.value.operator
-        value = additional_target_attributes.value.value
+        value    = additional_target_attributes.value.value
       }
     }
   }
