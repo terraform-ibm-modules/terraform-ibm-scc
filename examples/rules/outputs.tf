@@ -46,3 +46,8 @@ output "cos_bucket" {
   description = "The COS bucket created in this example"
   value       = module.cos.bucket_name
 }
+
+output "rule_ids" {
+  description = "SCC profile attachment parameters"
+  value       = module.create_scc_rules.rule_ids
+}

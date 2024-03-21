@@ -1,33 +1,54 @@
-# SCC Profile Attachment module
+# SCC Rules module
 
-A module to configure an SCC Profile Attachment.
+A module to configure SCC Rules.
 
 Features:
-- Create an attachment using a profile ID
-- Use the default profile parameters, or pass a custom parameter list
-- Configure a scan schedule for the attachment
-- Configure notifications for the attachment
+- Create scc rules for an scc instance
 
 ### Usage
 
 ```hcl
-module "create_scc_profile_attachment " {
-  source                         = "terraform-ibm-modules/scc/ibm//modules/attachment"
-  ibmcloud_api_key               = "XXXXXXXXXX" # pragma: allowlist secret
-  scc_instance_id                = "57b7ac52-e837-484c-aa07-e3c2db815c44" # replace with the ID of your SCC instance
-  profile_id                     = "f54b4962-06c6-46bb-bb04-396d9fa9bd60" # select the ID of the profile you want to use
-  use_profile_default_parameters = true # if setting this to false, custom parameters must be passed using the 'custom_attachment_parameters' variable
-  attachment_name                = "My attachment"
-  attachment_description         = "My attachment description"
-  attachment_schedule            = "daily"
-  # Configure the scope for the attachment - below scope will scan the whole account
-  scope {
-    environment   = "ibm-cloud"
-    properties {
-        name                = "scope-type"
-        value               = "account"
+module "create_scc_rules" {
+  source          = "../../modules/rules"
+  scc_instance_id = "123-XXX-XXX"
+  rules = [
+    {
+      description = "new rule 1"
+      version     = "1.0.0"
+      import = {
+        parameters = []
+      }
+      target = {
+        service_name  = "kms"
+        resource_kind = "instance"
+        additional_target_attributes = [
+          {
+            "name" : "location",
+            "operator" : "string_equals",
+            "value" : "us-south"
+          }
+        ]
+      }
+    },
+    {
+      description = "new rule 2"
+      version     = "1.0.0"
+      import = {
+        parameters = []
+      }
+      target = {
+        service_name  = "kms"
+        resource_kind = "instance"
+        additional_target_attributes = [
+          {
+            "name" : "location",
+            "operator" : "string_equals",
+            "value" : "eu-de"
+          }
+        ]
+      }
     }
-  }
+  ]
 }
 ```
 
@@ -58,5 +79,7 @@ No modules.
 
 ### Outputs
 
-No outputs.
+| Name | Description |
+|------|-------------|
+| <a name="output_rule_ids"></a> [rule\_ids](#output\_rule\_ids) | SCC profile attachment parameters |
 <!-- END OF PRE-COMMIT-TERRAFORM DOCS HOOK -->
