@@ -29,10 +29,10 @@ module "create_scc_instance" {
 module "create_scc_rules" {
   source          = "../../modules/rules"
   scc_instance_id = module.create_scc_instance.guid
+  rules_version   = "1.0.0"
   rules = [
     {
       description = "new rule 1"
-      version     = "1.0.0"
       import = {
         parameters = []
       }
@@ -50,7 +50,6 @@ module "create_scc_rules" {
     },
     {
       description = "new rule 2"
-      version     = "1.0.0"
       import = {
         parameters = []
       }

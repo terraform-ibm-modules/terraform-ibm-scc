@@ -53,5 +53,5 @@ resource "ibm_scc_rule" "scc_rule_instance" {
       }
     }
   }
-  version = "1.0.0"
+  version = var.rules_version
 }

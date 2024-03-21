@@ -4,11 +4,16 @@ variable "scc_instance_id" {
   default     = "57b7ac52-e837-484c-aa07-e3c2db815c44"
 }
 
+variable "rules_version" {
+  type        = string
+  description = "The version number of a rule."
+  default     = "1.0.0"
+}
+
 variable "rules" {
   description = "The rules to set for the SCC rules."
   type = list(object({
     description = string
-    version     = string
     import = object({
       parameters = list(object({
         name         = optional(string)
