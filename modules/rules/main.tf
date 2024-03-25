@@ -32,11 +32,59 @@ resource "ibm_scc_rule" "scc_rule_instance" {
   }
 
   required_config {
-    description = "description"
-    and {
-      description = "description"
-      property    = "endpoints_restricted"
-      operator    = "is_true"
+    description = var.rules[count.index].required_config.description
+    operator    = var.rules[count.index].required_config.operator
+    property    = var.rules[count.index].required_config.property
+    value       = var.rules[count.index].required_config.value
+    dynamic "and" {
+      for_each = var.rules[count.index].required_config.and == null ? [] : var.rules[count.index].required_config.and
+      content {
+        description = and.value.description
+        property    = and.value.property
+        operator    = and.value.operator
+        value       = and.value.value
+        dynamic "and" {
+          for_each = and.value.and == null ? [] : and.value.and
+          content {
+            description = and.value.description
+            property    = and.value.property
+            operator    = and.value.operator
+          }
+        }
+        dynamic "or" {
+          for_each = and.value.or == null ? [] : and.value.or
+          content {
+            description = or.value.description
+            property    = or.value.property
+            operator    = or.value.operator
+          }
+        }
+      }
+    }
+    dynamic "or" {
+      for_each = var.rules[count.index].required_config.or == null ? [] : var.rules[count.index].required_config.or
+      content {
+        description = or.value.description
+        property    = or.value.property
+        operator    = or.value.operator
+        value       = or.value.value
+        dynamic "and" {
+          for_each = or.value.and == null ? [] : or.value.and
+          content {
+            description = and.value.description
+            property    = and.value.property
+            operator    = and.value.operator
+          }
+        }
+        dynamic "or" {
+          for_each = or.value.or == null ? [] : or.value.or
+          content {
+            description = or.value.description
+            property    = or.value.property
+            operator    = or.value.operator
+          }
+        }
+      }
     }
   }
 

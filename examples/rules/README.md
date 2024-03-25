@@ -9,4 +9,4 @@ The text below should describe exactly what resources are provisioned / configur
 A basic example that will provision the following:
 - A new resource group if one is not passed in.
 - A new Security and Compliance Center instance with COS bucket configuration
-- New SCC rules for Security and Compliance Center instance
+- Creates 3 new custom SCC rules for a Security and Compliance Center instance

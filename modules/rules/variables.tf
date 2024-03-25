@@ -1,7 +1,7 @@
 variable "scc_instance_id" {
   type        = string
   description = "ID of the SCC instance in which to create the attachment."
-  default     = "57b7ac52-e837-484c-aa07-e3c2db815c44"
+  default     = "5cd2ee42-a26b-4631-a0d6-e0f220716d5f"
 }
 
 variable "rules_version" {
@@ -13,7 +13,10 @@ variable "rules_version" {
 variable "rules" {
   description = "The rules to set for the SCC rules."
   type = list(object({
-    description = string
+    description = optional(string)
+    operator    = optional(string)
+    property    = optional(string)
+    value       = optional(string)
     import = object({
       parameters = list(object({
         name         = optional(string)
@@ -22,10 +25,60 @@ variable "rules" {
         type         = optional(string)
       }))
     })
-    # required_config = object({
-    #   description = string
-    #   value = list(object({}))
-    # })
+    required_config = object({
+      description = optional(string)
+      operator    = optional(string)
+      property    = optional(string)
+      value       = optional(string)
+      and = optional(list(
+        object({
+          description = optional(string)
+          operator    = string
+          property    = string
+          value       = optional(string)
+          and = optional(list(
+            object({
+              description = optional(string)
+              operator    = string
+              property    = string
+              value       = optional(string)
+            })
+          ))
+          or = optional(list(
+            object({
+              description = optional(string)
+              operator    = string
+              property    = string
+              value       = optional(string)
+            })
+          ))
+        })
+      ))
+      or = optional(list(
+        object({
+          description = optional(string)
+          operator    = optional(string)
+          property    = optional(string)
+          value       = optional(string)
+          and = optional(list(
+            object({
+              description = optional(string)
+              operator    = string
+              property    = string
+              value       = optional(string)
+            })
+          ))
+          or = optional(list(
+            object({
+              description = optional(string)
+              operator    = string
+              property    = string
+              value       = optional(string)
+            })
+          ))
+        })
+      ))
+    })
     target = object({
       service_name         = optional(string)
       service_display_name = optional(string)
