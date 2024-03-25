@@ -1,13 +1,4 @@
 ##############################################################################
-# Variable validation
-##############################################################################
-
-locals {
-  # tflint-ignore: terraform_unused_declarations
-  # validate_attachment_parameters = var.custom_attachment_parameters == null && !var.use_profile_default_parameters ? tobool("A value must be passed for 'custom_attachment_parameters' if 'use_profile_default_parameters' is set to false.") : true
-}
-
-##############################################################################
 # SCC rules
 ##############################################################################
 
