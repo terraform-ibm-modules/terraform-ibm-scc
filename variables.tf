@@ -14,6 +14,12 @@ variable "instance_name" {
   description = "Name of the security and compliance instance that will be provisioned by this module"
 }
 
+variable "attach_wp_to_scc_instance" {
+  type        = string
+  description = "Set to `true` to attach an existing SCC Workload Protection instance to attach it to the SCC instance."
+  default     = false
+}
+
 variable "wp_instance_crn" {
   type        = string
   description = "Optionally pass the CRN of an existing SCC Workload Protection instance to attach it to the SCC instance."

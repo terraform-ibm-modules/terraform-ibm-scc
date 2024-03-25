@@ -12,16 +12,21 @@ resource "ibm_resource_instance" "scc_instance" {
 }
 
 data "ibm_scc_provider_types" "scc_provider_types" {
-  count = var.wp_instance_crn != null ? 1 : 0
+  count       = var.attach_wp_to_scc_instance ? 1 : 0
+  instance_id = ibm_resource_instance.scc_instance.guid
+}
+
+locals {
+  provider_type_id = data.ibm_scc_provider_types.scc_provider_types[0].provider_types[index(data.ibm_scc_provider_types.scc_provider_types[0].provider_types[*].name, "workload-protection")].id
 }
 
 resource "ibm_scc_provider_type_instance" "scc_provider_type_instance_instance" {
   depends_on       = [time_sleep.wait_for_authorization_policy]
-  count            = var.wp_instance_crn != null ? 1 : 0
-  instance_id      = ibm_resource_instance.scc_instance.id
+  count            = var.attach_wp_to_scc_instance ? 1 : 0
+  instance_id      = ibm_resource_instance.scc_instance.guid
   attributes       = { "wp_crn" : var.wp_instance_crn }
   name             = "workload-protection-instance"
-  provider_type_id = { for k, v in data.ibm_scc_provider_types.scc_provider_types : k => v if v.name == "Security and Compliance Workload Protection" }[0].id
+  provider_type_id = local.provider_type_id
 }
 
 # workaround for https://github.com/IBM-Cloud/terraform-provider-ibm/issues/4478
@@ -32,7 +37,7 @@ resource "time_sleep" "wait_for_authorization_policy" {
 }
 
 resource "ibm_iam_authorization_policy" "scc_wp_s2s_access" {
-  count                       = var.wp_instance_crn != null ? 1 : 0
+  count                       = var.attach_wp_to_scc_instance ? 1 : 0
   source_service_name         = "compliance"
   source_resource_instance_id = ibm_resource_instance.scc_instance.guid
   roles                       = ["Reader"]
