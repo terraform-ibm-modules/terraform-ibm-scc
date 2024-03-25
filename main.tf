@@ -17,7 +17,8 @@ data "ibm_scc_provider_types" "scc_provider_types" {
 }
 
 locals {
-  provider_type_id = data.ibm_scc_provider_types.scc_provider_types[0].provider_types[index(data.ibm_scc_provider_types.scc_provider_types[0].provider_types[*].name, "workload-protection")].id
+  provider_type_index = index(data.ibm_scc_provider_types.scc_provider_types[0].provider_types[*].name, "workload-protection")
+  provider_type_id = data.ibm_scc_provider_types.scc_provider_types[0].provider_types[local.provider_type_index].id
 }
 
 resource "ibm_scc_provider_type_instance" "scc_provider_type_instance_instance" {
