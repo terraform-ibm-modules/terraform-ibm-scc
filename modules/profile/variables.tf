@@ -12,18 +12,20 @@ variable "profile_name" {
   description = "The profile name. Constraints: The maximum length is `64` characters. The minimum length is `2` characters. The value must match regular expression `/[A-Za-z0-9]+/`."
 }
 
+variable "profile_type" {
+  type        = string
+  description = "The profile type. Constraints: Allowable values are: `predefined`, `custom`."
+}
+
 variable "profile_description" {
   type        = string
   description = "The profile description. Constraints: The maximum length is `256` characters. The minimum length is `2` characters. The value must match regular expression `/[A-Za-z0-9]+/`."
 }
 
-variable "controls" {
-  type = list(object({
-    control_library_id = optional(string)
-    control_id         = optional(string)
-  }))
+variable "control_library_names" {
+  type        = list
   default     = []
-  description = "The list of controls that are used to create the profile. Constraints: The maximum length is `600` items. The minimum length is `0` items."
+  description = "The list of control_library_names that are used to create the profile. Constraints: The maximum length is `600` items. The minimum length is `0` items."
 }
 
 variable "default_parameters" {

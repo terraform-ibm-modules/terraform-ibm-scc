@@ -1,10 +1,18 @@
+data "ibm_scc_control_libraries" "scc_control_libraries" {
+    instance_id = "00000000-1111-2222-3333-444444444444"
+}
+
+locals {
+  control_libraries = [for control_library in data.ibm_scc_control_libraries.scc_control_libraries[0].control_libraries : control_library if contains(var.var.control_library_names, control_library.control_library_name)]
+}
+
 resource "ibm_scc_profile" "scc_profile_instance" {
   instance_id = var.instance_id
 
   dynamic "controls" {
-    for_each = var.controls != null ? var.controls : []
+    for_each = locals.control_libraries
     content {
-      control_library_id = controls.value.control_library_id
+      control_library_id = controls.value.id
       control_id         = controls.value.control_id
     }
   }
@@ -21,5 +29,5 @@ resource "ibm_scc_profile" "scc_profile_instance" {
   }
   profile_description = var.profile_description
   profile_name        = var.profile_name
-  profile_type        = "custom"
+  profile_type        = var.profile_type
 }
