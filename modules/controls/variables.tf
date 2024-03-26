@@ -22,12 +22,6 @@ variable "control_library_type" {
   description = "The control library type. Constraints: Allowable values are: `predefined`, `custom`."
 }
 
-variable "version_group_label" {
-  type        = string
-  description = "(Optional) The version group label. Constraints: The maximum length is `36` characters. The minimum length is `36` characters. The value must match regular expression `/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/`."
-  default     = null
-}
-
 variable "latest" {
   type        = bool
   description = "Choose whether you want the latest version of the control library."

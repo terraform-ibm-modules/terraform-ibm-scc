@@ -1,9 +1,20 @@
+data "ibm_scc_control_libraries" "scc_control_libraries" {
+    instance_id = var.instance_id
+}
+
+
+locals {
+  control_library_index = index(data.ibm_scc_control_libraries.scc_control_libraries[0].control_libraries[*].name, var.control_library_name)
+  control_library = data.ibm_scc_control_libraries.scc_control_libraries[0].control_libraries[local.control_library_index]
+}
+
 resource "ibm_scc_control_library" "scc_control_library_instance" {
   instance_id                 = var.instance_id
   control_library_name        = var.control_library_name
   control_library_description = var.control_library_description
   control_library_type        = var.control_library_type
   latest                      = var.latest
+  version_group_label         = local.control_library.version_group_label
 
   dynamic "controls" {
     for_each = var.controls != null ? var.controls : []
@@ -53,5 +64,4 @@ resource "ibm_scc_control_library" "scc_control_library_instance" {
       status              = controls.value.status
     }
   }
-  version_group_label = var.version_group_label
 }
