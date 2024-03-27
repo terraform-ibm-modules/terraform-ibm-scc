@@ -1,18 +1,39 @@
 data "ibm_scc_control_libraries" "scc_control_libraries" {
-    instance_id = "00000000-1111-2222-3333-444444444444"
+  instance_id = var.instance_id
 }
 
 locals {
-  control_libraries = [for control_library in data.ibm_scc_control_libraries.scc_control_libraries[0].control_libraries : control_library if contains(var.var.control_library_names, control_library.control_library_name)]
+  control_library_ids = [for control_library in data.ibm_scc_control_libraries.scc_control_libraries.control_libraries : control_library if contains(var.control_library_ids, control_library.id)]
+}
+
+data "ibm_scc_control_library" "scc_control_library" {
+  count              = length(var.control_library_ids)
+  instance_id        = var.instance_id
+  control_library_id = local.control_library_ids[count.index].id
+}
+
+locals {
+  # Nested loop over both lists, and flatten the result.
+  controls_map = flatten([
+    for index, control_library in local.control_library_ids : [
+      for control in data.ibm_scc_control_library.scc_control_library[index].controls : {
+        control_library_id = control_library.id
+        control_id         = control.control_id
+      }
+    ]
+  ])
 }
 
 resource "ibm_scc_profile" "scc_profile_instance" {
-  instance_id = var.instance_id
+  instance_id         = var.instance_id
+  profile_description = var.profile_description
+  profile_name        = var.profile_name
+  profile_type        = "custom"
 
   dynamic "controls" {
-    for_each = locals.control_libraries
+    for_each = local.controls_map
     content {
-      control_library_id = controls.value.id
+      control_library_id = controls.value.control_library_id
       control_id         = controls.value.control_id
     }
   }
@@ -27,7 +48,4 @@ resource "ibm_scc_profile" "scc_profile_instance" {
       parameter_type          = default_parameters.value.parameter_type
     }
   }
-  profile_description = var.profile_description
-  profile_name        = var.profile_name
-  profile_type        = var.profile_type
 }

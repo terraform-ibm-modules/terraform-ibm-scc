@@ -62,12 +62,14 @@ No modules.
 | Name | Type |
 |------|------|
 | [ibm_scc_profile.scc_profile_instance](https://registry.terraform.io/providers/IBM-Cloud/ibm/latest/docs/resources/scc_profile) | resource |
+| [ibm_scc_control_libraries.scc_control_libraries](https://registry.terraform.io/providers/IBM-Cloud/ibm/latest/docs/data-sources/scc_control_libraries) | data source |
+| [ibm_scc_control_library.scc_control_library](https://registry.terraform.io/providers/IBM-Cloud/ibm/latest/docs/data-sources/scc_control_library) | data source |
 
 ### Inputs
 
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
-| <a name="input_controls"></a> [controls](#input\_controls) | The list of controls that are used to create the profile. Constraints: The maximum length is `600` items. The minimum length is `0` items. | <pre>list(object({<br>    control_library_id = optional(string)<br>    control_id         = optional(string)<br>  }))</pre> | `[]` | no |
+| <a name="input_control_library_ids"></a> [control\_library\_ids](#input\_control\_library\_ids) | The list of control\_library\_ids that are used to create the profile. Constraints: The maximum length is `600` items. The minimum length is `0` items. | `list(any)` | `[]` | no |
 | <a name="input_default_parameters"></a> [default\_parameters](#input\_default\_parameters) | The default parameters of the profile. Constraints: The maximum length is `512` items. The minimum length is `0` items. | <pre>list(object({<br>    assessment_type         = optional(string)<br>    assessment_id           = optional(string)<br>    parameter_name          = optional(string)<br>    parameter_default_value = optional(string)<br>    parameter_display_name  = optional(string)<br>    parameter_type          = optional(string)<br>  }))</pre> | `[]` | no |
 | <a name="input_instance_id"></a> [instance\_id](#input\_instance\_id) | The ID of the SCC instance in a particular region. | `string` | n/a | yes |
 | <a name="input_profile_description"></a> [profile\_description](#input\_profile\_description) | The profile description. Constraints: The maximum length is `256` characters. The minimum length is `2` characters. The value must match regular expression `/[A-Za-z0-9]+/`. | `string` | n/a | yes |
@@ -77,5 +79,5 @@ No modules.
 
 | Name | Description |
 |------|-------------|
-| <a name="output_profile_id"></a> [profile\_id](#output\_profile\_id) | The id of the SCC profile created by this module |
+| <a name="output_scc_control_libraries"></a> [scc\_control\_libraries](#output\_scc\_control\_libraries) | The COS bucket created in this example |
 <!-- END OF PRE-COMMIT-TERRAFORM DOCS HOOK -->

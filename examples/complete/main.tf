@@ -61,14 +61,16 @@ module "create_scc_profile" {
   source      = "../../modules/profile/."
   instance_id = module.create_scc_instance.guid
 
-  control_library_names = [
-    "Information Flow Enforcement",
-    "Use of External Systems"
+  # control_library_names = [
+  #   "IBM Cloud for Financial Services",
+  # ]
+
+  control_library_ids = [
+    "65e75833-e59d-4313-81c4-471af17d4782",
   ]
 
   profile_name        = "${var.prefix}-profile"
   profile_description = "scc-custom"
-  profile_type        = "custom"
 }
 
 ##############################################################################
