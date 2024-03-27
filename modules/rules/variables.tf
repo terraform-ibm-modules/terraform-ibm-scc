@@ -1,13 +1,11 @@
 variable "scc_instance_id" {
   type        = string
-  description = "ID of the SCC instance in which to create the attachment."
-  default     = "5cd2ee42-a26b-4631-a0d6-e0f220716d5f"
+  description = "ID of the SCC instance in which to create the rules."
 }
 
 variable "rules_version" {
   type        = string
   description = "The version number of a rule."
-  default     = "1.0.0"
 }
 
 variable "rules" {

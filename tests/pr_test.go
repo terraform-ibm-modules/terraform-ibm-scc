@@ -12,6 +12,7 @@ import (
 const resourceGroup = "geretain-test-resources" // Use existing resource group
 const basicExampleDir = "examples/basic"
 const completeExampleDir = "examples/complete"
+const customExampleDir = "examples/custom"
 
 func setupBasicExampleOptions(t *testing.T, prefix string, dir string) *testhelper.TestOptions {
 	options := testhelper.TestOptionsDefaultWithVars(&testhelper.TestOptions{
@@ -49,6 +50,16 @@ func TestRunCompleteExample(t *testing.T) {
 	t.Parallel()
 
 	options := setupCompleteExampleOptions(t, "scc-cmp", completeExampleDir)
+
+	output, err := options.RunTestConsistency()
+	assert.Nil(t, err, "This should not have errored")
+	assert.NotNil(t, output, "Expected some output")
+}
+
+func TestRunCustomExample(t *testing.T) {
+	t.Parallel()
+
+	options := setupCompleteExampleOptions(t, "scc-cust", customExampleDir)
 
 	output, err := options.RunTestConsistency()
 	assert.Nil(t, err, "This should not have errored")
