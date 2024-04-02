@@ -1,4 +1,4 @@
-# Rules example
+# Custom example
 
 <!--
 The basic example should call the module(s) stored in this repository with a basic configuration.

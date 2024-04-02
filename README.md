@@ -20,7 +20,7 @@ This module configures an IBM Cloud Security and Compliance instance.
 * [Examples](./examples)
     * [Basic example](./examples/basic)
     * [Complete example](./examples/complete)
-    * [Rules example](./examples/custom)
+    * [Custom example](./examples/custom)
 * [Contributing](#contributing)
 <!-- END OVERVIEW HOOK -->
 
