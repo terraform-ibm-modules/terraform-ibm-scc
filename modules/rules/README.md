@@ -83,5 +83,5 @@ No modules.
 
 | Name | Description |
 |------|-------------|
-| <a name="output_rule_ids"></a> [rule\_ids](#output\_rule\_ids) | The ids for the rules created by this module. |
+| <a name="output_rule_ids"></a> [rule\_ids](#output\_rule\_ids) | The unique identifier of the scc\_rules created by this module. |
 <!-- END OF PRE-COMMIT-TERRAFORM DOCS HOOK -->

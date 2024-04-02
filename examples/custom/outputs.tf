@@ -48,6 +48,6 @@ output "cos_bucket" {
 }
 
 output "rule_ids" {
-  description = "SCC profile attachment parameters"
+  description = "The unique identifier of the scc_rules created by this module."
   value       = module.create_scc_rules.rule_ids
 }
