@@ -3,19 +3,23 @@ data "ibm_scc_control_libraries" "scc_control_libraries" {
 }
 
 locals {
-  control_library_ids = [for control_library in data.ibm_scc_control_libraries.scc_control_libraries.control_libraries : control_library if contains(var.control_library_ids, control_library.id)]
+  control_libraries = flatten([for control_library in data.ibm_scc_control_libraries.scc_control_libraries.control_libraries : [
+    for ctrl in var.control_libraries:
+      control_library if ctrl.control_library_name == control_library.control_library_name && ctrl.control_library_version == control_library.control_library_version
+    ]
+  ])
 }
 
 data "ibm_scc_control_library" "scc_control_library" {
-  count              = length(var.control_library_ids)
+  count              = length(var.control_libraries)
   instance_id        = var.instance_id
-  control_library_id = local.control_library_ids[count.index].id
+  control_library_id = local.control_libraries[count.index].id
 }
 
 locals {
   # Nested loop over both lists, and flatten the result.
   controls_map = flatten([
-    for index, control_library in local.control_library_ids : [
+    for index, control_library in local.control_libraries : [
       for control in data.ibm_scc_control_library.scc_control_library[index].controls : {
         control_library_id = control_library.id
         control_id         = control.control_id

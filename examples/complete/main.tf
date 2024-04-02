@@ -65,8 +65,11 @@ module "create_scc_profile" {
   #   "IBM Cloud for Financial Services",
   # ]
 
-  control_library_ids = [
-    "65e75833-e59d-4313-81c4-471af17d4782",
+  control_libraries = [
+    {
+      control_library_name = "IBM Cloud Framework for Financial Services",
+      control_library_version = "1.6.0"
+    }
   ]
 
   profile_name        = "${var.prefix}-profile"
