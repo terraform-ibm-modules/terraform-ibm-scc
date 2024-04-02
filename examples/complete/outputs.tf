@@ -53,17 +53,22 @@ output "cos_bucket" {
   depends_on  = [module.create_scc_instance]
 }
 
-# output "scc_control_libraries" {
-#   description = "The COS bucket created in this example"
-#   value       = module.create_scc_profile.scc_control_libraries
-# }
+output "profile_id" {
+  description = "The id of the SCC profile created by this module"
+  value       = module.create_scc_profile.profile_id
+}
 
-# output "scc_profile_attachment_id" {
-#   description = "SCC profile attachment ID"
-#   value       = module.create_profile_attachment.id
-# }
+output "scc_control_libraries" {
+  description = "The COS bucket created in this example"
+  value       = module.create_scc_profile.scc_control_libraries
+}
 
-# output "scc_profile_attachment_parameters" {
-#   description = "SCC profile attachment ID"
-#   value       = module.create_profile_attachment.attachment_parameters
-# }
+output "scc_profile_attachment_id" {
+  description = "SCC profile attachment ID"
+  value       = module.create_profile_attachment.id
+}
+
+output "scc_profile_attachment_parameters" {
+  description = "SCC profile attachment ID"
+  value       = module.create_profile_attachment.attachment_parameters
+}

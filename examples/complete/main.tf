@@ -61,15 +61,15 @@ module "create_scc_profile" {
   source      = "../../modules/profile/."
   instance_id = module.create_scc_instance.guid
 
-  # control_library_names = [
-  #   "IBM Cloud for Financial Services",
-  # ]
-
   control_libraries = [
     {
-      control_library_name = "IBM Cloud Framework for Financial Services",
+      control_library_name    = "IBM Cloud Framework for Financial Services",
       control_library_version = "1.6.0"
-    }
+    },
+    {
+      control_library_name    = "CIS Azure Kubernetes Service (AKS) Benchmark",
+      control_library_version = "1.2.0"
+    },
   ]
 
   profile_name        = "${var.prefix}-profile"
@@ -80,25 +80,25 @@ module "create_scc_profile" {
 # SCC attachment
 ##############################################################################
 
-# module "create_profile_attachment" {
-#   source                 = "../../modules/attachment"
-#   profile_id             = "f54b4962-06c6-46bb-bb04-396d9fa9bd60" # temporarily default to SOC 2 profile until provider add support to do data lookup by name https://github.com/IBM-Cloud/terraform-provider-ibm/issues/5185)
-#   scc_instance_id        = module.create_scc_instance.guid
-#   attachment_name        = "${var.prefix}-attachment"
-#   attachment_description = "profile-attachment-description"
-#   attachment_schedule    = "every_7_days"
-#   # scope the attachment to a specific resource group
-#   scope = [{
-#     environment = "ibm-cloud"
-#     properties = [
-#       {
-#         name  = "scope_type"
-#         value = "account.resource_group"
-#       },
-#       {
-#         name  = "scope_id"
-#         value = module.resource_group.resource_group_id
-#       }
-#     ]
-#   }]
-# }
+module "create_profile_attachment" {
+  source                 = "../../modules/attachment"
+  profile_id             = module.create_scc_profile.profile_id
+  scc_instance_id        = module.create_scc_instance.guid
+  attachment_name        = "${var.prefix}-attachment"
+  attachment_description = "profile-attachment-description"
+  attachment_schedule    = "every_7_days"
+  # scope the attachment to a specific resource group
+  scope = [{
+    environment = "ibm-cloud"
+    properties = [
+      {
+        name  = "scope_type"
+        value = "account.resource_group"
+      },
+      {
+        name  = "scope_id"
+        value = module.resource_group.resource_group_id
+      }
+    ]
+  }]
+}

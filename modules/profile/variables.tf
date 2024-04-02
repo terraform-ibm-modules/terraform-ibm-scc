@@ -18,8 +18,8 @@ variable "profile_description" {
 }
 
 variable "control_libraries" {
-  type        = list(object({
-    control_library_name = optional(string)
+  type = list(object({
+    control_library_name    = optional(string)
     control_library_version = optional(string)
   }))
   default     = []
