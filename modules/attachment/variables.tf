@@ -1,6 +1,9 @@
-variable "profile_id" {
-  type        = string
-  description = "ID of the profile you wish to use for the attachment."
+variable "profile" {
+  type = object({
+    profile_name    = string
+    profile_version = string
+  })
+  description = "The profile that is used for the attachment."
 }
 
 variable "scc_instance_id" {

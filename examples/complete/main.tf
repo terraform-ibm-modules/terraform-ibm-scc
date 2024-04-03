@@ -20,7 +20,7 @@ module "cos" {
   kms_encryption_enabled = false
   retention_enabled      = false
   resource_group_id      = module.resource_group.resource_group_id
-  bucket_name            = "${var.prefix}-cb"
+  bucket_name            = "${var.prefix}-cb3"
 }
 
 ##############################################################################
@@ -58,8 +58,11 @@ module "create_scc_instance" {
 ##############################################################################
 
 module "create_profile_attachment" {
-  source                 = "../../modules/attachment"
-  profile_id             = "f54b4962-06c6-46bb-bb04-396d9fa9bd60" # temporarily default to SOC 2 profile until provider add support to do data lookup by name https://github.com/IBM-Cloud/terraform-provider-ibm/issues/5185)
+  source = "../../modules/attachment"
+  profile = {
+    profile_name    = "IBM Cloud Framework for Financial Services"
+    profile_version = "1.6.0"
+  }
   scc_instance_id        = module.create_scc_instance.guid
   attachment_name        = "${var.prefix}-attachment"
   attachment_description = "profile-attachment-description"
