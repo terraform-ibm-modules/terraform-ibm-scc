@@ -65,7 +65,7 @@ module "create_scc_profile" {
     {
       control_library_name    = "IBM Cloud Framework for Financial Services",
       control_library_version = "1.6.0"
-    },
+    }
   ]
 
   profile_name        = "${var.prefix}-profile"
