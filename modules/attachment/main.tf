@@ -18,13 +18,13 @@ data "ibm_scc_profiles" "scc_profiles" {
 locals {
   profile_map = {
     for profile in data.ibm_scc_profiles.scc_profiles.profiles :
-    var.profile.profile_name => profile if profile.profile_name == var.profile.profile_name && profile.profile_version == var.profile.profile_version
+    var.profile.name => profile if profile.profile_name == var.profile.name && profile.profile_version == var.profile.version
   }
 
   # tflint-ignore: terraform_unused_declarations
-  profile_check = lookup(local.profile_map, var.profile.profile_name, null) == null ? tobool("Could not find a valid profile name ${var.profile.profile_name} and matching version ${var.profile.profile_version}") : null
+  validate_profile = lookup(local.profile_map, var.profile.name, null) == null ? tobool("Could not find a valid profile name ${var.profile.name} and matching version ${var.profile.version}") : true
 
-  profile = local.profile_map[var.profile.profile_name]
+  profile = local.validate_profile ? local.profile_map[var.profile.name] : null
 }
 
 data "ibm_scc_profile" "scc_profile" {

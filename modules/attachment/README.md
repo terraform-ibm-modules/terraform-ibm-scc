@@ -62,7 +62,7 @@ No modules.
 | <a name="input_enable_notification"></a> [enable\_notification](#input\_enable\_notification) | To enable notifications. | `bool` | `false` | no |
 | <a name="input_notification_threshold_limit"></a> [notification\_threshold\_limit](#input\_notification\_threshold\_limit) | The threshold limit for notifications. | `number` | `14` | no |
 | <a name="input_notify_failed_control_ids"></a> [notify\_failed\_control\_ids](#input\_notify\_failed\_control\_ids) | A list of control IDs to send notifcations for when they fail. | `list(string)` | `[]` | no |
-| <a name="input_profile"></a> [profile](#input\_profile) | The profile that is used for the attachment. | <pre>object({<br>    profile_name    = string<br>    profile_version = string<br>  })</pre> | n/a | yes |
+| <a name="input_profile"></a> [profile](#input\_profile) | The profile that is used for the attachment. | <pre>object({<br>    name    = string<br>    version = string<br>  })</pre> | n/a | yes |
 | <a name="input_scc_instance_id"></a> [scc\_instance\_id](#input\_scc\_instance\_id) | ID of the SCC instance in which to create the attachment. | `string` | n/a | yes |
 | <a name="input_scope"></a> [scope](#input\_scope) | The scope to set for the SCC profile attachment. | <pre>list(object({<br>    environment = optional(string, "ibm-cloud")<br>    properties = list(object({<br>      name  = string<br>      value = string<br>    }))<br>  }))</pre> | n/a | yes |
 | <a name="input_use_profile_default_parameters"></a> [use\_profile\_default\_parameters](#input\_use\_profile\_default\_parameters) | A boolean indicating whether to use the profiles default parameters. If set to false, a value must be passed for the `custum_attachment_parameters` input variable. | `bool` | `true` | no |

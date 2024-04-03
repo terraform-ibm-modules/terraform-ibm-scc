@@ -1,7 +1,7 @@
 variable "profile" {
   type = object({
-    profile_name    = string
-    profile_version = string
+    name    = string
+    version = string
   })
   description = "The profile that is used for the attachment."
 }
