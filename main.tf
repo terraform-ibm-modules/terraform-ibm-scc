@@ -17,14 +17,14 @@ data "ibm_scc_provider_types" "scc_provider_types" {
 }
 
 locals {
-  provider_type_names = length(data.ibm_scc_provider_types.scc_provider_types) > 0 ? data.ibm_scc_provider_types.scc_provider_types[0].provider_types[*].name : []
-  provider_type_index = length(local.provider_type_names) > 0 ? index(local.provider_type_names, "workload-protection") : null
-  provider_type_id    = local.provider_type_index != null ? data.ibm_scc_provider_types.scc_provider_types[0].provider_types[local.provider_type_index].id : null
+  provider_type_names = var.attach_wp_to_scc_instance ? data.ibm_scc_provider_types.scc_provider_types[0].provider_types[*].name : []
+  provider_type_index = var.attach_wp_to_scc_instance && length(local.provider_type_names) > 0 ? index(local.provider_type_names, "workload-protection") : tobool("Could not find any provider type names")
+  provider_type_id    = var.attach_wp_to_scc_instance ? data.ibm_scc_provider_types.scc_provider_types[0].provider_types[local.provider_type_index].id : null
 }
 
 resource "ibm_scc_provider_type_instance" "scc_provider_type_instance_instance" {
   depends_on       = [time_sleep.wait_for_authorization_policy]
-  count            = var.attach_wp_to_scc_instance && local.provider_type_id != null ? 1 : 0
+  count            = var.attach_wp_to_scc_instance ? 1 : 0
   instance_id      = ibm_resource_instance.scc_instance.guid
   attributes       = { "wp_crn" : var.wp_instance_crn }
   name             = "workload-protection-instance"
