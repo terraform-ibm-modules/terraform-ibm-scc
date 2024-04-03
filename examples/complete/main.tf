@@ -66,10 +66,6 @@ module "create_scc_profile" {
       control_library_name    = "IBM Cloud Framework for Financial Services",
       control_library_version = "1.6.0"
     },
-    {
-      control_library_name    = "CIS Azure Kubernetes Service (AKS) Benchmark",
-      control_library_version = "1.2.0"
-    },
   ]
 
   profile_name        = "${var.prefix}-profile"
