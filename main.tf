@@ -17,9 +17,14 @@ data "ibm_scc_provider_types" "scc_provider_types" {
 }
 
 locals {
-  provider_type_names = var.attach_wp_to_scc_instance ? data.ibm_scc_provider_types.scc_provider_types[0].provider_types[*].name : []
-  provider_type_index = var.attach_wp_to_scc_instance && length(local.provider_type_names) > 0 ? index(local.provider_type_names, "workload-protection") : tobool("Could not find any provider type names")
-  provider_type_id    = var.attach_wp_to_scc_instance ? data.ibm_scc_provider_types.scc_provider_types[0].provider_types[local.provider_type_index].id : null
+  provider_types_list = var.attach_wp_to_scc_instance ? data.ibm_scc_provider_types.scc_provider_types[0].provider_types : []
+
+  provider_types_map = {
+    for provider_type in local.provider_types_list :
+    provider_type.name => provider_type
+  }
+
+  provider_type = lookup(local.provider_types_map, "workload-protection", null)
 }
 
 resource "ibm_scc_provider_type_instance" "scc_provider_type_instance_instance" {
@@ -28,7 +33,7 @@ resource "ibm_scc_provider_type_instance" "scc_provider_type_instance_instance" 
   instance_id      = ibm_resource_instance.scc_instance.guid
   attributes       = { "wp_crn" : var.wp_instance_crn }
   name             = "workload-protection-instance"
-  provider_type_id = local.provider_type_id
+  provider_type_id = local.provider_type.id
 }
 
 # workaround for https://github.com/IBM-Cloud/terraform-provider-ibm/issues/4478
