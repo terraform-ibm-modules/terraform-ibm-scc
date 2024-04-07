@@ -62,3 +62,13 @@ output "cos_bucket" {
 #   description = "SCC profile attachment ID"
 #   value       = module.create_profile_attachment.attachment_parameters
 # }
+
+output "control_library_map" {
+  description = "The name of the SCC instance created by this module"
+  value       = module.create_scc_controls.control_library_map
+}
+
+output "controls_map" {
+  description = "The location of the SCC instance created by this module"
+  value       = module.create_scc_controls.controls_map
+}

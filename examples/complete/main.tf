@@ -58,7 +58,7 @@ module "create_scc_instance" {
 ##############################################################################
 
 module "create_scc_controls" {
-  source                      = "../../controls/."
+  source                      = "../../modules/controls/."
   instance_id                 = module.create_scc_instance.guid
   control_library_name        = "control_library_complete"
   control_library_description = "control_library_complete_description"
@@ -103,7 +103,6 @@ module "create_scc_controls" {
     }
   ]
 }
-
 
 ##############################################################################
 # SCC attachment
