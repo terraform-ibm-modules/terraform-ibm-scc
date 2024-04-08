@@ -1,26 +1,40 @@
 data "ibm_scc_control_libraries" "scc_control_libraries" {
-    instance_id = var.instance_id
+  instance_id = var.instance_id
 }
 
+locals {
+  control_library_map = {
+    for control_library in data.ibm_scc_control_libraries.scc_control_libraries.control_libraries :
+    control_library.control_library_name => control_library if control_library.control_library_name == var.control_library_name
+  }
+}
+
+data "ibm_scc_control_library" "scc_control_library" {
+  count              = lookup(local.control_library_map, var.control_library_name, null) != null ? 1 : 0
+  instance_id        = var.instance_id
+  control_library_id = local.control_library_map[var.control_library_name].id
+}
 
 locals {
-  control_library_index = index(data.ibm_scc_control_libraries.scc_control_libraries[0].control_libraries[*].name, var.control_library_name)
-  control_library = data.ibm_scc_control_libraries.scc_control_libraries[0].control_libraries[local.control_library_index]
+  controls_map = {
+    for control in data.ibm_scc_control_library.scc_control_library[*].controls :
+    control[0].control_name => control[0]
+  }
 }
 
 resource "ibm_scc_control_library" "scc_control_library_instance" {
   instance_id                 = var.instance_id
   control_library_name        = var.control_library_name
   control_library_description = var.control_library_description
-  control_library_type        = var.control_library_type
+  control_library_type        = "custom"
   latest                      = var.latest
-  version_group_label         = local.control_library.version_group_label
+  version_group_label         = var.version_group_label == null ? data.ibm_scc_control_library.scc_control_library[0].version_group_label : var.version_group_label
 
   dynamic "controls" {
     for_each = var.controls != null ? var.controls : []
     content {
       control_name        = controls.value.control_name
-      control_id          = controls.value.control_id
+      control_id          = lookup(local.controls_map, controls.value.control_name, null) == null ? controls.value.control_id : local.controls_map[controls.value.control_name].control_id
       control_description = controls.value.control_description
       control_category    = controls.value.control_category
       control_parent      = controls.value.control_parent

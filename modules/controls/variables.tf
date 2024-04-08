@@ -17,15 +17,16 @@ variable "control_library_description" {
   description = "The control library description. Constraints: The maximum length is `256` characters. The minimum length is `2` characters. The value must match regular expression `/[A-Za-z0-9]+/`."
 }
 
-variable "control_library_type" {
-  type        = string
-  description = "The control library type. Constraints: Allowable values are: `predefined`, `custom`."
-}
-
 variable "latest" {
   type        = bool
   description = "Choose whether you want the latest version of the control library."
   default     = true
+}
+
+variable "version_group_label" {
+  type        = string
+  description = "The version group label."
+  default     = null
 }
 
 variable "controls" {

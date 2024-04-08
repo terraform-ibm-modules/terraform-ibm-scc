@@ -16,6 +16,7 @@ This module configures an IBM Cloud Security and Compliance instance.
 * [terraform-ibm-scc](#terraform-ibm-scc)
 * [Submodules](./modules)
     * [attachment](./modules/attachment)
+    * [controls](./modules/controls)
 * [Examples](./examples)
     * [Basic example](./examples/basic)
     * [Complete example](./examples/complete)
