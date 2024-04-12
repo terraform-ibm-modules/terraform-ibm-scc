@@ -1,6 +1,11 @@
-variable "profile_id" {
+variable "profile_name" {
   type        = string
-  description = "ID of the profile you wish to use for the attachment."
+  description = "Name of the SCC profile that is used for the attachment."
+}
+
+variable "profile_version" {
+  type        = string
+  description = "Version of the SCC profile that is used for the attachment."
 }
 
 variable "scc_instance_id" {
