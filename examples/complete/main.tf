@@ -58,11 +58,9 @@ module "create_scc_instance" {
 ##############################################################################
 
 module "create_profile_attachment" {
-  source = "../../modules/attachment"
-  profile = {
-    name    = "SOC 2"
-    version = "1.0.0"
-  }
+  source                 = "../../modules/attachment"
+  profile_name           = "SOC 2"
+  profile_version        = "1.0.0"
   scc_instance_id        = module.create_scc_instance.guid
   attachment_name        = "${var.prefix}-attachment"
   attachment_description = "profile-attachment-description"
