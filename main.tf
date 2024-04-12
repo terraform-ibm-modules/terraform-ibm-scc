@@ -44,7 +44,7 @@ resource "time_sleep" "wait_for_authorization_policy" {
 }
 
 resource "ibm_iam_authorization_policy" "scc_wp_s2s_access" {
-  count                       = var.attach_wp_to_scc_instance ? 1 : 0
+  count                       = var.attach_wp_to_scc_instance && !var.skip_scc_wp_auth_policy ? 1 : 0
   source_service_name         = "compliance"
   source_resource_instance_id = ibm_resource_instance.scc_instance.guid
   roles                       = ["Reader"]
