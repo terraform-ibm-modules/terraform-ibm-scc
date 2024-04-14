@@ -73,7 +73,7 @@ data "ibm_iam_account_settings" "iam_account_settings" {
 
 # workaround for https://github.com/IBM-Cloud/terraform-provider-ibm/issues/4478
 resource "time_sleep" "wait_for_scc_cos_authorization_policy" {
-  depends_on = [ibm_iam_authorization_policy.scc_wp_s2s_access]
+  depends_on = [ibm_iam_authorization_policy.scc_cos_s2s_access]
 
   create_duration = "30s"
 }
