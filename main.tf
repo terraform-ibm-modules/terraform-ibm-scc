@@ -27,20 +27,49 @@ locals {
   provider_type = lookup(local.provider_types_map, "workload-protection", null)
 }
 
-resource "ibm_scc_provider_type_instance" "scc_provider_type_instance_instance" {
-  depends_on       = [time_sleep.wait_for_scc_wp_authorization_policy]
-  count            = var.attach_wp_to_scc_instance ? 1 : 0
-  instance_id      = ibm_resource_instance.scc_instance.guid
-  attributes       = { "wp_crn" : var.wp_instance_crn }
-  name             = "workload-protection-instance"
-  provider_type_id = local.provider_type.id
+resource "ibm_iam_authorization_policy" "scc_cos_s2s_access" {
+  count                       = var.skip_cos_iam_authorization_policy ? 0 : 1
+  source_service_name         = "compliance"
+  source_resource_instance_id = ibm_resource_instance.scc_instance.guid
+  roles                       = ["Writer"]
+
+  resource_attributes {
+    name     = "serviceName"
+    operator = "stringEquals"
+    value    = "cloud-object-storage"
+  }
+
+  resource_attributes {
+    name     = "serviceInstance"
+    operator = "stringEquals"
+    value    = local.cos_instance_guid
+  }
+
+  resource_attributes {
+    name     = "accountId"
+    operator = "stringEquals"
+    value    = data.ibm_iam_account_settings.iam_account_settings.account_id
+  }
 }
 
 # workaround for https://github.com/IBM-Cloud/terraform-provider-ibm/issues/4478
-resource "time_sleep" "wait_for_scc_wp_authorization_policy" {
-  depends_on = [ibm_iam_authorization_policy.scc_wp_s2s_access]
+resource "time_sleep" "wait_for_scc_cos_authorization_policy" {
+  depends_on = [ibm_iam_authorization_policy.scc_cos_s2s_access]
 
   create_duration = "30s"
+}
+
+# attach a COS bucket and an event notifications instance
+resource "ibm_scc_instance_settings" "scc_instance_settings" {
+  depends_on  = [time_sleep.wait_for_scc_cos_authorization_policy]
+  instance_id = resource.ibm_resource_instance.scc_instance.guid
+  event_notifications {
+    instance_crn = var.en_instance_crn
+  }
+  object_storage {
+    instance_crn = var.cos_instance_crn
+    bucket       = var.cos_bucket
+  }
 }
 
 resource "ibm_iam_authorization_policy" "scc_wp_s2s_access" {
@@ -68,51 +97,24 @@ resource "ibm_iam_authorization_policy" "scc_wp_s2s_access" {
   }
 }
 
-data "ibm_iam_account_settings" "iam_account_settings" {
-}
-
-resource "ibm_scc_instance_settings" "scc_instance_settings" {
-  depends_on  = [time_sleep.wait_for_scc_cos_authorization_policy]
-  instance_id = resource.ibm_resource_instance.scc_instance.guid
-  event_notifications {
-    instance_crn = var.en_instance_crn
-  }
-  object_storage {
-    instance_crn = var.cos_instance_crn
-    bucket       = var.cos_bucket
-  }
-}
-
 # workaround for https://github.com/IBM-Cloud/terraform-provider-ibm/issues/4478
-resource "time_sleep" "wait_for_scc_cos_authorization_policy" {
-  depends_on = [ibm_iam_authorization_policy.scc_cos_s2s_access]
+resource "time_sleep" "wait_for_scc_wp_authorization_policy" {
+  depends_on = [ibm_iam_authorization_policy.scc_wp_s2s_access]
 
   create_duration = "30s"
 }
 
-resource "ibm_iam_authorization_policy" "scc_cos_s2s_access" {
-  count                       = var.skip_cos_iam_authorization_policy ? 0 : 1
-  source_service_name         = "compliance"
-  source_resource_instance_id = ibm_resource_instance.scc_instance.guid
-  roles                       = ["Writer"]
+# attach an SCC Workload Protection instance
+resource "ibm_scc_provider_type_instance" "scc_provider_type_instance" {
+  depends_on       = [time_sleep.wait_for_scc_wp_authorization_policy, ibm_scc_instance_settings.scc_instance_settings]
+  count            = var.attach_wp_to_scc_instance ? 1 : 0
+  instance_id      = ibm_resource_instance.scc_instance.guid
+  attributes       = { "wp_crn" : var.wp_instance_crn }
+  name             = "workload-protection-instance"
+  provider_type_id = local.provider_type.id
+}
 
-  resource_attributes {
-    name     = "serviceName"
-    operator = "stringEquals"
-    value    = "cloud-object-storage"
-  }
-
-  resource_attributes {
-    name     = "serviceInstance"
-    operator = "stringEquals"
-    value    = local.cos_instance_guid
-  }
-
-  resource_attributes {
-    name     = "accountId"
-    operator = "stringEquals"
-    value    = data.ibm_iam_account_settings.iam_account_settings.account_id
-  }
+data "ibm_iam_account_settings" "iam_account_settings" {
 }
 
 locals {
