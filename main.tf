@@ -71,6 +71,18 @@ resource "ibm_iam_authorization_policy" "scc_wp_s2s_access" {
 data "ibm_iam_account_settings" "iam_account_settings" {
 }
 
+resource "ibm_scc_instance_settings" "scc_instance_settings" {
+  depends_on  = [time_sleep.wait_for_scc_cos_authorization_policy]
+  instance_id = resource.ibm_resource_instance.scc_instance.guid
+  event_notifications {
+    instance_crn = var.en_instance_crn
+  }
+  object_storage {
+    instance_crn = var.cos_instance_crn
+    bucket       = var.cos_bucket
+  }
+}
+
 # workaround for https://github.com/IBM-Cloud/terraform-provider-ibm/issues/4478
 resource "time_sleep" "wait_for_scc_cos_authorization_policy" {
   depends_on = [ibm_iam_authorization_policy.scc_cos_s2s_access]
@@ -100,18 +112,6 @@ resource "ibm_iam_authorization_policy" "scc_cos_s2s_access" {
     name     = "accountId"
     operator = "stringEquals"
     value    = data.ibm_iam_account_settings.iam_account_settings.account_id
-  }
-}
-
-resource "ibm_scc_instance_settings" "scc_instance_settings" {
-  depends_on  = [time_sleep.wait_for_scc_cos_authorization_policy]
-  instance_id = resource.ibm_resource_instance.scc_instance.guid
-  event_notifications {
-    instance_crn = var.en_instance_crn
-  }
-  object_storage {
-    instance_crn = var.cos_instance_crn
-    bucket       = var.cos_bucket
   }
 }
 
