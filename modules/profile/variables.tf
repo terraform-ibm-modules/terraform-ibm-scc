@@ -43,5 +43,5 @@ variable "default_parameters" {
     parameter_type          = optional(string)
   }))
   default     = []
-  description = "Each assessment must be assigned a value to evaluate your resources. To customize parameters for your profile, set a new default value."
+  description = "Each assessment must be assigned a value to evaluate your resources. To customize parameters for your profile, set a new default value. This is optional and if no values are passed then the default values will be used."
 }

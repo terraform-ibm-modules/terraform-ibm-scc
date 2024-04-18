@@ -34,6 +34,11 @@ module "create_scc_profile" {
         "1.4",
       ]
     },
+    {
+      control_library_name    = "SOC 2",
+      control_library_version = "1.0.0"
+      add_all_controls        = true
+    },
   ]
   profile_name        = "scc-profile"
   profile_description = "scc-custom"
@@ -46,7 +51,7 @@ You need the following permissions to run this module.
 
 - Account Management
     - Security and Compliance Center service
-        - `Administrator` platform access
+        - `Editor` platform access
 
 <!-- BEGINNING OF PRE-COMMIT-TERRAFORM DOCS HOOK -->
 ### Requirements
@@ -73,7 +78,7 @@ No modules.
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
 | <a name="input_controls"></a> [controls](#input\_controls) | The list of control\_library\_ids that are used to create the profile. Constraints: The maximum length is `600` items. The minimum length is `0` items. | <pre>list(object({<br>    control_library_name    = string<br>    control_library_version = string<br>    control_name_list       = optional(list(string), ["all_rules"])<br>    add_all_controls        = optional(bool, false)<br>  }))</pre> | `[]` | no |
-| <a name="input_default_parameters"></a> [default\_parameters](#input\_default\_parameters) | Each assessment must be assigned a value to evaluate your resources. To customize parameters for your profile, set a new default value. | <pre>list(object({<br>    assessment_type         = optional(string)<br>    assessment_id           = optional(string)<br>    parameter_name          = optional(string)<br>    parameter_default_value = optional(string)<br>    parameter_display_name  = optional(string)<br>    parameter_type          = optional(string)<br>  }))</pre> | `[]` | no |
+| <a name="input_default_parameters"></a> [default\_parameters](#input\_default\_parameters) | Each assessment must be assigned a value to evaluate your resources. To customize parameters for your profile, set a new default value. This is optional and if no values are passed then the default values will be used. | <pre>list(object({<br>    assessment_type         = optional(string)<br>    assessment_id           = optional(string)<br>    parameter_name          = optional(string)<br>    parameter_default_value = optional(string)<br>    parameter_display_name  = optional(string)<br>    parameter_type          = optional(string)<br>  }))</pre> | `[]` | no |
 | <a name="input_instance_id"></a> [instance\_id](#input\_instance\_id) | The ID of the SCC instance in a particular region. | `string` | n/a | yes |
 | <a name="input_profile_description"></a> [profile\_description](#input\_profile\_description) | The description of the profile to be created. | `string` | n/a | yes |
 | <a name="input_profile_name"></a> [profile\_name](#input\_profile\_name) | The name of the profile to be created. | `string` | n/a | yes |
