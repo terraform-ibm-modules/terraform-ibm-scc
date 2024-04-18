@@ -4,14 +4,14 @@ data "ibm_scc_control_libraries" "scc_control_libraries" {
 
 locals {
   control_libraries = flatten([for control_library in data.ibm_scc_control_libraries.scc_control_libraries.control_libraries : [
-    for ctrl in var.control_libraries :
+    for ctrl in var.controls :
     control_library if ctrl.control_library_name == control_library.control_library_name && ctrl.control_library_version == control_library.control_library_version
     ]
   ])
 }
 
 data "ibm_scc_control_library" "scc_control_library" {
-  count              = length(var.control_libraries)
+  count              = length(var.controls)
   instance_id        = var.instance_id
   control_library_id = local.control_libraries[count.index].id
 }
@@ -20,9 +20,20 @@ locals {
   controls_map = flatten([
     for index, control_library in local.control_libraries : [
       for control in data.ibm_scc_control_library.scc_control_library[index].controls : {
-        control_library_id = control_library.id
-        control_id         = control.control_id
+        control_library_id   = control_library.id
+        control_library_name = control_library.control_library_name
+        control_id           = control.control_id
+        control_name         = trimspace(split(":", control.control_name)[0])
       }
+    ]
+  ])
+
+  relevant_controls = flatten([
+    for ctrl_map in local.controls_map : [
+      for control in var.controls : [
+        for ctrl in control.control_list :
+        ctrl_map if ctrl_map.control_name == ctrl && ctrl_map.control_library_name == control.control_library_name
+      ]
     ]
   ])
 }
@@ -34,7 +45,7 @@ resource "ibm_scc_profile" "scc_profile_instance" {
   profile_type        = "custom"
 
   dynamic "controls" {
-    for_each = local.controls_map
+    for_each = local.relevant_controls
     content {
       control_library_id = controls.value.control_library_id
       control_id         = controls.value.control_id

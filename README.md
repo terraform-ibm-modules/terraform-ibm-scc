@@ -55,9 +55,6 @@ You need the following permissions to run this module.
 - Account Management
     - Security and Compliance Center service
         - `Administrator` platform access
-- IAM Services
-   - Event Notifications service
-        - `Manager` service access
 
 
 <!-- Below content is automatically populated via pre-commit hook -->

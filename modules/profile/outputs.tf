@@ -7,6 +7,11 @@ output "profile_id" {
   value       = ibm_scc_profile.scc_profile_instance.profile_id
 }
 
+output "controls_map" {
+  description = "maps"
+  value       = local.relevant_controls
+}
+
 output "scc_control_libraries" {
   description = "The scc control libraries applied to the profile in this module"
   value = [

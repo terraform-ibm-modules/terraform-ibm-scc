@@ -1,6 +1,6 @@
 # SCC Profile Module
 
-This module creates SCC Profile's (https://cloud.ibm.com/docs/security-compliance?topic=security-compliance-build-custom-profiles&interface=ui). A profile is a grouping of controls that can be evaluated for compliance.
+This module creates an SCC Profile (https://cloud.ibm.com/docs/security-compliance?topic=security-compliance-build-custom-profiles&interface=ui). A profile is a grouping of controls that can be evaluated for compliance.
 
 The module supports the following actions:
 - Create SCC Profile
@@ -15,7 +15,7 @@ provider "ibm" {
 
 # - SCC Profile
 module "create_scc_profile" {
-  source           = "../../profile/."
+  source           = "terraform-ibm-modules/scc/ibm//modules/profile"
   ibmcloud_api_key = "XXXXXXXXXX" # pragma: allowlist secret
   instance_id      = "123-456-789"
   controls = [
@@ -30,20 +30,12 @@ module "create_scc_profile" {
 }
 ```
 
-The above will create a new scc profile output the `profile_id`:
-```
-  profile_id = "fc179109-3b0a-4e06-bbd8-7458706cc66d"
-```
-
 ### Required IAM access policies
 You need the following permissions to run this module.
 
 - Account Management
     - Security and Compliance Center service
         - `Administrator` platform access
-- IAM Services
-   - Event Notifications service
-        - `Manager` service access
 
 <!-- BEGINNING OF PRE-COMMIT-TERRAFORM DOCS HOOK -->
 ### Requirements
@@ -51,7 +43,7 @@ You need the following permissions to run this module.
 | Name | Version |
 |------|---------|
 | <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) | >= 1.3.0, <1.7.0 |
-| <a name="requirement_ibm"></a> [ibm](#requirement\_ibm) | >= 1.62.0, <2.0.0 |
+| <a name="requirement_ibm"></a> [ibm](#requirement\_ibm) | >= 1.64.1, <2.0.0 |
 
 ### Modules
 
@@ -69,7 +61,7 @@ No modules.
 
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
-| <a name="input_control_libraries"></a> [control\_libraries](#input\_control\_libraries) | The list of control\_library\_ids that are used to create the profile. Constraints: The maximum length is `600` items. The minimum length is `0` items. | <pre>list(object({<br>    control_library_name    = optional(string)<br>    control_library_version = optional(string)<br>  }))</pre> | `[]` | no |
+| <a name="input_controls"></a> [controls](#input\_controls) | The list of control\_library\_ids that are used to create the profile. Constraints: The maximum length is `600` items. The minimum length is `0` items. | <pre>list(object({<br>    control_library_name    = optional(string)<br>    control_library_version = optional(string)<br>    control_list            = optional(list(string))<br>  }))</pre> | `[]` | no |
 | <a name="input_default_parameters"></a> [default\_parameters](#input\_default\_parameters) | The default parameters of the profile. Constraints: The maximum length is `512` items. The minimum length is `0` items. | <pre>list(object({<br>    assessment_type         = optional(string)<br>    assessment_id           = optional(string)<br>    parameter_name          = optional(string)<br>    parameter_default_value = optional(string)<br>    parameter_display_name  = optional(string)<br>    parameter_type          = optional(string)<br>  }))</pre> | `[]` | no |
 | <a name="input_instance_id"></a> [instance\_id](#input\_instance\_id) | The ID of the SCC instance in a particular region. | `string` | n/a | yes |
 | <a name="input_profile_description"></a> [profile\_description](#input\_profile\_description) | The profile description. Constraints: The maximum length is `256` characters. The minimum length is `2` characters. The value must match regular expression `/[A-Za-z0-9]+/`. | `string` | n/a | yes |
@@ -79,6 +71,7 @@ No modules.
 
 | Name | Description |
 |------|-------------|
+| <a name="output_controls_map"></a> [controls\_map](#output\_controls\_map) | maps |
 | <a name="output_profile_id"></a> [profile\_id](#output\_profile\_id) | The id of the SCC profile created by this module |
 | <a name="output_scc_control_libraries"></a> [scc\_control\_libraries](#output\_scc\_control\_libraries) | The scc control libraries applied to the profile in this module |
 <!-- END OF PRE-COMMIT-TERRAFORM DOCS HOOK -->
