@@ -83,7 +83,6 @@ No modules.
 
 | Name | Description |
 |------|-------------|
-| <a name="output_controls_map"></a> [controls\_map](#output\_controls\_map) | maps |
 | <a name="output_profile_id"></a> [profile\_id](#output\_profile\_id) | The id of the SCC profile created by this module |
 | <a name="output_scc_control_libraries"></a> [scc\_control\_libraries](#output\_scc\_control\_libraries) | The scc control libraries applied to the profile in this module |
 <!-- END OF PRE-COMMIT-TERRAFORM DOCS HOOK -->

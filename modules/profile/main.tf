@@ -3,6 +3,7 @@ data "ibm_scc_control_libraries" "scc_control_libraries" {
 }
 
 locals {
+  # Get conrtol libraries id from their name and version specified in var.controls.control_library_name
   control_libraries = flatten([for control_library in data.ibm_scc_control_libraries.scc_control_libraries.control_libraries : [
     for ctrl in var.controls :
     control_library if ctrl.control_library_name == control_library.control_library_name && ctrl.control_library_version == control_library.control_library_version
@@ -17,7 +18,8 @@ data "ibm_scc_control_library" "scc_control_library" {
 }
 
 locals {
-  controls_map = flatten([
+  # Map out all controls from relevant control libraries
+  all_controls_map = flatten([
     for index, control_library in local.control_libraries : [
       for control in data.ibm_scc_control_library.scc_control_library[index].controls : {
         control_library_id   = control_library.id
@@ -28,8 +30,9 @@ locals {
     ]
   ])
 
-  relevant_controls = flatten([
-    for ctrl_map in local.controls_map : [
+  # Get chosen controls from var.controls.control_name_list in local.all_controls_map
+  relevant_controls_map = flatten([
+    for ctrl_map in local.all_controls_map : [
       for control in var.controls : [
         for ctrl in control.control_name_list :
         ctrl_map if(ctrl_map.control_name == ctrl && ctrl_map.control_library_name == control.control_library_name) || control.add_all_controls
@@ -46,7 +49,7 @@ resource "ibm_scc_profile" "scc_profile_instance" {
   profile_version     = var.profile_version
 
   dynamic "controls" {
-    for_each = local.relevant_controls
+    for_each = local.relevant_controls_map
     content {
       control_library_id = controls.value.control_library_id
       control_id         = controls.value.control_id
