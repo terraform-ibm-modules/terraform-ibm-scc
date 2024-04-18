@@ -3,7 +3,7 @@ data "ibm_scc_control_libraries" "scc_control_libraries" {
 }
 
 locals {
-  # Get conrtol libraries id from their name and version specified in var.controls.control_library_name
+  # Get control libraries id from their name and version specified in var.controls.control_library_name
   control_libraries = flatten([for control_library in data.ibm_scc_control_libraries.scc_control_libraries.control_libraries : [
     for ctrl in var.controls :
     control_library if ctrl.control_library_name == control_library.control_library_name && ctrl.control_library_version == control_library.control_library_version
