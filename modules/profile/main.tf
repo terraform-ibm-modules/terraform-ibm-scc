@@ -31,7 +31,7 @@ locals {
   relevant_controls = flatten([
     for ctrl_map in local.controls_map : [
       for control in var.controls : [
-        for ctrl in control.control_list :
+        for ctrl in control.control_name_list :
         ctrl_map if ctrl_map.control_name == ctrl && ctrl_map.control_library_name == control.control_library_name
       ]
     ]
@@ -43,6 +43,7 @@ resource "ibm_scc_profile" "scc_profile_instance" {
   profile_description = var.profile_description
   profile_name        = var.profile_name
   profile_type        = "custom"
+  profile_version     = var.profile_version
 
   dynamic "controls" {
     for_each = local.relevant_controls

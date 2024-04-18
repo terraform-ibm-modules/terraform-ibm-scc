@@ -9,19 +9,24 @@ variable "instance_id" {
 
 variable "profile_name" {
   type        = string
-  description = "The profile name. Constraints: The maximum length is `64` characters. The minimum length is `2` characters. The value must match regular expression `/[A-Za-z0-9]+/`."
+  description = "The name of the profile to be created."
 }
 
 variable "profile_description" {
   type        = string
-  description = "The profile description. Constraints: The maximum length is `256` characters. The minimum length is `2` characters. The value must match regular expression `/[A-Za-z0-9]+/`."
+  description = "The description of the profile to be created."
+}
+
+variable "profile_version" {
+  type        = string
+  description = "The version status of the profile."
 }
 
 variable "controls" {
   type = list(object({
     control_library_name    = optional(string)
     control_library_version = optional(string)
-    control_list            = optional(list(string))
+    control_name_list       = optional(list(string))
   }))
   default     = []
   description = "The list of control_library_ids that are used to create the profile. Constraints: The maximum length is `600` items. The minimum length is `0` items."
@@ -37,5 +42,5 @@ variable "default_parameters" {
     parameter_type          = optional(string)
   }))
   default     = []
-  description = "Each assessment must be assigned a value to evaluate your resources. To customize parameters for your profile, set a new default value. Constraints: The maximum length is `512` items. The minimum length is `0` items."
+  description = "Each assessment must be assigned a value to evaluate your resources. To customize parameters for your profile, set a new default value."
 }

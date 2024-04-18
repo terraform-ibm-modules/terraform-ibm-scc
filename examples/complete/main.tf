@@ -81,7 +81,7 @@ module "create_scc_profile" {
     {
       control_library_name    = "IBM Cloud Framework for Financial Services",
       control_library_version = "1.6.0"
-      control_list = [
+      control_name_list = [
         "AC",
         "AC-1",
         "AC-1(a)",
@@ -90,7 +90,7 @@ module "create_scc_profile" {
     {
       control_library_name    = "CIS IBM Cloud Foundations Benchmark",
       control_library_version = "1.0.0"
-      control_list = [
+      control_name_list = [
         "1.16",
         "1.18",
         "1.19",
@@ -100,6 +100,7 @@ module "create_scc_profile" {
   ]
   profile_name        = "${var.prefix}-profile"
   profile_description = "scc-custom"
+  profile_version     = "1.0.0"
 }
 
 ##############################################################################

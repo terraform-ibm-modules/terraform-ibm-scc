@@ -2,9 +2,6 @@
 
 This module creates an SCC Profile (https://cloud.ibm.com/docs/security-compliance?topic=security-compliance-build-custom-profiles&interface=ui). A profile is a grouping of controls that can be evaluated for compliance.
 
-The module supports the following actions:
-- Create SCC Profile
-
 ### Usage
 
 ```hcl
@@ -16,12 +13,12 @@ provider "ibm" {
 # - SCC Profile
 module "create_scc_profile" {
   source           = "terraform-ibm-modules/scc/ibm//modules/profile"
-  instance_id = module.create_scc_instance.guid
+  instance_id = "00000000-1111-2222-3333-444444444444"
   controls = [
     {
       control_library_name    = "IBM Cloud Framework for Financial Services",
       control_library_version = "1.6.0"
-      control_list = [
+      control_name_list = [
         "AC",
         "AC-1",
         "AC-1(a)",
@@ -30,7 +27,7 @@ module "create_scc_profile" {
     {
       control_library_name    = "CIS IBM Cloud Foundations Benchmark",
       control_library_version = "1.0.0"
-      control_list = [
+      control_name_list = [
         "1.16",
         "1.18",
         "1.19",
@@ -38,8 +35,9 @@ module "create_scc_profile" {
       ]
     },
   ]
-  profile_name        = "${var.prefix}-profile"
+  profile_name        = "scc-profile"
   profile_description = "scc-custom"
+  profile_version     = "1.0.0"
 }
 ```
 
@@ -74,11 +72,12 @@ No modules.
 
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
-| <a name="input_controls"></a> [controls](#input\_controls) | The list of control\_library\_ids that are used to create the profile. Constraints: The maximum length is `600` items. The minimum length is `0` items. | <pre>list(object({<br>    control_library_name    = optional(string)<br>    control_library_version = optional(string)<br>    control_list            = optional(list(string))<br>  }))</pre> | `[]` | no |
-| <a name="input_default_parameters"></a> [default\_parameters](#input\_default\_parameters) | Each assessment must be assigned a value to evaluate your resources. To customize parameters for your profile, set a new default value. Constraints: The maximum length is `512` items. The minimum length is `0` items. | <pre>list(object({<br>    assessment_type         = optional(string)<br>    assessment_id           = optional(string)<br>    parameter_name          = optional(string)<br>    parameter_default_value = optional(string)<br>    parameter_display_name  = optional(string)<br>    parameter_type          = optional(string)<br>  }))</pre> | `[]` | no |
+| <a name="input_controls"></a> [controls](#input\_controls) | The list of control\_library\_ids that are used to create the profile. Constraints: The maximum length is `600` items. The minimum length is `0` items. | <pre>list(object({<br>    control_library_name    = optional(string)<br>    control_library_version = optional(string)<br>    control_name_list       = optional(list(string))<br>  }))</pre> | `[]` | no |
+| <a name="input_default_parameters"></a> [default\_parameters](#input\_default\_parameters) | Each assessment must be assigned a value to evaluate your resources. To customize parameters for your profile, set a new default value. | <pre>list(object({<br>    assessment_type         = optional(string)<br>    assessment_id           = optional(string)<br>    parameter_name          = optional(string)<br>    parameter_default_value = optional(string)<br>    parameter_display_name  = optional(string)<br>    parameter_type          = optional(string)<br>  }))</pre> | `[]` | no |
 | <a name="input_instance_id"></a> [instance\_id](#input\_instance\_id) | The ID of the SCC instance in a particular region. | `string` | n/a | yes |
-| <a name="input_profile_description"></a> [profile\_description](#input\_profile\_description) | The profile description. Constraints: The maximum length is `256` characters. The minimum length is `2` characters. The value must match regular expression `/[A-Za-z0-9]+/`. | `string` | n/a | yes |
-| <a name="input_profile_name"></a> [profile\_name](#input\_profile\_name) | The profile name. Constraints: The maximum length is `64` characters. The minimum length is `2` characters. The value must match regular expression `/[A-Za-z0-9]+/`. | `string` | n/a | yes |
+| <a name="input_profile_description"></a> [profile\_description](#input\_profile\_description) | The description of the profile to be created. | `string` | n/a | yes |
+| <a name="input_profile_name"></a> [profile\_name](#input\_profile\_name) | The name of the profile to be created. | `string` | n/a | yes |
+| <a name="input_profile_version"></a> [profile\_version](#input\_profile\_version) | The version status of the profile. | `string` | n/a | yes |
 
 ### Outputs
 
