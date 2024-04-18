@@ -23,7 +23,7 @@ locals {
         control_library_id   = control_library.id
         control_library_name = control_library.control_library_name
         control_id           = control.control_id
-        control_name         = trimspace(split(":", control.control_name)[0])
+        control_name         = control.control_name
       }
     ]
   ])
