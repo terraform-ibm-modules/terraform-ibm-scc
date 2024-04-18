@@ -37,5 +37,5 @@ variable "default_parameters" {
     parameter_type          = optional(string)
   }))
   default     = []
-  description = "The default parameters of the profile. Constraints: The maximum length is `512` items. The minimum length is `0` items."
+  description = "Each assessment must be assigned a value to evaluate your resources. To customize parameters for your profile, set a new default value. Constraints: The maximum length is `512` items. The minimum length is `0` items."
 }
