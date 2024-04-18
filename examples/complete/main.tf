@@ -78,6 +78,7 @@ module "create_scc_profile" {
   source      = "../../modules/profile/."
   instance_id = module.create_scc_instance.guid
   controls = [
+    # Apply 3 controls from IBM Cloud Framework for Financial Services control library version 1.6.0
     {
       control_library_name    = "IBM Cloud Framework for Financial Services",
       control_library_version = "1.6.0"
@@ -87,6 +88,7 @@ module "create_scc_profile" {
         "AC-1(a)",
       ]
     },
+    # Apply 4 controls from CIS IBM Cloud Foundations Benchmark control library version 1.0.0
     {
       control_library_name    = "CIS IBM Cloud Foundations Benchmark",
       control_library_version = "1.0.0"
@@ -97,6 +99,7 @@ module "create_scc_profile" {
         "1.4",
       ]
     },
+    # Apply all controls from SOC 2 control library version 1.0.0
     {
       control_library_name    = "SOC 2",
       control_library_version = "1.0.0"
