@@ -24,9 +24,10 @@ variable "profile_version" {
 
 variable "controls" {
   type = list(object({
-    control_library_name    = optional(string)
-    control_library_version = optional(string)
-    control_name_list       = optional(list(string))
+    control_library_name    = string
+    control_library_version = string
+    control_name_list       = optional(list(string), ["all_rules"])
+    add_all_controls        = optional(bool, false)
   }))
   default     = []
   description = "The list of control_library_ids that are used to create the profile. Constraints: The maximum length is `600` items. The minimum length is `0` items."

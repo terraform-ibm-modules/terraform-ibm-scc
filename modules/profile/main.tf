@@ -32,7 +32,7 @@ locals {
     for ctrl_map in local.controls_map : [
       for control in var.controls : [
         for ctrl in control.control_name_list :
-        ctrl_map if ctrl_map.control_name == ctrl && ctrl_map.control_library_name == control.control_library_name
+        ctrl_map if(ctrl_map.control_name == ctrl && ctrl_map.control_library_name == control.control_library_name) || control.add_all_controls
       ]
     ]
   ])

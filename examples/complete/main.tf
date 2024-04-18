@@ -97,6 +97,11 @@ module "create_scc_profile" {
         "1.4",
       ]
     },
+    {
+      control_library_name    = "SOC 2",
+      control_library_version = "1.0.0"
+      add_all_controls        = true
+    },
   ]
   profile_name        = "${var.prefix}-profile"
   profile_description = "scc-custom"

@@ -58,11 +58,6 @@ output "profile_id" {
   value       = module.create_scc_profile.profile_id
 }
 
-output "scc_control_libraries" {
-  description = "The COS bucket created in this example"
-  value       = module.create_scc_profile.scc_control_libraries
-}
-
 output "scc_profile_attachment_id" {
   description = "SCC profile attachment ID"
   value       = module.create_profile_attachment.id
@@ -71,9 +66,4 @@ output "scc_profile_attachment_id" {
 output "wp_crn" {
   description = "CRN of created SCC WP instance."
   value       = module.scc_wp.crn
-}
-
-output "controls_map" {
-  description = "maps"
-  value       = module.create_scc_profile.controls_map
 }
