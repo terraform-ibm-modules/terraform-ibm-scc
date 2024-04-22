@@ -29,7 +29,7 @@ module "cos" {
 
 module "event_notification" {
   source            = "terraform-ibm-modules/event-notifications/ibm"
-  version           = "1.2.2"
+  version           = "1.3.2"
   resource_group_id = module.resource_group.resource_group_id
   name              = "${var.prefix}-en"
   tags              = var.resource_tags
@@ -39,18 +39,35 @@ module "event_notification" {
 }
 
 ##############################################################################
+# SCC Workload Protection Instance
+##############################################################################
+
+module "scc_wp" {
+  source            = "terraform-ibm-modules/scc-workload-protection/ibm"
+  version           = "1.3.0"
+  name              = "${var.prefix}-wp"
+  region            = var.region
+  resource_group_id = module.resource_group.resource_group_id
+  resource_tags     = var.resource_tags
+}
+
+##############################################################################
 # SCC instance
 ##############################################################################
 
 module "create_scc_instance" {
-  source            = "../.."
-  instance_name     = "${var.prefix}-instance"
-  region            = var.region
-  resource_group_id = module.resource_group.resource_group_id
-  resource_tags     = var.resource_tags
-  cos_bucket        = module.cos.bucket_name
-  cos_instance_crn  = module.cos.cos_instance_id
-  en_instance_crn   = module.event_notification.crn
+  source                            = "../.."
+  instance_name                     = "${var.prefix}-instance"
+  region                            = var.region
+  resource_group_id                 = module.resource_group.resource_group_id
+  resource_tags                     = var.resource_tags
+  cos_bucket                        = module.cos.bucket_name
+  cos_instance_crn                  = module.cos.cos_instance_id
+  en_instance_crn                   = module.event_notification.crn
+  skip_cos_iam_authorization_policy = false
+  attach_wp_to_scc_instance         = true
+  skip_scc_wp_auth_policy           = false
+  wp_instance_crn                   = module.scc_wp.crn
 }
 
 ##############################################################################
@@ -59,7 +76,8 @@ module "create_scc_instance" {
 
 module "create_profile_attachment" {
   source                 = "../../modules/attachment"
-  profile_id             = "f54b4962-06c6-46bb-bb04-396d9fa9bd60" # temporarily default to SOC 2 profile until provider add support to do data lookup by name https://github.com/IBM-Cloud/terraform-provider-ibm/issues/5185)
+  profile_name           = "SOC 2"
+  profile_version        = "1.0.0"
   scc_instance_id        = module.create_scc_instance.guid
   attachment_name        = "${var.prefix}-attachment"
   attachment_description = "profile-attachment-description"

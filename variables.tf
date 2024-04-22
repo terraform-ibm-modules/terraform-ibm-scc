@@ -14,6 +14,18 @@ variable "instance_name" {
   description = "Name of the security and compliance instance that will be provisioned by this module"
 }
 
+variable "attach_wp_to_scc_instance" {
+  type        = string
+  description = "When set to true, a value must be passed for the `wp_instance_crn` inout variable."
+  default     = false
+}
+
+variable "wp_instance_crn" {
+  type        = string
+  description = "Optionally pass the CRN of an existing SCC Workload Protection instance to attach it to the SCC instance."
+  default     = null
+}
+
 variable "plan" {
   description = "Pricing plan to create SCC instance. Options include security-compliance-center-standard-plan or security-compliance-center-trial-plan"
   type        = string
@@ -56,4 +68,10 @@ variable "skip_cos_iam_authorization_policy" {
   type        = bool
   default     = false
   description = "Set to true to skip the creation of an IAM authorization policy that permits the SCC instance created by this module to write access to the provided COS instance"
+}
+
+variable "skip_scc_wp_auth_policy" {
+  type        = bool
+  default     = false
+  description = "Set to true to skip the creation of an IAM authorization policy that permits the SCC instance created by this solution read access to the workload protection instance. Only used if `attach_wp_to_scc_instance` is set to true."
 }
