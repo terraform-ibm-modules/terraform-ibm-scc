@@ -11,9 +11,25 @@ locals {
 # SCC profile attachment
 ##############################################################################
 
+data "ibm_scc_profiles" "scc_profiles" {
+  instance_id = var.scc_instance_id
+}
+
+locals {
+  profile_map = {
+    for profile in data.ibm_scc_profiles.scc_profiles.profiles :
+    var.profile_name => profile if profile.profile_name == var.profile_name && profile.profile_version == var.profile_version
+  }
+
+  # tflint-ignore: terraform_unused_declarations
+  validate_profile = lookup(local.profile_map, var.profile_name, null) == null ? tobool("Could not find a valid profile name ${var.profile_name} and matching version ${var.profile_version}") : true
+
+  profile = local.validate_profile ? local.profile_map[var.profile_name] : null
+}
+
 data "ibm_scc_profile" "scc_profile" {
   instance_id = var.scc_instance_id
-  profile_id  = var.profile_id
+  profile_id  = local.profile.id
 }
 
 locals {
@@ -22,7 +38,7 @@ locals {
 
 # Create the attachment
 resource "ibm_scc_profile_attachment" "scc_profile_attachment" {
-  profile_id  = var.profile_id
+  profile_id  = local.profile.id
   instance_id = var.scc_instance_id
   name        = var.attachment_name
   description = var.attachment_description
