@@ -15,7 +15,8 @@ module "create_scc_profile_attachment " {
   source                         = "terraform-ibm-modules/scc/ibm//modules/attachment"
   ibmcloud_api_key               = "XXXXXXXXXX" # pragma: allowlist secret
   scc_instance_id                = "57b7ac52-e837-484c-aa07-e3c2db815c44" # replace with the ID of your SCC instance
-  profile_id                     = "f54b4962-06c6-46bb-bb04-396d9fa9bd60" # select the ID of the profile you want to use
+  profile_name                   = "SOC 2" # select the Name of the profile you want to use
+  profile_version                = "1.0.0" # select the Version of the profile you want to use
   use_profile_default_parameters = true # if setting this to false, custom parameters must be passed using the 'custom_attachment_parameters' variable
   attachment_name                = "My attachment"
   attachment_description         = "My attachment description"
