@@ -20,7 +20,7 @@ module "cos" {
   kms_encryption_enabled = false
   retention_enabled      = false
   resource_group_id      = module.resource_group.resource_group_id
-  bucket_name            = "${var.prefix}-cb1"
+  bucket_name            = "${var.prefix}-cb"
 }
 
 ##############################################################################
@@ -108,7 +108,7 @@ module "create_scc_profile" {
   ]
   profile_name        = "${var.prefix}-profile"
   profile_description = "scc-custom"
-  profile_version     = "1.2.1"
+  profile_version     = "1.0.0"
 }
 
 ##############################################################################
