@@ -16,7 +16,10 @@ data "ibm_scc_profiles" "scc_profiles" {
 }
 
 locals {
-  profile_map = {
+  profile_map = var.profile_version == "latest" ? {
+    for profile in data.ibm_scc_profiles.scc_profiles.profiles :
+    var.profile_name => profile if profile.profile_name == var.profile_name && profile.latest == true
+    } : {
     for profile in data.ibm_scc_profiles.scc_profiles.profiles :
     var.profile_name => profile if profile.profile_name == var.profile_name && profile.profile_version == var.profile_version
   }

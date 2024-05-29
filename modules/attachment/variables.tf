@@ -5,7 +5,8 @@ variable "profile_name" {
 
 variable "profile_version" {
   type        = string
-  description = "Version of the SCC profile that is used for the attachment."
+  description = "Version of the SCC profile that is used for the attachment. Defaults to the latest profile version if value is not provided."
+  default     = "latest"
 }
 
 variable "scc_instance_id" {
