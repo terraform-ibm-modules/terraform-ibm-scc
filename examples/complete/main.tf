@@ -76,7 +76,7 @@ module "create_scc_instance" {
 
 module "create_profile_attachment" {
   source                 = "../../modules/attachment"
-  profile_name           = "IBM Cloud Framework for Financial Services"
+  profile_name           = "SOC 2"
   profile_version        = "latest"
   scc_instance_id        = module.create_scc_instance.guid
   attachment_name        = "${var.prefix}-attachment"
