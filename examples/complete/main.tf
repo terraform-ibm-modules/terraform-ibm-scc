@@ -15,7 +15,7 @@ module "resource_group" {
 
 module "cos" {
   source                 = "terraform-ibm-modules/cos/ibm"
-  version                = "8.2.8"
+  version                = "8.3.0"
   cos_instance_name      = "${var.prefix}-cos"
   kms_encryption_enabled = false
   retention_enabled      = false
@@ -29,7 +29,7 @@ module "cos" {
 
 module "event_notification" {
   source            = "terraform-ibm-modules/event-notifications/ibm"
-  version           = "1.3.7"
+  version           = "1.4.2"
   resource_group_id = module.resource_group.resource_group_id
   name              = "${var.prefix}-en"
   tags              = var.resource_tags
@@ -118,7 +118,7 @@ module "create_scc_profile" {
 module "create_profile_attachment" {
   source                 = "../../modules/attachment"
   profile_name           = "SOC 2"
-  profile_version        = "1.0.0"
+  profile_version        = "latest"
   scc_instance_id        = module.create_scc_instance.guid
   attachment_name        = "${var.prefix}-attachment"
   attachment_description = "profile-attachment-description"
