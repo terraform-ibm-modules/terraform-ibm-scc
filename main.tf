@@ -154,7 +154,7 @@ module "cbr_rule" {
   operations = [{
     api_types = [
       {
-        api_type_id = "crn:v1:bluemix:public:context-based-restrictions::::api-type:data-plane"
+        api_type_id = "crn:v1:bluemix:public:context-based-restrictions::::api-type:"
       }
     ]
   }]
