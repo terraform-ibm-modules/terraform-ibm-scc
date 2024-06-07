@@ -18,7 +18,7 @@ This module configures an IBM Cloud Security and Compliance instance.
     * [attachment](./modules/attachment)
 * [Examples](./examples)
     * [Basic example](./examples/basic)
-    * [Complete example](./examples/complete)
+    * [Complete example with CBR rules](./examples/complete)
 * [Contributing](#contributing)
 <!-- END OVERVIEW HOOK -->
 
@@ -71,7 +71,9 @@ You need the following permissions to run this module.
 
 ### Modules
 
-No modules.
+| Name | Source | Version |
+|------|--------|---------|
+| <a name="module_cbr_rule"></a> [cbr\_rule](#module\_cbr\_rule) | terraform-ibm-modules/cbr/ibm//modules/cbr-rule-module | 1.22.1 |
 
 ### Resources
 
@@ -92,6 +94,7 @@ No modules.
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
 | <a name="input_attach_wp_to_scc_instance"></a> [attach\_wp\_to\_scc\_instance](#input\_attach\_wp\_to\_scc\_instance) | When set to true, a value must be passed for the `wp_instance_crn` inout variable. | `string` | `false` | no |
+| <a name="input_cbr_rules"></a> [cbr\_rules](#input\_cbr\_rules) | (Optional, list) List of CBR rules to create | <pre>list(object({<br>    description = string<br>    account_id  = string<br>    rule_contexts = list(object({<br>      attributes = optional(list(object({<br>        name  = string<br>        value = string<br>    }))) }))<br>    enforcement_mode = string<br>  }))</pre> | `[]` | no |
 | <a name="input_cos_bucket"></a> [cos\_bucket](#input\_cos\_bucket) | The name of the Cloud Object Storage bucket to be used in SCC instance | `string` | n/a | yes |
 | <a name="input_cos_instance_crn"></a> [cos\_instance\_crn](#input\_cos\_instance\_crn) | CRN of the Cloud Object Storage to store SCC data | `string` | n/a | yes |
 | <a name="input_en_instance_crn"></a> [en\_instance\_crn](#input\_en\_instance\_crn) | The CRN of Event Notifications instance to be used with SCC. If no value is provided, Event Notifications will not be enabled for this SCC instance | `string` | `null` | no |
