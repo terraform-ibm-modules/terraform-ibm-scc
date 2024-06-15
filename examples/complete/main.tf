@@ -4,7 +4,7 @@
 
 module "resource_group" {
   source                       = "terraform-ibm-modules/resource-group/ibm"
-  version                      = "1.1.5"
+  version                      = "1.1.6"
   resource_group_name          = var.resource_group == null ? "${var.prefix}-resource-group" : null
   existing_resource_group_name = var.resource_group
 }
@@ -15,7 +15,7 @@ module "resource_group" {
 
 module "cos" {
   source                 = "terraform-ibm-modules/cos/ibm"
-  version                = "8.3.2"
+  version                = "8.4.1"
   cos_instance_name      = "${var.prefix}-cos"
   kms_encryption_enabled = false
   retention_enabled      = false
@@ -29,7 +29,7 @@ module "cos" {
 
 module "event_notification" {
   source            = "terraform-ibm-modules/event-notifications/ibm"
-  version           = "1.4.4"
+  version           = "1.5.2"
   resource_group_id = module.resource_group.resource_group_id
   name              = "${var.prefix}-en"
   tags              = var.resource_tags
@@ -44,7 +44,7 @@ module "event_notification" {
 
 module "scc_wp" {
   source            = "terraform-ibm-modules/scc-workload-protection/ibm"
-  version           = "1.3.0"
+  version           = "1.3.1"
   name              = "${var.prefix}-wp"
   region            = var.region
   resource_group_id = module.resource_group.resource_group_id
@@ -137,7 +137,7 @@ resource "ibm_is_vpc" "example_vpc" {
 ##############################################################################
 module "cbr_zone" {
   source           = "terraform-ibm-modules/cbr/ibm//modules/cbr-zone-module"
-  version          = "1.22.1"
+  version          = "1.22.2"
   name             = "${var.prefix}-VPC-network-zone"
   zone_description = "CBR Network zone representing VPC"
   account_id       = data.ibm_iam_account_settings.iam_account_settings.account_id
