@@ -121,3 +121,34 @@ locals {
   cos_instance_guid = var.cos_instance_crn != null ? element(split(":", var.cos_instance_crn), length(split(":", var.cos_instance_crn)) - 3) : null
   wp_instance_guid  = var.wp_instance_crn != null ? element(split(":", var.wp_instance_crn), length(split(":", var.wp_instance_crn)) - 3) : null
 }
+
+##############################################################################
+# Context Based Restrictions
+##############################################################################
+module "cbr_rule" {
+  count            = length(var.cbr_rules) > 0 ? length(var.cbr_rules) : 0
+  source           = "terraform-ibm-modules/cbr/ibm//modules/cbr-rule-module"
+  version          = "1.23.0"
+  rule_description = var.cbr_rules[count.index].description
+  enforcement_mode = var.cbr_rules[count.index].enforcement_mode
+  rule_contexts    = var.cbr_rules[count.index].rule_contexts
+  resources = [{
+    attributes = [
+      {
+        name     = "accountId"
+        value    = var.cbr_rules[count.index].account_id
+        operator = "stringEquals"
+      },
+      {
+        name     = "serviceInstance"
+        value    = ibm_resource_instance.scc_instance.guid
+        operator = "stringEquals"
+      },
+      {
+        name     = "serviceName"
+        value    = "compliance"
+        operator = "stringEquals"
+      }
+    ]
+  }]
+}
