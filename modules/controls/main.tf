@@ -1,14 +1,17 @@
+// Get list of all control libraries
 data "ibm_scc_control_libraries" "scc_control_libraries" {
   instance_id = var.instance_id
 }
 
 locals {
+  // Create map of control libraries
   control_library_map = {
     for control_library in data.ibm_scc_control_libraries.scc_control_libraries.control_libraries :
     control_library.control_library_name => control_library if control_library.control_library_name == var.control_library_name
   }
 }
 
+// Get specified control library by id
 data "ibm_scc_control_library" "scc_control_library" {
   count              = lookup(local.control_library_map, var.control_library_name, null) != null ? 1 : 0
   instance_id        = var.instance_id
@@ -16,6 +19,7 @@ data "ibm_scc_control_library" "scc_control_library" {
 }
 
 locals {
+  // Create map of controls
   controls_map = {
     for control in data.ibm_scc_control_library.scc_control_library[*].controls :
     control[0].control_name => control[0]
