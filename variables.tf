@@ -75,3 +75,23 @@ variable "skip_scc_wp_auth_policy" {
   default     = false
   description = "Set to true to skip the creation of an IAM authorization policy that permits the SCC instance created by this solution read access to the workload protection instance. Only used if `attach_wp_to_scc_instance` is set to true."
 }
+
+##############################################################
+# Context-based restriction (CBR)
+##############################################################
+
+variable "cbr_rules" {
+  type = list(object({
+    description = string
+    account_id  = string
+    rule_contexts = list(object({
+      attributes = optional(list(object({
+        name  = string
+        value = string
+    }))) }))
+    enforcement_mode = string
+  }))
+  description = "(Optional, list) List of CBR rules to create"
+  default     = []
+  # Validation happens in the rule module
+}
