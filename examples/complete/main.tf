@@ -89,6 +89,47 @@ module "create_scc_instance" {
 }
 
 ##############################################################################
+# SCC custom profile
+##############################################################################
+
+module "create_scc_profile" {
+  source      = "../../modules/profile/."
+  instance_id = module.create_scc_instance.guid
+  controls = [
+    # Apply 3 controls from IBM Cloud Framework for Financial Services control library version 1.6.0
+    {
+      control_library_name    = "IBM Cloud Framework for Financial Services",
+      control_library_version = "1.6.0"
+      control_name_list = [
+        "AC",
+        "AC-1",
+        "AC-1(a)",
+      ]
+    },
+    # Apply 4 controls from CIS IBM Cloud Foundations Benchmark control library version 1.0.0
+    {
+      control_library_name    = "CIS IBM Cloud Foundations Benchmark",
+      control_library_version = "1.0.0"
+      control_name_list = [
+        "1.16",
+        "1.18",
+        "1.19",
+        "1.4",
+      ]
+    },
+    # Apply all controls from SOC 2 control library version 1.0.0
+    {
+      control_library_name    = "SOC 2",
+      control_library_version = "1.0.0"
+      add_all_controls        = true
+    },
+  ]
+  profile_name        = "${var.prefix}-profile"
+  profile_description = "scc-custom"
+  profile_version     = "1.0.0"
+}
+
+##############################################################################
 # SCC attachment
 ##############################################################################
 
