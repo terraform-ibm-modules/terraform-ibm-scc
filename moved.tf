@@ -7,3 +7,5 @@ moved {
   from = ibm_scc_provider_type_instance.scc_provider_type_instance_instance
   to   = ibm_scc_provider_type_instance.scc_provider_type_instance
 }
+
+

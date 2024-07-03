@@ -9,13 +9,19 @@ variable "resource_tags" {
   default     = []
 }
 
+variable "existing_scc_instance_crn" {
+  type        = string
+  default     = null
+  description = "The CRN of an existing Security and Compliance Center instance. If not supplied, a new instance will be created."
+}
+
 variable "instance_name" {
   type        = string
   description = "Name of the security and compliance instance that will be provisioned by this module"
 }
 
 variable "attach_wp_to_scc_instance" {
-  type        = string
+  type        = bool
   description = "When set to true, a value must be passed for the `wp_instance_crn` inout variable."
   default     = false
 }
