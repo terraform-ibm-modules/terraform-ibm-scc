@@ -22,7 +22,7 @@ variable "instance_name" {
 
 variable "attach_wp_to_scc_instance" {
   type        = bool
-  description = "When set to true, a value must be passed for the `wp_instance_crn` inout variable."
+  description = "When set to true, a value must be passed for the `wp_instance_crn` input variable."
   default     = false
 }
 
@@ -56,12 +56,14 @@ variable "region" {
 
 variable "cos_instance_crn" {
   type        = string
-  description = "CRN of the Cloud Object Storage to store SCC data"
+  default     = null
+  description = "CRN of the Cloud Object Storage to store SCC data, required if `var.cos_bucket` is provided"
 }
 
 variable "cos_bucket" {
   type        = string
-  description = "The name of the Cloud Object Storage bucket to be used in SCC instance"
+  default     = null
+  description = "The name of the Cloud Object Storage bucket to be used in SCC instance, required if `var.cos_instance_crn` is provided`"
 }
 
 variable "en_instance_crn" {

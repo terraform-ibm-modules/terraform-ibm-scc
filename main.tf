@@ -43,7 +43,7 @@ locals {
 }
 
 resource "ibm_iam_authorization_policy" "scc_cos_s2s_access" {
-  count                       = var.skip_cos_iam_authorization_policy ? 0 : 1
+  count                       = var.skip_cos_iam_authorization_policy || var.en_instance_crn == null ? 0 : 1
   source_service_name         = "compliance"
   source_resource_instance_id = local.scc_instance_guid
   roles                       = ["Writer"]
@@ -74,17 +74,22 @@ resource "time_sleep" "wait_for_scc_cos_authorization_policy" {
   create_duration = "30s"
 }
 
+locals {
+  validate_en_cos_attachment = (var.cos_instance_crn != null && var.cos_bucket == null) || (var.cos_instance_crn == null && var.cos_bucket != null)
+  # tflint-ignore: terraform_unused_declarations
+  validate_en_cos_attachment_msg = local.validate_en_cos_attachment ? tobool("When providing `var.cos_instance_crn`, `var.cos_bucket` is also required, and vice-versa.") : null
+}
+
 # attach a COS bucket and an event notifications instance
 resource "ibm_scc_instance_settings" "scc_instance_settings" {
-  count       = var.existing_scc_instance_crn == null ? 1 : 0
   depends_on  = [time_sleep.wait_for_scc_cos_authorization_policy]
   instance_id = local.scc_instance_guid
   event_notifications {
-    instance_crn = var.en_instance_crn
+    instance_crn = var.en_instance_crn != null ? var.en_instance_crn : null
   }
   object_storage {
-    instance_crn = var.cos_instance_crn
-    bucket       = var.cos_bucket
+    instance_crn = var.cos_instance_crn != null ? var.cos_instance_crn : null
+    bucket       = var.cos_bucket != null ? var.cos_bucket : null
   }
 }
 
