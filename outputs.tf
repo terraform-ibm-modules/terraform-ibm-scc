@@ -15,7 +15,7 @@ output "guid" {
 output "crn" {
   description = "The CRN of the SCC instance."
   value       = local.scc_instance_crn
-  # Don't return the SCC GUI until it has been configred with COS, as it can't be used until COS integration complete
+  # Don't return the SCC CRN until it has been configred with COS, as it can't be used until COS integration complete
   depends_on = [ibm_scc_instance_settings.scc_instance_settings]
 }
 
