@@ -82,9 +82,10 @@ locals {
 
 # attach a COS bucket and an event notifications instance
 resource "ibm_scc_instance_settings" "scc_instance_settings" {
-  count       = var.configure_scc_settings ? 1 : 0
+  count       = var.existing_scc_instance_crn == null || var.update_scc_settings ? 1 : 0
   depends_on  = [time_sleep.wait_for_scc_cos_authorization_policy]
   instance_id = local.scc_instance_guid
+
   event_notifications {
     instance_crn = var.en_instance_crn
   }
