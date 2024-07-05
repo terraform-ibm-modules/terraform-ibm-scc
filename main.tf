@@ -86,11 +86,11 @@ resource "ibm_scc_instance_settings" "scc_instance_settings" {
   depends_on  = [time_sleep.wait_for_scc_cos_authorization_policy]
   instance_id = local.scc_instance_guid
   event_notifications {
-    instance_crn = var.en_instance_crn != null ? var.en_instance_crn : null
+    instance_crn = var.en_instance_crn
   }
   object_storage {
-    instance_crn = var.cos_instance_crn != null ? var.cos_instance_crn : null
-    bucket       = var.cos_bucket != null ? var.cos_bucket : null
+    instance_crn = var.cos_instance_crn
+    bucket       = var.cos_bucket
   }
 }
 
