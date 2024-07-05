@@ -43,7 +43,7 @@ locals {
 }
 
 resource "ibm_iam_authorization_policy" "scc_cos_s2s_access" {
-  count                       = var.skip_cos_iam_authorization_policy || var.cos_instance_crn == null ? 0 : 1
+  count                       = var.skip_cos_iam_authorization_policy ? 0 : 1
   source_service_name         = "compliance"
   source_resource_instance_id = local.scc_instance_guid
   roles                       = ["Writer"]
@@ -82,6 +82,7 @@ locals {
 
 # attach a COS bucket and an event notifications instance
 resource "ibm_scc_instance_settings" "scc_instance_settings" {
+  count       = var.configure_scc_settings ? 1 : 0
   depends_on  = [time_sleep.wait_for_scc_cos_authorization_policy]
   instance_id = local.scc_instance_guid
   event_notifications {

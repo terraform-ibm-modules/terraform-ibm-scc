@@ -84,6 +84,12 @@ variable "skip_scc_wp_auth_policy" {
   description = "Set to true to skip the creation of an IAM authorization policy that permits the SCC instance created by this solution read access to the workload protection instance. Only used if `attach_wp_to_scc_instance` is set to true."
 }
 
+variable "configure_scc_settings" {
+  type        = bool
+  default     = true
+  description = "Set to true to configure Event Notification and COS to the SCC instance. When used with an existing SCC instance this will override existing settings if set to true."
+}
+
 ##############################################################
 # Context-based restriction (CBR)
 ##############################################################
