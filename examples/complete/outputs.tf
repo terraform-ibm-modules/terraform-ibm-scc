@@ -58,12 +58,17 @@ output "scc_profile_attachment_id" {
   value       = module.create_profile_attachment.id
 }
 
-output "scc_profile_attachment_parameters" {
-  description = "SCC profile attachment ID"
-  value       = module.create_profile_attachment.attachment_parameters
-}
-
 output "wp_crn" {
   description = "CRN of created SCC WP instance."
   value       = module.scc_wp.crn
+}
+
+output "sorted_list" {
+  description = "SCC profile attachment parameters"
+  value       = module.create_profile_attachment.sorted_list
+}
+
+output "latest_profile" {
+  description = "SCC profile attachment parameters"
+  value       = module.create_profile_attachment.latest_profile
 }
