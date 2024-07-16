@@ -75,6 +75,10 @@ resource "time_sleep" "wait_for_scc_cos_authorization_policy" {
 }
 
 locals {
+  valiate_new_scc_instance_cos_configuration = var.existing_scc_instance_crn == null && (var.cos_instance_crn == null || var.cos_bucket == null)
+  # tflint-ignore: terraform_unused_declarations
+  valiate_new_scc_instance_cos_configuration_msg = local.valiate_new_scc_instance_cos_configuration ? tobool("`var.cos_instance_crn` and `var.cos_bucket` are required when creating a new SCC instance") : true
+  
   validate_scc_cos_configuaration = var.configure_cos_instance && (var.cos_instance_crn == null || var.cos_bucket == null)
   # tflint-ignore: terraform_unused_declarations
   validate_scc_cos_configuaration_msg = local.validate_scc_cos_configuaration ? tobool("`var.cos_instance_crn` and `var.cos_bucket` are required when `var.configure_cos_instance` is true") : true

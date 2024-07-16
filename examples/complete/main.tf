@@ -68,6 +68,7 @@ module "create_scc_instance" {
   attach_wp_to_scc_instance         = true
   skip_scc_wp_auth_policy           = false
   wp_instance_crn                   = module.scc_wp.crn
+  # configure_cos_instance = false
   cbr_rules = [
     {
       description      = "${var.prefix}-scc access only from vpc"
