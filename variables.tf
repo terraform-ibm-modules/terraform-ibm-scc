@@ -57,19 +57,19 @@ variable "region" {
 variable "cos_instance_crn" {
   type        = string
   default     = null
-  description = "CRN of the Cloud Object Storage to store SCC data, required if `var.cos_bucket` is provided"
+  description = "CRN of the Cloud Object Storage to store SCC data, required if `var.configure_cos_instance` is true"
 }
 
 variable "cos_bucket" {
   type        = string
   default     = null
-  description = "The name of the Cloud Object Storage bucket to be used in SCC instance, required if `var.cos_instance_crn` is provided`"
+  description = "The name of the Cloud Object Storage bucket to be used in SCC instance, required if `var.configure_cos_instance` is true"
 }
 
 variable "en_instance_crn" {
   type        = string
   default     = null
-  description = "The CRN of Event Notifications instance to be used with SCC. If no value is provided, Event Notifications will not be enabled for this SCC instance"
+  description = "The CRN of Event Notifications instance to be used with SCC instance, required if `var.configure_en_instance` is true"
 }
 
 variable "skip_cos_iam_authorization_policy" {
