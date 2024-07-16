@@ -84,10 +84,16 @@ variable "skip_scc_wp_auth_policy" {
   description = "Set to true to skip the creation of an IAM authorization policy that permits the SCC instance created by this solution read access to the workload protection instance. Only used if `attach_wp_to_scc_instance` is set to true."
 }
 
-variable "update_scc_settings" {
+variable "configure_en_instance" {
   type        = bool
   default     = true
-  description = "Set to true to update Event Notification and COS attachments in the existing SCC instance. Ignored when new SCC instance is created."
+  description = "Set to true to attach Event Notification to SCC instance being created or overwrite Event Notification attached to existing SCC instance. If set to false this will create SCC settings without Event Notification when creating a new instance or remove Event Notification attached to existing SCC instance."
+}
+
+variable "configure_cos_instance" {
+  type        = bool
+  default     = true
+  description = "Set to true to attach COS bucket to SCC instance being created or overwrite COS bucket attached to existing SCC instance. If set to false this will create SCC settings without COS bucket when creating a new instance or remove COS bucket attached to existing SCC instance."
 }
 
 ##############################################################

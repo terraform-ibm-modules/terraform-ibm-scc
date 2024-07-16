@@ -75,23 +75,26 @@ resource "time_sleep" "wait_for_scc_cos_authorization_policy" {
 }
 
 locals {
-  validate_scc_cos_attachment = (var.cos_instance_crn != null && var.cos_bucket == null) || (var.cos_instance_crn == null && var.cos_bucket != null)
+  validate_scc_cos_configuaration = var.configure_cos_instance && (var.cos_instance_crn == null || var.cos_bucket == null)
   # tflint-ignore: terraform_unused_declarations
-  validate_scc_cos_attachment_msg = local.validate_scc_cos_attachment ? tobool("When providing `var.cos_instance_crn`, `var.cos_bucket` is also required, and vice-versa.") : null
+  validate_scc_cos_configuaration_msg = local.validate_scc_cos_configuaration ? tobool("`var.cos_instance_crn` and `var.cos_bucket` are required when `var.configure_cos_instance` is true") : true
+
+  # tflint-ignore: terraform_unused_declarations
+  validate_scc_en_configuaration = var.configure_en_instance && var.en_instance_crn == null ? tobool("`var.en_instance_crn` is required when `var.configure_en_instance` is true") : true
 }
 
 # attach a COS bucket and an event notifications instance
 resource "ibm_scc_instance_settings" "scc_instance_settings" {
-  count       = var.existing_scc_instance_crn == null || var.update_scc_settings ? 1 : 0
+  count       = var.existing_scc_instance_crn == null || var.configure_cos_instance || var.configure_en_instance ? 1 : 0
   depends_on  = [time_sleep.wait_for_scc_cos_authorization_policy]
   instance_id = local.scc_instance_guid
 
   event_notifications {
-    instance_crn = var.en_instance_crn
+    instance_crn = var.configure_en_instance ? var.en_instance_crn : null
   }
   object_storage {
-    instance_crn = var.cos_instance_crn
-    bucket       = var.cos_bucket
+    instance_crn = var.configure_cos_instance ? var.cos_instance_crn : null
+    bucket       = var.configure_cos_instance ? var.cos_bucket : null
   }
 }
 
