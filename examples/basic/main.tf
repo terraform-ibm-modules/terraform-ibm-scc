@@ -25,4 +25,5 @@ module "create_scc_instance" {
   cos_instance_crn                  = module.cos.cos_instance_id
   attach_wp_to_scc_instance         = false
   skip_cos_iam_authorization_policy = false
+  configure_en_instance             = false
 }
