@@ -1,11 +1,11 @@
 variable "resource_group_id" {
   type        = string
-  description = "The id of the resource group to create the SCC instance"
+  description = "The id of the resource group to create the SCC instance."
 }
 
 variable "resource_tags" {
   type        = list(string)
-  description = "A list of tags applied to the resources created by the module"
+  description = "A list of tags applied to the resources created by the module."
   default     = []
 }
 
@@ -17,7 +17,7 @@ variable "existing_scc_instance_crn" {
 
 variable "instance_name" {
   type        = string
-  description = "Name of the security and compliance instance that will be provisioned by this module"
+  description = "Name of the security and compliance instance that will be provisioned by this module."
 }
 
 variable "attach_wp_to_scc_instance" {
@@ -33,7 +33,7 @@ variable "wp_instance_crn" {
 }
 
 variable "plan" {
-  description = "Pricing plan to create SCC instance. Options include security-compliance-center-standard-plan or security-compliance-center-trial-plan"
+  description = "Pricing plan to create SCC instance. Options include security-compliance-center-standard-plan or security-compliance-center-trial-plan."
   type        = string
   default     = "security-compliance-center-standard-plan"
 
@@ -44,7 +44,7 @@ variable "plan" {
 }
 
 variable "region" {
-  description = "Region where SCC instance will be created"
+  description = "Region where SCC instance will be created."
   type        = string
   default     = "us-south"
 
@@ -57,25 +57,25 @@ variable "region" {
 variable "cos_instance_crn" {
   type        = string
   default     = null
-  description = "CRN of the Cloud Object Storage to store SCC data, required if `var.configure_cos_instance` is true"
+  description = "CRN of the Cloud Object Storage to store SCC data, required if `var.configure_cos_instance` is true."
 }
 
 variable "cos_bucket" {
   type        = string
   default     = null
-  description = "The name of the Cloud Object Storage bucket to be used in SCC instance, required if `var.configure_cos_instance` is true"
+  description = "The name of the Cloud Object Storage bucket to be used in SCC instance, required if `var.configure_cos_instance` is true."
 }
 
 variable "en_instance_crn" {
   type        = string
   default     = null
-  description = "The CRN of Event Notifications instance to be used with SCC instance, required if `var.configure_en_instance` is true"
+  description = "The CRN of Event Notifications instance to be used with SCC, required if `var.configure_en_instance` is true."
 }
 
 variable "skip_cos_iam_authorization_policy" {
   type        = bool
   default     = false
-  description = "Set to true to skip the creation of an IAM authorization policy that permits the SCC instance created by this module to write access to the provided COS instance"
+  description = "Set to true to skip the creation of an IAM authorization policy that permits the SCC instance created by this module to write access to the provided COS instance."
 }
 
 variable "skip_scc_wp_auth_policy" {
@@ -111,7 +111,7 @@ variable "cbr_rules" {
     }))) }))
     enforcement_mode = string
   }))
-  description = "(Optional, list) List of CBR rules to create"
+  description = "(Optional, list) List of CBR rules to create."
   default     = []
   # Validation happens in the rule module
 }
