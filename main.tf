@@ -75,13 +75,14 @@ resource "time_sleep" "wait_for_scc_cos_authorization_policy" {
 }
 
 locals {
-  valiate_new_scc_instance_cos_configuration = var.existing_scc_instance_crn == null && (var.cos_instance_crn == null || var.cos_bucket == null)
+  valiate_new_scc_instance_cos_configuration = var.existing_scc_instance_crn == null && var.configure_cos_instance == false
   # tflint-ignore: terraform_unused_declarations
-  valiate_new_scc_instance_cos_configuration_msg = local.valiate_new_scc_instance_cos_configuration ? tobool("`var.cos_instance_crn` and `var.cos_bucket` are required when creating a new SCC instance") : true
-  
-  validate_scc_cos_configuaration = var.configure_cos_instance && (var.cos_instance_crn == null || var.cos_bucket == null)
+  valiate_new_scc_instance_cos_configuration_msg = local.valiate_new_scc_instance_cos_configuration ? tobool("`var.configure_cos_instance` should be true when creating a new SCC instance") : true
+
   # tflint-ignore: terraform_unused_declarations
-  validate_scc_cos_configuaration_msg = local.validate_scc_cos_configuaration ? tobool("`var.cos_instance_crn` and `var.cos_bucket` are required when `var.configure_cos_instance` is true") : true
+  validate_scc_cos_bucket = var.cos_bucket == null && var.configure_cos_instance ? tobool("`var.cos_bucket` is required when `var.configure_cos_instance` is true") : true
+  # tflint-ignore: terraform_unused_declarations
+  validate_scc_cos_crn = var.cos_instance_crn == null && var.configure_cos_instance ? tobool("`var.cos_instance_crn` is required when `var.configure_cos_instance` is true") : true
 
   # tflint-ignore: terraform_unused_declarations
   validate_scc_en_configuaration = var.configure_en_instance && var.en_instance_crn == null ? tobool("`var.en_instance_crn` is required when `var.configure_en_instance` is true") : true
