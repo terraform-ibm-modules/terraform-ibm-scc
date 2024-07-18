@@ -76,6 +76,12 @@ variable "skip_scc_wp_auth_policy" {
   description = "Set to true to skip the creation of an IAM authorization policy that permits the SCC instance created by this solution read access to the workload protection instance. Only used if `attach_wp_to_scc_instance` is set to true."
 }
 
+variable "cos_bucket_endpoint" {
+  type        = string
+  default     = ""
+  description = "Cloud Object Storage bucket endpoint, defaults to public endpoint if not passed in."
+}
+
 ##############################################################
 # Context-based restriction (CBR)
 ##############################################################

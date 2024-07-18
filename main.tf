@@ -67,8 +67,9 @@ resource "ibm_scc_instance_settings" "scc_instance_settings" {
     instance_crn = var.en_instance_crn
   }
   object_storage {
-    instance_crn = var.cos_instance_crn
-    bucket       = var.cos_bucket
+    instance_crn    = var.cos_instance_crn
+    bucket          = var.cos_bucket
+    bucket_endpoint = var.cos_bucket_endpoint
   }
 }
 
