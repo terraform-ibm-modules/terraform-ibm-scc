@@ -16,20 +16,20 @@ data "ibm_scc_profiles" "scc_profiles" {
 }
 
 locals {
-  # Get profiles by name matching that provided in var.profile_name
-  relevant_profiles = [
+  # Get profile and its various versions by name matching that provided in var.profile_name
+  relevant_profile_versions = [
     for profile in data.ibm_scc_profiles.scc_profiles.profiles : profile if profile.profile_name == var.profile_name
   ]
 
   # Sort profile versions from lowest to highest
-  sorted_profile_versions = sort(local.relevant_profiles[*].profile_version)
+  sorted_profile_versions = sort(local.relevant_profile_versions[*].profile_version)
 
   # Create sorted list of profiles, ordered from lowest to highest profile version
   sorted_list = flatten(
     [
       for version in local.sorted_profile_versions :
       [
-        for profile in local.relevant_profiles :
+        for profile in local.relevant_profile_versions :
         profile if version == profile.profile_version
       ]
     ]

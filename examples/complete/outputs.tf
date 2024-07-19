@@ -63,12 +63,7 @@ output "wp_crn" {
   value       = module.scc_wp.crn
 }
 
-output "sorted_list" {
-  description = "SCC profile attachment parameters"
-  value       = module.create_profile_attachment.sorted_list
-}
-
-output "latest_profile" {
-  description = "SCC profile attachment parameters"
-  value       = module.create_profile_attachment.latest_profile
+output "profile" {
+  description = "SCC profile details"
+  value       = module.create_profile_attachment.profile
 }
