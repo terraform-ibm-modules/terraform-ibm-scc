@@ -75,4 +75,5 @@ No modules.
 |------|-------------|
 | <a name="output_attachment_parameters"></a> [attachment\_parameters](#output\_attachment\_parameters) | SCC profile attachment parameters |
 | <a name="output_id"></a> [id](#output\_id) | SCC profile attachment ID |
+| <a name="output_profile"></a> [profile](#output\_profile) | SCC profile details |
 <!-- END OF PRE-COMMIT-TERRAFORM DOCS HOOK -->
