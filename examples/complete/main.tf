@@ -94,7 +94,7 @@ module "create_scc_instance" {
 
 module "create_profile_attachment" {
   source                 = "../../modules/attachment"
-  profile_name           = "CIS IBM Cloud Foundations Benchmark v1.1.0"
+  profile_name           = "SOC 2"
   profile_version        = "latest"
   scc_instance_id        = module.create_scc_instance.guid
   attachment_name        = "${var.prefix}-attachment"
