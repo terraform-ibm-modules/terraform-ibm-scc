@@ -11,6 +11,12 @@ resource "ibm_resource_instance" "scc_instance" {
   tags              = var.resource_tags
 }
 
+resource "ibm_resource_tag" "access_tags" {
+  resource_id = ibm_resource_instance.scc_instance.crn
+  tags        = var.access_tags
+  tag_type    = "access"
+}
+
 data "ibm_scc_provider_types" "scc_provider_types" {
   count       = var.attach_wp_to_scc_instance ? 1 : 0
   instance_id = ibm_resource_instance.scc_instance.guid
