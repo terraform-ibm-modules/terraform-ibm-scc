@@ -80,37 +80,24 @@ resource "time_sleep" "wait_for_scc_cos_authorization_policy" {
   create_duration = "30s"
 }
 
-data "ibm_scc_instance_settings" "scc_instance_settings" {
-  instance_id = local.scc_instance_guid
-}
-
 locals {
-
-  validate_cos_setting = (var.cos_bucket == null && var.cos_instance_crn != null) || (var.cos_bucket != null && var.cos_instance_crn == null)
-  # tflint-ignore: terraform_unused_declarations
-  validate_cos_setting_msg = var.update_existing_scc_instance_cos_setting && local.validate_cos_setting ? tobool("When `var.update_existing_scc_instance_cos_setting` is set to true, either both `var.cos_instance_crn` and `var.cos_bucket` must be null, or both must be non-null.") : false
   # tflint-ignore: terraform_unused_declarations
   validate_new_scc_instance_cos_setting = var.existing_scc_instance_crn == null && anytrue([var.cos_bucket == null, var.cos_instance_crn == null]) ? tobool("when creating a new SCC instance, both both `var.cos_instance_crn` and `var.cos_bucket` are required.") : false
-
-  scc_setting_en_instance_crn  = var.update_existing_scc_instance_en_setting ? var.en_instance_crn : data.ibm_scc_instance_settings.scc_instance_settings.event_notifications[0].instance_crn
-  scc_setting_cos_instance_crn = var.update_existing_scc_instance_cos_setting ? var.cos_instance_crn : data.ibm_scc_instance_settings.scc_instance_settings.object_storage[0].instance_crn
-  scc_setting_cos_bucket_name  = var.update_existing_scc_instance_cos_setting ? var.cos_bucket : data.ibm_scc_instance_settings.scc_instance_settings.object_storage[0].bucket
 }
 
 # attach a COS bucket and an event notifications instance
 resource "ibm_scc_instance_settings" "scc_instance_settings" {
   depends_on  = [time_sleep.wait_for_scc_cos_authorization_policy]
-  instance_id = local.scc_instance_guid
-
+  count       = var.existing_scc_instance_crn == null ? 1 : 0
+  instance_id = resource.ibm_resource_instance.scc_instance[0].guid
   event_notifications {
-    instance_crn = var.existing_scc_instance_crn == null ? var.en_instance_crn : local.scc_setting_en_instance_crn
+    instance_crn = var.en_instance_crn
   }
   object_storage {
-    instance_crn = var.existing_scc_instance_crn == null ? var.cos_instance_crn : local.scc_setting_cos_instance_crn
-    bucket       = var.existing_scc_instance_crn == null ? var.cos_bucket : local.scc_setting_cos_bucket_name
+    instance_crn = var.cos_instance_crn
+    bucket       = var.cos_bucket
   }
 }
-
 
 resource "ibm_iam_authorization_policy" "scc_wp_s2s_access" {
   count                       = var.attach_wp_to_scc_instance && !var.skip_scc_wp_auth_policy ? 1 : 0

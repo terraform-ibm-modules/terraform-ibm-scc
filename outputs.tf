@@ -33,8 +33,3 @@ output "plan" {
   description = "The pricing plan of the SCC instance."
   value       = var.existing_scc_instance_crn == null ? resource.ibm_resource_instance.scc_instance[0].plan : data.ibm_resource_instance.scc_instance[0].plan
 }
-
-output "scc_instance_settings" {
-  description = "The SCC instance settings."
-  value       = ibm_scc_instance_settings.scc_instance_settings
-}

@@ -1,11 +1,11 @@
 variable "resource_group_id" {
   type        = string
-  description = "The id of the resource group to create the SCC instance."
+  description = "The id of the resource group to create the SCC instance"
 }
 
 variable "resource_tags" {
   type        = list(string)
-  description = "A list of tags applied to the resources created by the module."
+  description = "A list of tags applied to the resources created by the module"
   default     = []
 }
 
@@ -30,7 +30,7 @@ variable "access_tags" {
 
 variable "instance_name" {
   type        = string
-  description = "Name of the security and compliance instance that will be provisioned by this module."
+  description = "Name of the security and compliance instance that will be provisioned by this module"
 }
 
 variable "attach_wp_to_scc_instance" {
@@ -46,7 +46,7 @@ variable "wp_instance_crn" {
 }
 
 variable "plan" {
-  description = "Pricing plan to create SCC instance. Options include security-compliance-center-standard-plan or security-compliance-center-trial-plan."
+  description = "Pricing plan to create SCC instance. Options include security-compliance-center-standard-plan or security-compliance-center-trial-plan"
   type        = string
   default     = "security-compliance-center-standard-plan"
 
@@ -57,7 +57,7 @@ variable "plan" {
 }
 
 variable "region" {
-  description = "Region where SCC instance will be created."
+  description = "Region where SCC instance will be created"
   type        = string
   default     = "us-south"
 
@@ -70,43 +70,31 @@ variable "region" {
 variable "cos_instance_crn" {
   type        = string
   default     = null
-  description = "CRN of the Cloud Object Storage to be used with the Security and Compliance Center (SCC). Required when creating a new SCC instance. If `update_existing_scc_instance_cos_setting` is set to true, this value will override the Cloud Object Storage (COS) setting in the existing SCC instance."
+  description = "CRN of the Cloud Object Storage to store SCC data. Required when creating a new SCC instance."
 }
 
 variable "cos_bucket" {
   type        = string
   default     = null
-  description = "The name of the Cloud Object Storage bucket to be used with the Security and Compliance Center (SCC). Required when creating a new SCC instance. If `update_existing_scc_instance_cos_setting` is set to true, this value will override the Cloud Object Storage (COS) setting in the existing SCC instance."
+  description = "The name of the Cloud Object Storage bucket to be used in SCC instance. Required when creating a new SCC instance."
 }
 
 variable "en_instance_crn" {
   type        = string
   default     = null
-  description = "The CRN of the Event Notifications instance to be used with the Security and Compliance Center (SCC). If `update_existing_scc_instance_en_setting` is set to true, this value will override the Event Notification setting in the existing SCC instance."
+  description = "The CRN of Event Notifications instance to be used with SCC. If no value is provided, Event Notifications will not be enabled for this SCC instance"
 }
 
 variable "skip_cos_iam_authorization_policy" {
   type        = bool
   default     = false
-  description = "Set to true to skip the creation of an IAM authorization policy that permits the SCC instance created by this module to write access to the provided COS instance."
+  description = "Set to true to skip the creation of an IAM authorization policy that permits the SCC instance created by this module to write access to the provided COS instance"
 }
 
 variable "skip_scc_wp_auth_policy" {
   type        = bool
   default     = false
   description = "Set to true to skip the creation of an IAM authorization policy that permits the SCC instance created by this solution read access to the workload protection instance. Only used if `attach_wp_to_scc_instance` is set to true."
-}
-
-variable "update_existing_scc_instance_en_setting" {
-  type        = bool
-  default     = true
-  description = "Set to true to update Event Notification setting in the existing Security and Compliance Center (SCC) instance with `var.en_instance_crn`. Ignored if new SCC instance is being created."
-}
-
-variable "update_existing_scc_instance_cos_setting" {
-  type        = bool
-  default     = true
-  description = "Set to true to update COS bucket setting in the existing Security and Compliance Center (SCC) instance with `var.cos_bucket`. Ignored if new SCC instance is being created."
 }
 
 ##############################################################
@@ -124,7 +112,7 @@ variable "cbr_rules" {
     }))) }))
     enforcement_mode = string
   }))
-  description = "(Optional, list) List of CBR rules to create."
+  description = "(Optional, list) List of CBR rules to create"
   default     = []
   # Validation happens in the rule module
 }
