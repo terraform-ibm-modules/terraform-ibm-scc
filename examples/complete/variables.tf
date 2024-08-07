@@ -32,6 +32,12 @@ variable "resource_tags" {
   default     = []
 }
 
+variable "existing_scc_instance_crn" {
+  type        = string
+  description = "The CRN of existing SCC instacne"
+  default     = null
+}
+
 variable "access_tags" {
   type        = list(string)
   description = "Optional list of access tags to be added to the created resource instance"
