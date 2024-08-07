@@ -56,20 +56,22 @@ module "scc_wp" {
 ##############################################################################
 
 module "create_scc_instance" {
-  source                            = "../.."
-  instance_name                     = "${var.prefix}-instance"
-  region                            = var.region
-  resource_group_id                 = module.resource_group.resource_group_id
-  resource_tags                     = var.resource_tags
-  existing_scc_instance_crn         = var.existing_scc_instance_crn
-  access_tags                       = var.access_tags
-  cos_bucket                        = module.cos.bucket_name
-  cos_instance_crn                  = module.cos.cos_instance_id
-  en_instance_crn                   = module.event_notification.crn
-  skip_cos_iam_authorization_policy = false
-  attach_wp_to_scc_instance         = true
-  skip_scc_wp_auth_policy           = false
-  wp_instance_crn                   = module.scc_wp.crn
+  source                                   = "../.."
+  instance_name                            = "${var.prefix}-instance"
+  region                                   = var.region
+  resource_group_id                        = module.resource_group.resource_group_id
+  resource_tags                            = var.resource_tags
+  existing_scc_instance_crn                = var.existing_scc_instance_crn
+  access_tags                              = var.access_tags
+  cos_bucket                               = module.cos.bucket_name
+  cos_instance_crn                         = module.cos.cos_instance_id
+  en_instance_crn                          = module.event_notification.crn
+  skip_cos_iam_authorization_policy        = false
+  attach_wp_to_scc_instance                = true
+  skip_scc_wp_auth_policy                  = false
+  wp_instance_crn                          = module.scc_wp.crn
+  update_existing_scc_instance_cos_setting = false
+  update_existing_scc_instance_en_setting  = false
   cbr_rules = [
     {
       description      = "${var.prefix}-scc access only from vpc"

@@ -85,9 +85,12 @@ data "ibm_scc_instance_settings" "scc_instance_settings" {
 }
 
 locals {
+
   validate_cos_setting = (var.cos_bucket == null && var.cos_instance_crn != null) || (var.cos_bucket != null && var.cos_instance_crn == null)
   # tflint-ignore: terraform_unused_declarations
   validate_cos_setting_msg = var.update_existing_scc_instance_cos_setting && local.validate_cos_setting ? tobool("When `var.update_existing_scc_instance_cos_setting` is set to true, either both `var.cos_instance_crn` and `var.cos_bucket` must be null, or both must be non-null.") : false
+  # tflint-ignore: terraform_unused_declarations
+  validate_new_scc_instance_cos_setting = var.existing_scc_instance_crn == null && anytrue([var.cos_bucket == null, var.cos_instance_crn == null]) ? tobool("when creating a new SCC instance, both both `var.cos_instance_crn` and `var.cos_bucket` are required.") : false
 
   scc_setting_en_instance_crn  = var.update_existing_scc_instance_en_setting ? var.en_instance_crn : data.ibm_scc_instance_settings.scc_instance_settings.event_notifications[0].instance_crn
   scc_setting_cos_instance_crn = var.update_existing_scc_instance_cos_setting ? var.cos_instance_crn : data.ibm_scc_instance_settings.scc_instance_settings.object_storage[0].instance_crn

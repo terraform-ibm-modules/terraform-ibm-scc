@@ -70,13 +70,13 @@ variable "region" {
 variable "cos_instance_crn" {
   type        = string
   default     = null
-  description = "CRN of the Cloud Object Storage to be used with the Security and Compliance Center (SCC). If `update_existing_scc_instance_cos_setting` is set to true, this value will override the Cloud Object Storage (COS) setting in the existing SCC instance."
+  description = "CRN of the Cloud Object Storage to be used with the Security and Compliance Center (SCC). Required when creating a new SCC instance. If `update_existing_scc_instance_cos_setting` is set to true, this value will override the Cloud Object Storage (COS) setting in the existing SCC instance."
 }
 
 variable "cos_bucket" {
   type        = string
   default     = null
-  description = "The name of the Cloud Object Storage bucket to be used with the Security and Compliance Center (SCC). If `update_existing_scc_instance_cos_setting` is set to true, this value will override the Cloud Object Storage (COS) setting in the existing SCC instance."
+  description = "The name of the Cloud Object Storage bucket to be used with the Security and Compliance Center (SCC). Required when creating a new SCC instance. If `update_existing_scc_instance_cos_setting` is set to true, this value will override the Cloud Object Storage (COS) setting in the existing SCC instance."
 }
 
 variable "en_instance_crn" {
