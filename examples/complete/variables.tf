@@ -31,3 +31,9 @@ variable "resource_tags" {
   description = "Optional list of tags to be added to created resources"
   default     = []
 }
+
+variable "existing_scc_instance_crn" {
+  type        = string
+  description = "The CRN of existing SCC instacne"
+  default     = null
+}

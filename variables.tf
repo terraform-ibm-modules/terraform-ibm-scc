@@ -57,19 +57,19 @@ variable "region" {
 variable "cos_instance_crn" {
   type        = string
   default     = null
-  description = "CRN of the Cloud Object Storage to store SCC data, required if `var.configure_cos_instance` is true."
+  description = "CRN of the Cloud Object Storage to be used with the Security and Compliance Center (SCC). If `update_existing_scc_instance_cos_setting` is set to true, this value will override the Cloud Object Storage (COS) setting in the existing SCC instance."
 }
 
 variable "cos_bucket" {
   type        = string
   default     = null
-  description = "The name of the Cloud Object Storage bucket to be used in SCC instance, required if `var.configure_cos_instance` is true."
+  description = "The name of the Cloud Object Storage bucket to be used with the Security and Compliance Center (SCC). If `update_existing_scc_instance_cos_setting` is set to true, this value will override the Cloud Object Storage (COS) setting in the existing SCC instance."
 }
 
 variable "en_instance_crn" {
   type        = string
   default     = null
-  description = "The CRN of Event Notifications instance to be used with SCC, required if `var.configure_en_instance` is true."
+  description = "The CRN of the Event Notifications instance to be used with the Security and Compliance Center (SCC). If `update_existing_scc_instance_en_setting` is set to true, this value will override the Event Notification setting in the existing SCC instance."
 }
 
 variable "skip_cos_iam_authorization_policy" {
@@ -84,16 +84,16 @@ variable "skip_scc_wp_auth_policy" {
   description = "Set to true to skip the creation of an IAM authorization policy that permits the SCC instance created by this solution read access to the workload protection instance. Only used if `attach_wp_to_scc_instance` is set to true."
 }
 
-variable "configure_en_instance" {
+variable "update_existing_scc_instance_en_setting" {
   type        = bool
   default     = true
-  description = "Set to true to attach Event Notification to SCC instance being created or overwrite Event Notification attached to existing SCC instance. If set to false this will create SCC settings without Event Notification when creating a new instance or remove Event Notification attached to existing SCC instance."
+  description = "Set to true to update Event Notification setting in the existing Security and Compliance Center (SCC) instance with `var.en_instance_crn`. Ignored if new SCC instance is being created."
 }
 
-variable "configure_cos_instance" {
+variable "update_existing_scc_instance_cos_setting" {
   type        = bool
   default     = true
-  description = "Set to true to attach COS bucket to SCC instance being created or overwrite COS bucket attached to existing SCC instance. If set to false this will create SCC settings without COS bucket when creating a new instance or remove COS bucket attached to existing SCC instance."
+  description = "Set to true to update COS bucket setting in the existing Security and Compliance Center (SCC) instance with `var.cos_bucket`. Ignored if new SCC instance is being created."
 }
 
 ##############################################################

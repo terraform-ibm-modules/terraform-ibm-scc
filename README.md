@@ -88,6 +88,7 @@ You need the following permissions to run this module.
 | [time_sleep.wait_for_scc_wp_authorization_policy](https://registry.terraform.io/providers/hashicorp/time/latest/docs/resources/sleep) | resource |
 | [ibm_iam_account_settings.iam_account_settings](https://registry.terraform.io/providers/IBM-Cloud/ibm/latest/docs/data-sources/iam_account_settings) | data source |
 | [ibm_resource_instance.scc_instance](https://registry.terraform.io/providers/IBM-Cloud/ibm/latest/docs/data-sources/resource_instance) | data source |
+| [ibm_scc_instance_settings.scc_instance_settings](https://registry.terraform.io/providers/IBM-Cloud/ibm/latest/docs/data-sources/scc_instance_settings) | data source |
 | [ibm_scc_provider_types.scc_provider_types](https://registry.terraform.io/providers/IBM-Cloud/ibm/latest/docs/data-sources/scc_provider_types) | data source |
 
 ### Inputs
@@ -96,11 +97,9 @@ You need the following permissions to run this module.
 |------|-------------|------|---------|:--------:|
 | <a name="input_attach_wp_to_scc_instance"></a> [attach\_wp\_to\_scc\_instance](#input\_attach\_wp\_to\_scc\_instance) | When set to true, a value must be passed for the `wp_instance_crn` input variable. | `bool` | `false` | no |
 | <a name="input_cbr_rules"></a> [cbr\_rules](#input\_cbr\_rules) | (Optional, list) List of CBR rules to create. | <pre>list(object({<br>    description = string<br>    account_id  = string<br>    rule_contexts = list(object({<br>      attributes = optional(list(object({<br>        name  = string<br>        value = string<br>    }))) }))<br>    enforcement_mode = string<br>  }))</pre> | `[]` | no |
-| <a name="input_configure_cos_instance"></a> [configure\_cos\_instance](#input\_configure\_cos\_instance) | Set to true to attach COS bucket to SCC instance being created or overwrite COS bucket attached to existing SCC instance. If set to false this will create SCC settings without COS bucket when creating a new instance or remove COS bucket attached to existing SCC instance. | `bool` | `true` | no |
-| <a name="input_configure_en_instance"></a> [configure\_en\_instance](#input\_configure\_en\_instance) | Set to true to attach Event Notification to SCC instance being created or overwrite Event Notification attached to existing SCC instance. If set to false this will create SCC settings without Event Notification when creating a new instance or remove Event Notification attached to existing SCC instance. | `bool` | `true` | no |
-| <a name="input_cos_bucket"></a> [cos\_bucket](#input\_cos\_bucket) | The name of the Cloud Object Storage bucket to be used in SCC instance, required if `var.configure_cos_instance` is true. | `string` | `null` | no |
-| <a name="input_cos_instance_crn"></a> [cos\_instance\_crn](#input\_cos\_instance\_crn) | CRN of the Cloud Object Storage to store SCC data, required if `var.configure_cos_instance` is true. | `string` | `null` | no |
-| <a name="input_en_instance_crn"></a> [en\_instance\_crn](#input\_en\_instance\_crn) | The CRN of Event Notifications instance to be used with SCC, required if `var.configure_en_instance` is true. | `string` | `null` | no |
+| <a name="input_cos_bucket"></a> [cos\_bucket](#input\_cos\_bucket) | The name of the Cloud Object Storage bucket to be used with the Security and Compliance Center (SCC). If `update_existing_scc_instance_cos_setting` is set to true, this value will override the Cloud Object Storage (COS) setting in the existing SCC instance. | `string` | `null` | no |
+| <a name="input_cos_instance_crn"></a> [cos\_instance\_crn](#input\_cos\_instance\_crn) | CRN of the Cloud Object Storage to be used with the Security and Compliance Center (SCC). If `update_existing_scc_instance_cos_setting` is set to true, this value will override the Cloud Object Storage (COS) setting in the existing SCC instance. | `string` | `null` | no |
+| <a name="input_en_instance_crn"></a> [en\_instance\_crn](#input\_en\_instance\_crn) | The CRN of the Event Notifications instance to be used with the Security and Compliance Center (SCC). If `update_existing_scc_instance_en_setting` is set to true, this value will override the Event Notification setting in the existing SCC instance. | `string` | `null` | no |
 | <a name="input_existing_scc_instance_crn"></a> [existing\_scc\_instance\_crn](#input\_existing\_scc\_instance\_crn) | The CRN of an existing Security and Compliance Center instance. If not supplied, a new instance will be created. | `string` | `null` | no |
 | <a name="input_instance_name"></a> [instance\_name](#input\_instance\_name) | Name of the security and compliance instance that will be provisioned by this module. | `string` | n/a | yes |
 | <a name="input_plan"></a> [plan](#input\_plan) | Pricing plan to create SCC instance. Options include security-compliance-center-standard-plan or security-compliance-center-trial-plan. | `string` | `"security-compliance-center-standard-plan"` | no |
@@ -109,6 +108,8 @@ You need the following permissions to run this module.
 | <a name="input_resource_tags"></a> [resource\_tags](#input\_resource\_tags) | A list of tags applied to the resources created by the module. | `list(string)` | `[]` | no |
 | <a name="input_skip_cos_iam_authorization_policy"></a> [skip\_cos\_iam\_authorization\_policy](#input\_skip\_cos\_iam\_authorization\_policy) | Set to true to skip the creation of an IAM authorization policy that permits the SCC instance created by this module to write access to the provided COS instance. | `bool` | `false` | no |
 | <a name="input_skip_scc_wp_auth_policy"></a> [skip\_scc\_wp\_auth\_policy](#input\_skip\_scc\_wp\_auth\_policy) | Set to true to skip the creation of an IAM authorization policy that permits the SCC instance created by this solution read access to the workload protection instance. Only used if `attach_wp_to_scc_instance` is set to true. | `bool` | `false` | no |
+| <a name="input_update_existing_scc_instance_cos_setting"></a> [update\_existing\_scc\_instance\_cos\_setting](#input\_update\_existing\_scc\_instance\_cos\_setting) | Set to true to update COS bucket setting in the existing Security and Compliance Center (SCC) instance with `var.cos_bucket`. Ignored if new SCC instance is being created. | `bool` | `true` | no |
+| <a name="input_update_existing_scc_instance_en_setting"></a> [update\_existing\_scc\_instance\_en\_setting](#input\_update\_existing\_scc\_instance\_en\_setting) | Set to true to update Event Notification setting in the existing Security and Compliance Center (SCC) instance with `var.en_instance_crn`. Ignored if new SCC instance is being created. | `bool` | `true` | no |
 | <a name="input_wp_instance_crn"></a> [wp\_instance\_crn](#input\_wp\_instance\_crn) | Optionally pass the CRN of an existing SCC Workload Protection instance to attach it to the SCC instance. | `string` | `null` | no |
 
 ### Outputs
@@ -121,6 +122,7 @@ You need the following permissions to run this module.
 | <a name="output_location"></a> [location](#output\_location) | The location of the SCC instance. |
 | <a name="output_name"></a> [name](#output\_name) | The name of the SCC instance. |
 | <a name="output_plan"></a> [plan](#output\_plan) | The pricing plan of the SCC instance. |
+| <a name="output_scc_instance_settings"></a> [scc\_instance\_settings](#output\_scc\_instance\_settings) | The SCC instance settings. |
 <!-- END OF PRE-COMMIT-TERRAFORM DOCS HOOK -->
 
 <!-- Leave this section as is so that your module has a link to local development environment set up steps for contributors to follow -->

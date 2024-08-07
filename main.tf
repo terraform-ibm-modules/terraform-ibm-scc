@@ -16,6 +16,7 @@ data "ibm_resource_instance" "scc_instance" {
   count      = var.existing_scc_instance_crn == null ? 0 : 1
   identifier = local.scc_instance_guid
 }
+
 resource "ibm_resource_instance" "scc_instance" {
   count             = var.existing_scc_instance_crn == null ? 1 : 0
   name              = var.instance_name
@@ -75,17 +76,17 @@ resource "time_sleep" "wait_for_scc_cos_authorization_policy" {
 }
 
 locals {
-  valiate_new_scc_instance_cos_configuration = var.existing_scc_instance_crn == null && var.configure_cos_instance == false
+  validate_cos_setting = (var.cos_bucket == null && var.cos_instance_crn != null) || (var.cos_bucket != null && var.cos_instance_crn == null)
   # tflint-ignore: terraform_unused_declarations
-  valiate_new_scc_instance_cos_configuration_msg = local.valiate_new_scc_instance_cos_configuration ? tobool("`var.configure_cos_instance` should be true when creating a new SCC instance") : true
+  validate_cos_setting_msg = var.update_existing_scc_instance_cos_setting && local.validate_cos_setting ? tobool("When `var.update_existing_scc_instance_cos_setting` is set to true, either both `var.cos_instance_crn` and `var.cos_bucket` must be null, or both must be non-null.") : false
 
-  # tflint-ignore: terraform_unused_declarations
-  validate_scc_cos_bucket = var.cos_bucket == null && var.configure_cos_instance ? tobool("`var.cos_bucket` is required when `var.configure_cos_instance` is true") : true
-  # tflint-ignore: terraform_unused_declarations
-  validate_scc_cos_crn = var.cos_instance_crn == null && var.configure_cos_instance ? tobool("`var.cos_instance_crn` is required when `var.configure_cos_instance` is true") : true
+  scc_setting_en_instance_crn  = var.update_existing_scc_instance_en_setting ? var.en_instance_crn : data.ibm_scc_instance_settings.scc_instance_settings.event_notifications[0].instance_crn
+  scc_setting_cos_instance_crn = var.update_existing_scc_instance_cos_setting ? var.cos_instance_crn : data.ibm_scc_instance_settings.scc_instance_settings.object_storage[0].instance_crn
+  scc_setting_cos_bucket_name  = var.update_existing_scc_instance_cos_setting ? var.cos_bucket : data.ibm_scc_instance_settings.scc_instance_settings.object_storage[0].bucket
+}
 
-  # tflint-ignore: terraform_unused_declarations
-  validate_scc_en_configuaration = var.configure_en_instance && var.en_instance_crn == null ? tobool("`var.en_instance_crn` is required when `var.configure_en_instance` is true") : true
+data "ibm_scc_instance_settings" "scc_instance_settings" {
+  instance_id = local.scc_instance_guid
 }
 
 # attach a COS bucket and an event notifications instance
@@ -94,11 +95,11 @@ resource "ibm_scc_instance_settings" "scc_instance_settings" {
   instance_id = local.scc_instance_guid
 
   event_notifications {
-    instance_crn = var.configure_en_instance ? var.en_instance_crn : null
+    instance_crn = var.existing_scc_instance_crn == null ? var.en_instance_crn : local.scc_setting_en_instance_crn
   }
   object_storage {
-    instance_crn = var.configure_cos_instance ? var.cos_instance_crn : null
-    bucket       = var.configure_cos_instance ? var.cos_bucket : null
+    instance_crn = var.existing_scc_instance_crn == null ? var.cos_instance_crn : local.scc_setting_cos_instance_crn
+    bucket       = var.existing_scc_instance_crn == null ? var.cos_bucket : local.scc_setting_cos_bucket_name
   }
 }
 

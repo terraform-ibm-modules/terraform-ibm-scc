@@ -61,6 +61,7 @@ module "create_scc_instance" {
   region                            = var.region
   resource_group_id                 = module.resource_group.resource_group_id
   resource_tags                     = var.resource_tags
+  existing_scc_instance_crn         = var.existing_scc_instance_crn
   cos_bucket                        = module.cos.bucket_name
   cos_instance_crn                  = module.cos.cos_instance_id
   en_instance_crn                   = module.event_notification.crn
