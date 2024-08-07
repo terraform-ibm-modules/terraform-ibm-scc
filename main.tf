@@ -27,6 +27,12 @@ resource "ibm_resource_instance" "scc_instance" {
   tags              = var.resource_tags
 }
 
+resource "ibm_resource_tag" "access_tags" {
+  resource_id = ibm_resource_instance.scc_instance.crn
+  tags        = var.access_tags
+  tag_type    = "access"
+}
+
 data "ibm_scc_provider_types" "scc_provider_types" {
   count       = var.attach_wp_to_scc_instance ? 1 : 0
   instance_id = local.scc_instance_guid
@@ -160,7 +166,7 @@ locals {
 module "cbr_rule" {
   count            = length(var.cbr_rules) > 0 ? length(var.cbr_rules) : 0
   source           = "terraform-ibm-modules/cbr/ibm//modules/cbr-rule-module"
-  version          = "1.23.0"
+  version          = "1.23.1"
   rule_description = var.cbr_rules[count.index].description
   enforcement_mode = var.cbr_rules[count.index].enforcement_mode
   rule_contexts    = var.cbr_rules[count.index].rule_contexts

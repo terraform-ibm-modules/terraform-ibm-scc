@@ -2,16 +2,33 @@
 package test
 
 import (
+	"log"
 	"math/rand"
+	"os"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
+	"github.com/terraform-ibm-modules/ibmcloud-terratest-wrapper/common"
 	"github.com/terraform-ibm-modules/ibmcloud-terratest-wrapper/testhelper"
 )
 
 const resourceGroup = "geretain-test-resources" // Use existing resource group
 const basicExampleDir = "examples/basic"
 const completeExampleDir = "examples/complete"
+const yamlLocation = "../common-dev-assets/common-go-assets/common-permanent-resources.yaml"
+
+var permanentResources map[string]interface{}
+
+func TestMain(m *testing.M) {
+	// Read the YAML file contents
+	var err error
+	permanentResources, err = common.LoadMapFromYaml(yamlLocation)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	os.Exit(m.Run())
+}
 
 func setupBasicExampleOptions(t *testing.T, prefix string, dir string) *testhelper.TestOptions {
 	options := testhelper.TestOptionsDefaultWithVars(&testhelper.TestOptions{
@@ -20,6 +37,9 @@ func setupBasicExampleOptions(t *testing.T, prefix string, dir string) *testhelp
 		Prefix:             prefix,
 		ResourceGroup:      resourceGroup,
 		BestRegionYAMLPath: "../common-dev-assets/common-go-assets/cloudinfo-region-scc-prefs.yaml",
+		TerraformVars: map[string]interface{}{
+			"access_tags": permanentResources["accessTags"],
+		},
 	})
 	return options
 }
