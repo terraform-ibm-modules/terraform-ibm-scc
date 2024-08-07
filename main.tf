@@ -2,6 +2,11 @@
 # SCC module
 ##############################################################################
 
+data "ibm_resource_instance" "scc_instance" {
+  count      = var.existing_scc_instance_crn == null ? 0 : 1
+  identifier = local.scc_instance_guid
+}
+
 locals {
   parsed_existing_scc_instance_crn = var.existing_scc_instance_crn != null ? split(":", var.existing_scc_instance_crn) : []
   existing_scc_instance_guid       = length(local.parsed_existing_scc_instance_crn) > 0 ? local.parsed_existing_scc_instance_crn[7] : null
@@ -11,12 +16,6 @@ locals {
   scc_instance_guid   = var.existing_scc_instance_crn == null ? resource.ibm_resource_instance.scc_instance[0].guid : local.existing_scc_instance_guid
   scc_instance_region = var.existing_scc_instance_crn == null ? var.region : local.existing_scc_instance_region
 }
-
-data "ibm_resource_instance" "scc_instance" {
-  count      = var.existing_scc_instance_crn == null ? 0 : 1
-  identifier = local.scc_instance_guid
-}
-
 resource "ibm_resource_instance" "scc_instance" {
   count             = var.existing_scc_instance_crn == null ? 1 : 0
   name              = var.instance_name
@@ -28,7 +27,7 @@ resource "ibm_resource_instance" "scc_instance" {
 }
 
 resource "ibm_resource_tag" "access_tags" {
-  resource_id = ibm_resource_instance.scc_instance.crn
+  resource_id = local.scc_instance_crn
   tags        = var.access_tags
   tag_type    = "access"
 }
@@ -81,6 +80,10 @@ resource "time_sleep" "wait_for_scc_cos_authorization_policy" {
   create_duration = "30s"
 }
 
+data "ibm_scc_instance_settings" "scc_instance_settings" {
+  instance_id = local.scc_instance_guid
+}
+
 locals {
   validate_cos_setting = (var.cos_bucket == null && var.cos_instance_crn != null) || (var.cos_bucket != null && var.cos_instance_crn == null)
   # tflint-ignore: terraform_unused_declarations
@@ -89,10 +92,6 @@ locals {
   scc_setting_en_instance_crn  = var.update_existing_scc_instance_en_setting ? var.en_instance_crn : data.ibm_scc_instance_settings.scc_instance_settings.event_notifications[0].instance_crn
   scc_setting_cos_instance_crn = var.update_existing_scc_instance_cos_setting ? var.cos_instance_crn : data.ibm_scc_instance_settings.scc_instance_settings.object_storage[0].instance_crn
   scc_setting_cos_bucket_name  = var.update_existing_scc_instance_cos_setting ? var.cos_bucket : data.ibm_scc_instance_settings.scc_instance_settings.object_storage[0].bucket
-}
-
-data "ibm_scc_instance_settings" "scc_instance_settings" {
-  instance_id = local.scc_instance_guid
 }
 
 # attach a COS bucket and an event notifications instance
