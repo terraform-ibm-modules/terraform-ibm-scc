@@ -1,10 +1,10 @@
 package test
+
 import (
 	"testing"
 
 	"github.com/stretchr/testify/assert"
 )
-
 
 func TestRunCompleteExample(t *testing.T) {
 	t.Parallel()
