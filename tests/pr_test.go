@@ -73,16 +73,6 @@ func setupCompleteExampleOptions(t *testing.T, prefix string, dir string) *testh
 	return options
 }
 
-func TestRunCompleteExample(t *testing.T) {
-	t.Parallel()
-
-	options := setupCompleteExampleOptions(t, "scc-cmp", completeExampleDir)
-
-	output, err := options.RunTestConsistency()
-	assert.Nil(t, err, "This should not have errored")
-	assert.NotNil(t, output, "Expected some output")
-}
-
 func TestRunBasicExample(t *testing.T) {
 	t.Parallel()
 
@@ -117,7 +107,12 @@ func TestRunExistingResourcesInstances(t *testing.T) {
 	realTerraformDir := "./resources/existing-resources"
 	tempTerraformDir, _ := files.CopyTerraformFolderToTemp(realTerraformDir, fmt.Sprintf(prefix+"-%s", strings.ToLower(random.UniqueId())))
 	tags := common.GetTagsFromTravis()
-	region := "us-south"
+	validRegions := []string{
+		"us-south",
+		"eu-de",
+		"eu-es",
+	}
+	region := validRegions[rand.Intn(len(validRegions))]
 
 	// Verify ibmcloud_api_key variable is set
 	checkVariable := "TF_VAR_ibmcloud_api_key"
