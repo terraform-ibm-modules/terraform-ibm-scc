@@ -16,8 +16,8 @@ module "cos" {
 }
 
 module "create_scc_instance" {
-  source  = "terraform-ibm-modules/scc/ibm"
-  version = "1.7.2"
+  source                            = "terraform-ibm-modules/scc/ibm"
+  version                           = "1.7.2"
   instance_name                     = "${var.prefix}-instance"
   region                            = var.region
   resource_group_id                 = module.resource_group.resource_group_id
