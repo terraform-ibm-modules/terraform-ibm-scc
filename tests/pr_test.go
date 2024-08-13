@@ -105,12 +105,12 @@ func TestRunCompleteExampleUpgrade(t *testing.T) {
 	}
 }
 
-// A test to pass existing resources to the SCC instances DA
+// A test to pass existing SCC instances to complete example
 func TestRunExistingResourcesInstances(t *testing.T) {
 	t.Parallel()
 
 	// ------------------------------------------------------------------------------------
-	// Provision SCC and COS instance
+	// Provision SCC instance and configure COS setting
 	// ------------------------------------------------------------------------------------
 
 	prefix := fmt.Sprintf("scc-existing-%s", strings.ToLower(random.UniqueId()))
