@@ -104,7 +104,7 @@ func TestRunExistingResourcesInstances(t *testing.T) {
 	// ------------------------------------------------------------------------------------
 
 	prefix := fmt.Sprintf("scc-existing-%s", strings.ToLower(random.UniqueId()))
-	realTerraformDir := "./resources/existing-resources"
+	realTerraformDir := ".."
 	tempTerraformDir, _ := files.CopyTerraformFolderToTemp(realTerraformDir, fmt.Sprintf(prefix+"-%s", strings.ToLower(random.UniqueId())))
 	tags := common.GetTagsFromTravis()
 	validRegions := []string{
@@ -122,7 +122,7 @@ func TestRunExistingResourcesInstances(t *testing.T) {
 
 	logger.Log(t, "Tempdir: ", tempTerraformDir)
 	existingTerraformOptions := terraform.WithDefaultRetryableErrors(t, &terraform.Options{
-		TerraformDir: tempTerraformDir,
+		TerraformDir: tempTerraformDir + "/tests/existing-resources",
 		Vars: map[string]interface{}{
 			"prefix":        prefix,
 			"region":        region,
