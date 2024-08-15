@@ -9,6 +9,12 @@ variable "resource_tags" {
   default     = []
 }
 
+variable "existing_scc_instance_crn" {
+  type        = string
+  default     = null
+  description = "The CRN of an existing Security and Compliance Center instance. If not supplied, a new instance will be created."
+}
+
 variable "access_tags" {
   type        = list(string)
   description = "A list of access tags applied to the resource instance created by the module"
@@ -28,8 +34,8 @@ variable "instance_name" {
 }
 
 variable "attach_wp_to_scc_instance" {
-  type        = string
-  description = "When set to true, a value must be passed for the `wp_instance_crn` inout variable."
+  type        = bool
+  description = "When set to true, a value must be passed for the `wp_instance_crn` input variable."
   default     = false
 }
 
@@ -63,12 +69,14 @@ variable "region" {
 
 variable "cos_instance_crn" {
   type        = string
-  description = "CRN of the Cloud Object Storage to store SCC data"
+  default     = null
+  description = "CRN of the Cloud Object Storage to store SCC data. Required when creating a new SCC instance."
 }
 
 variable "cos_bucket" {
   type        = string
-  description = "The name of the Cloud Object Storage bucket to be used in SCC instance"
+  default     = null
+  description = "The name of the Cloud Object Storage bucket to be used in SCC instance. Required when creating a new SCC instance."
 }
 
 variable "en_instance_crn" {

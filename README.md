@@ -88,6 +88,7 @@ You need the following permissions to run this module.
 | [time_sleep.wait_for_scc_cos_authorization_policy](https://registry.terraform.io/providers/hashicorp/time/latest/docs/resources/sleep) | resource |
 | [time_sleep.wait_for_scc_wp_authorization_policy](https://registry.terraform.io/providers/hashicorp/time/latest/docs/resources/sleep) | resource |
 | [ibm_iam_account_settings.iam_account_settings](https://registry.terraform.io/providers/IBM-Cloud/ibm/latest/docs/data-sources/iam_account_settings) | data source |
+| [ibm_resource_instance.scc_instance](https://registry.terraform.io/providers/IBM-Cloud/ibm/latest/docs/data-sources/resource_instance) | data source |
 | [ibm_scc_provider_types.scc_provider_types](https://registry.terraform.io/providers/IBM-Cloud/ibm/latest/docs/data-sources/scc_provider_types) | data source |
 
 ### Inputs
@@ -95,11 +96,12 @@ You need the following permissions to run this module.
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
 | <a name="input_access_tags"></a> [access\_tags](#input\_access\_tags) | A list of access tags applied to the resource instance created by the module | `list(string)` | `[]` | no |
-| <a name="input_attach_wp_to_scc_instance"></a> [attach\_wp\_to\_scc\_instance](#input\_attach\_wp\_to\_scc\_instance) | When set to true, a value must be passed for the `wp_instance_crn` inout variable. | `string` | `false` | no |
+| <a name="input_attach_wp_to_scc_instance"></a> [attach\_wp\_to\_scc\_instance](#input\_attach\_wp\_to\_scc\_instance) | When set to true, a value must be passed for the `wp_instance_crn` input variable. | `bool` | `false` | no |
 | <a name="input_cbr_rules"></a> [cbr\_rules](#input\_cbr\_rules) | (Optional, list) List of CBR rules to create | <pre>list(object({<br>    description = string<br>    account_id  = string<br>    rule_contexts = list(object({<br>      attributes = optional(list(object({<br>        name  = string<br>        value = string<br>    }))) }))<br>    enforcement_mode = string<br>  }))</pre> | `[]` | no |
-| <a name="input_cos_bucket"></a> [cos\_bucket](#input\_cos\_bucket) | The name of the Cloud Object Storage bucket to be used in SCC instance | `string` | n/a | yes |
-| <a name="input_cos_instance_crn"></a> [cos\_instance\_crn](#input\_cos\_instance\_crn) | CRN of the Cloud Object Storage to store SCC data | `string` | n/a | yes |
+| <a name="input_cos_bucket"></a> [cos\_bucket](#input\_cos\_bucket) | The name of the Cloud Object Storage bucket to be used in SCC instance. Required when creating a new SCC instance. | `string` | `null` | no |
+| <a name="input_cos_instance_crn"></a> [cos\_instance\_crn](#input\_cos\_instance\_crn) | CRN of the Cloud Object Storage to store SCC data. Required when creating a new SCC instance. | `string` | `null` | no |
 | <a name="input_en_instance_crn"></a> [en\_instance\_crn](#input\_en\_instance\_crn) | The CRN of Event Notifications instance to be used with SCC. If no value is provided, Event Notifications will not be enabled for this SCC instance | `string` | `null` | no |
+| <a name="input_existing_scc_instance_crn"></a> [existing\_scc\_instance\_crn](#input\_existing\_scc\_instance\_crn) | The CRN of an existing Security and Compliance Center instance. If not supplied, a new instance will be created. | `string` | `null` | no |
 | <a name="input_instance_name"></a> [instance\_name](#input\_instance\_name) | Name of the security and compliance instance that will be provisioned by this module | `string` | n/a | yes |
 | <a name="input_plan"></a> [plan](#input\_plan) | Pricing plan to create SCC instance. Options include security-compliance-center-standard-plan or security-compliance-center-trial-plan | `string` | `"security-compliance-center-standard-plan"` | no |
 | <a name="input_region"></a> [region](#input\_region) | Region where SCC instance will be created | `string` | `"us-south"` | no |
@@ -113,12 +115,12 @@ You need the following permissions to run this module.
 
 | Name | Description |
 |------|-------------|
-| <a name="output_crn"></a> [crn](#output\_crn) | The CRN of the SCC instance created by this module |
-| <a name="output_guid"></a> [guid](#output\_guid) | The GUID of the SCC instance created by this module |
-| <a name="output_id"></a> [id](#output\_id) | The id of the SCC instance created by this module |
-| <a name="output_location"></a> [location](#output\_location) | The location of the SCC instance created by this module |
-| <a name="output_name"></a> [name](#output\_name) | The name of the SCC instance created by this module |
-| <a name="output_plan"></a> [plan](#output\_plan) | The pricing plan used to create SCC instance in this module |
+| <a name="output_crn"></a> [crn](#output\_crn) | The CRN of the SCC instance. |
+| <a name="output_guid"></a> [guid](#output\_guid) | The GUID of the SCC instance. |
+| <a name="output_id"></a> [id](#output\_id) | The id of the SCC instance. |
+| <a name="output_location"></a> [location](#output\_location) | The location of the SCC instance. |
+| <a name="output_name"></a> [name](#output\_name) | The name of the SCC instance. |
+| <a name="output_plan"></a> [plan](#output\_plan) | The pricing plan of the SCC instance. |
 <!-- END OF PRE-COMMIT-TERRAFORM DOCS HOOK -->
 
 <!-- Leave this section as is so that your module has a link to local development environment set up steps for contributors to follow -->
