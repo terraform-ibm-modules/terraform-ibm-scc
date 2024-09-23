@@ -7,6 +7,11 @@ output "resource_group_id" {
   value       = module.resource_group.resource_group_id
 }
 
+output "prefix" {
+  description = "Prefix to append to all resources created by this example"
+  value       = var.prefix
+}
+
 output "resource_group_name" {
   description = "The name of the resource group where SCC instance is created by this module"
   value       = module.resource_group.resource_group_name

@@ -44,12 +44,12 @@ output "en_crn" {
 
 output "cos_instance_id" {
   description = "The COS instance ID created in this example"
-  value       = module.cos.cos_instance_id
+  value       = var.existing_scc_instance_crn == null ? module.cos[0].bucket_name : data.ibm_scc_instance_settings.scc_instance_settings[0].object_storage[0].instance_crn
 }
 
 output "cos_bucket" {
   description = "The COS bucket created in this example"
-  value       = module.cos.bucket_name
+  value       = var.existing_scc_instance_crn == null ? module.cos[0].bucket_name : data.ibm_scc_instance_settings.scc_instance_settings[0].object_storage[0].bucket
   depends_on  = [module.create_scc_instance]
 }
 

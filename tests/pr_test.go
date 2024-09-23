@@ -153,6 +153,7 @@ func TestRunExistingResourcesInstances(t *testing.T) {
 				"region":                    region,
 				"resource_group":            terraform.Output(t, existingTerraformOptions, "resource_group_name"),
 				"existing_scc_instance_crn": terraform.Output(t, existingTerraformOptions, "crn"),
+				"prefix":                    terraform.Output(t, existingTerraformOptions, "prefix"),
 			},
 		})
 
