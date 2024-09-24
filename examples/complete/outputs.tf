@@ -44,7 +44,7 @@ output "en_crn" {
 
 output "cos_instance_id" {
   description = "The COS instance ID created in this example"
-  value       = var.existing_scc_instance_crn == null ? module.cos[0].bucket_name : null
+  value       = var.existing_scc_instance_crn == null ? module.cos[0].cos_instance_id : null
 }
 
 output "cos_bucket" {
