@@ -52,14 +52,6 @@ module "scc_wp" {
   resource_tags     = var.resource_tags
 }
 
-data "ibm_scc_instance_settings" "scc_instance_settings" {
-  count       = var.existing_scc_instance_crn == null ? 0 : 1
-  instance_id = local.existing_scc_instance_guid
-}
-locals {
-  existing_scc_instance_guid = var.existing_scc_instance_crn != null ? element(split(":", var.existing_scc_instance_crn), length(split(":", var.existing_scc_instance_crn)) - 3) : null
-}
-
 
 ##############################################################################
 # SCC instance
@@ -73,10 +65,10 @@ module "create_scc_instance" {
   resource_tags                     = var.resource_tags
   existing_scc_instance_crn         = var.existing_scc_instance_crn
   access_tags                       = var.access_tags
-  cos_bucket                        = var.existing_scc_instance_crn == null ? module.cos[0].bucket_name : data.ibm_scc_instance_settings.scc_instance_settings[0].object_storage[0].bucket
-  cos_instance_crn                  = var.existing_scc_instance_crn == null ? module.cos[0].cos_instance_id : data.ibm_scc_instance_settings.scc_instance_settings[0].object_storage[0].instance_crn
+  cos_bucket                        = var.existing_scc_instance_crn == null ? module.cos[0].bucket_name : null
+  cos_instance_crn                  = var.existing_scc_instance_crn == null ? module.cos[0].cos_instance_id : null
   en_instance_crn                   = module.event_notification.crn
-  skip_cos_iam_authorization_policy = var.existing_scc_instance_crn != null ? true : false
+  skip_cos_iam_authorization_policy = false
   attach_wp_to_scc_instance         = true
   skip_scc_wp_auth_policy           = false
   wp_instance_crn                   = module.scc_wp.crn
