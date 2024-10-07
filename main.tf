@@ -49,7 +49,7 @@ locals {
 }
 
 resource "ibm_iam_authorization_policy" "scc_cos_s2s_access" {
-  count                       = var.skip_cos_iam_authorization_policy ? 0 : 1
+  count                       = var.existing_scc_instance_crn != null || var.skip_cos_iam_authorization_policy ? 0 : 1
   source_service_name         = "compliance"
   source_resource_instance_id = local.scc_instance_guid
   roles                       = ["Writer"]

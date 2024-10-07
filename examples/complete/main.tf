@@ -14,6 +14,7 @@ module "resource_group" {
 ##############################################################################
 
 module "cos" {
+  count                  = var.existing_scc_instance_crn == null ? 1 : 0
   source                 = "terraform-ibm-modules/cos/ibm"
   version                = "8.11.15"
   cos_instance_name      = "${var.prefix}-cos"
@@ -51,6 +52,7 @@ module "scc_wp" {
   resource_tags     = var.resource_tags
 }
 
+
 ##############################################################################
 # SCC instance
 ##############################################################################
@@ -63,8 +65,8 @@ module "create_scc_instance" {
   resource_tags                     = var.resource_tags
   existing_scc_instance_crn         = var.existing_scc_instance_crn
   access_tags                       = var.access_tags
-  cos_bucket                        = module.cos.bucket_name
-  cos_instance_crn                  = module.cos.cos_instance_id
+  cos_bucket                        = var.existing_scc_instance_crn == null ? module.cos[0].bucket_name : null
+  cos_instance_crn                  = var.existing_scc_instance_crn == null ? module.cos[0].cos_instance_id : null
   en_instance_crn                   = module.event_notification.crn
   skip_cos_iam_authorization_policy = false
   attach_wp_to_scc_instance         = true
