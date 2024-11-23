@@ -16,7 +16,7 @@ module "resource_group" {
 module "cos" {
   count                  = var.existing_scc_instance_crn == null ? 1 : 0
   source                 = "terraform-ibm-modules/cos/ibm"
-  version                = "8.14.5"
+  version                = "8.15.1"
   cos_instance_name      = "${var.prefix}-cos"
   kms_encryption_enabled = false
   retention_enabled      = false
@@ -45,7 +45,7 @@ module "event_notification" {
 
 module "scc_wp" {
   source            = "terraform-ibm-modules/scc-workload-protection/ibm"
-  version           = "1.4.0"
+  version           = "1.4.2"
   name              = "${var.prefix}-wp"
   region            = var.region
   resource_group_id = module.resource_group.resource_group_id
@@ -141,7 +141,7 @@ resource "ibm_is_vpc" "example_vpc" {
 ##############################################################################
 module "cbr_zone" {
   source           = "terraform-ibm-modules/cbr/ibm//modules/cbr-zone-module"
-  version          = "1.28.1"
+  version          = "1.29.0"
   name             = "${var.prefix}-VPC-network-zone"
   zone_description = "CBR Network zone representing VPC"
   account_id       = data.ibm_iam_account_settings.iam_account_settings.account_id
