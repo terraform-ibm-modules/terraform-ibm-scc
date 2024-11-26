@@ -85,6 +85,18 @@ variable "en_instance_crn" {
   description = "The CRN of Event Notifications instance to be used with SCC. If no value is provided, Event Notifications will not be enabled for this SCC instance"
 }
 
+variable "en_source_name" {
+  type        = string
+  default     = null
+  description = "The source name to use for the Event Notifications integration. Required if a value is passed for `en_instance_crn`."
+}
+
+variable "en_source_description" {
+  type        = string
+  default     = null
+  description = "Optional description to give for the Event Notifications integration source. Only used if a value is passed for `en_instance_crn`."
+}
+
 variable "skip_cos_iam_authorization_policy" {
   type        = bool
   default     = false

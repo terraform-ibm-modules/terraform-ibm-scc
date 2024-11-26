@@ -83,6 +83,8 @@ resource "time_sleep" "wait_for_scc_cos_authorization_policy" {
 locals {
   # tflint-ignore: terraform_unused_declarations
   validate_new_scc_instance_cos_setting = var.existing_scc_instance_crn == null && anytrue([var.cos_bucket == null, var.cos_instance_crn == null]) ? tobool("when creating a new SCC instance, both both `var.cos_instance_crn` and `var.cos_bucket` are required.") : false
+  # tflint-ignore: terraform_unused_declarations
+  validate_en_integration = var.en_instance_crn != null && var.en_source_name == null ? tobool("When passing a value for 'en_instance_crn', a value must also be passed for 'en_source_name'.") : false
 }
 
 # attach a COS bucket and an event notifications instance
@@ -91,7 +93,9 @@ resource "ibm_scc_instance_settings" "scc_instance_settings" {
   count       = var.existing_scc_instance_crn == null ? 1 : 0
   instance_id = resource.ibm_resource_instance.scc_instance[0].guid
   event_notifications {
-    instance_crn = var.en_instance_crn
+    instance_crn       = var.en_instance_crn
+    source_name        = var.en_source_name
+    source_description = var.en_source_description
   }
   object_storage {
     instance_crn = var.cos_instance_crn
