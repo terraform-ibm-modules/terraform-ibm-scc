@@ -66,7 +66,7 @@ You need the following permissions to run this module.
 | Name | Version |
 |------|---------|
 | <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) | >= 1.3.0 |
-| <a name="requirement_ibm"></a> [ibm](#requirement\_ibm) | >=1.64.1, <2.0.0 |
+| <a name="requirement_ibm"></a> [ibm](#requirement\_ibm) | >=1.71.3, <2.0.0 |
 | <a name="requirement_time"></a> [time](#requirement\_time) | >= 0.9.1, <1.0.0 |
 
 ### Modules
@@ -101,6 +101,8 @@ You need the following permissions to run this module.
 | <a name="input_cos_bucket"></a> [cos\_bucket](#input\_cos\_bucket) | The name of the Cloud Object Storage bucket to be used in SCC instance. Required when creating a new SCC instance. | `string` | `null` | no |
 | <a name="input_cos_instance_crn"></a> [cos\_instance\_crn](#input\_cos\_instance\_crn) | CRN of the Cloud Object Storage to store SCC data. Required when creating a new SCC instance. | `string` | `null` | no |
 | <a name="input_en_instance_crn"></a> [en\_instance\_crn](#input\_en\_instance\_crn) | The CRN of Event Notifications instance to be used with SCC. If no value is provided, Event Notifications will not be enabled for this SCC instance | `string` | `null` | no |
+| <a name="input_en_source_description"></a> [en\_source\_description](#input\_en\_source\_description) | Optional description to give for the Event Notifications integration source. Only used if a value is passed for `en_instance_crn`. | `string` | `null` | no |
+| <a name="input_en_source_name"></a> [en\_source\_name](#input\_en\_source\_name) | The source name to use for the Event Notifications integration. Required if a value is passed for `en_instance_crn`. | `string` | `null` | no |
 | <a name="input_existing_scc_instance_crn"></a> [existing\_scc\_instance\_crn](#input\_existing\_scc\_instance\_crn) | The CRN of an existing Security and Compliance Center instance. If not supplied, a new instance will be created. | `string` | `null` | no |
 | <a name="input_instance_name"></a> [instance\_name](#input\_instance\_name) | Name of the security and compliance instance that will be provisioned by this module | `string` | n/a | yes |
 | <a name="input_plan"></a> [plan](#input\_plan) | Pricing plan to create SCC instance. Options include security-compliance-center-standard-plan or security-compliance-center-trial-plan | `string` | `"security-compliance-center-standard-plan"` | no |
