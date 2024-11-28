@@ -94,8 +94,8 @@ resource "ibm_scc_instance_settings" "scc_instance_settings" {
   instance_id = resource.ibm_resource_instance.scc_instance[0].guid
   event_notifications {
     instance_crn       = var.en_instance_crn
-    source_name        = var.en_source_name
-    source_description = var.en_source_description
+    source_name        = var.en_instance_crn != null ? var.en_source_name : null        # only pass source name if value being passed for 'en_instance_crn'
+    source_description = var.en_instance_crn != null ? var.en_source_description : null # only pass source description if value being passed for 'en_instance_crn'
   }
   object_storage {
     instance_crn = var.cos_instance_crn

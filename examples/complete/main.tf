@@ -68,7 +68,7 @@ module "create_scc_instance" {
   cos_bucket                        = var.existing_scc_instance_crn == null ? module.cos[0].bucket_name : null
   cos_instance_crn                  = var.existing_scc_instance_crn == null ? module.cos[0].cos_instance_id : null
   en_instance_crn                   = module.event_notification.crn
-  en_source_name                    = module.event_notification.event_notification_instance_name
+  en_source_name                    = "${var.prefix}-en-integration" # This name must be unique per SCC instance that is integrated with the Event Notfications instance.
   skip_cos_iam_authorization_policy = false
   attach_wp_to_scc_instance         = true
   skip_scc_wp_auth_policy           = false

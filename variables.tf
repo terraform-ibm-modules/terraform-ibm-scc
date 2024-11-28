@@ -87,8 +87,8 @@ variable "en_instance_crn" {
 
 variable "en_source_name" {
   type        = string
-  default     = null
-  description = "The source name to use for the Event Notifications integration. Required if a value is passed for `en_instance_crn`."
+  default     = "compliance"
+  description = "The source name to use for the Event Notifications integration. Required if a value is passed for `en_instance_crn`. This name must be unique per SCC instance that is integrated with the Event Notfications instance."
 }
 
 variable "en_source_description" {
