@@ -35,8 +35,10 @@ locals {
     ]
   )
 
+  validate_profile_name = length(local.sorted_list) == 0 ? tobool("Could not find a valid profile name ${var.profile_name}") : true
+
   # Retrieve profile with the latest version by getting last element in sorted list
-  latest_profile = local.sorted_list[length(local.sorted_list) - 1]
+  latest_profile = local.validate_profile_name ? local.sorted_list[length(local.sorted_list) - 1] : null
 
   profile_map = var.profile_version == "latest" ? {
     (var.profile_name) = local.latest_profile
@@ -46,9 +48,9 @@ locals {
   }
 
   # tflint-ignore: terraform_unused_declarations
-  validate_profile = lookup(local.profile_map, var.profile_name, null) == null ? tobool("Could not find a valid profile name ${var.profile_name} and matching version ${var.profile_version}") : true
+  validate_profile_version = lookup(local.profile_map, var.profile_name, null) == null ? tobool("Could not find a valid profile name ${var.profile_name} and matching version ${var.profile_version}") : true
 
-  profile = local.validate_profile ? local.profile_map[var.profile_name] : null
+  profile = local.validate_profile_version ? local.profile_map[var.profile_name] : null
 }
 
 data "ibm_scc_profile" "scc_profile" {
