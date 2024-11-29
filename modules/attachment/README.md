@@ -22,13 +22,17 @@ module "create_scc_profile_attachment " {
   attachment_description         = "My attachment description"
   attachment_schedule            = "daily"
   # Configure the scope for the attachment - below scope will scan the whole account
-  scope {
-    environment   = "ibm-cloud"
-    properties {
-        name                = "scope-type"
-        value               = "account"
-    }
-  }
+  scope = [{
+    environment = "ibm-cloud"
+    properties = [{
+        name  = "scope_type"
+        value = "account"
+      },
+      {
+        name  = "scope_id"
+        value = "<account-id>"
+      }]
+  }]
 }
 ```
 
