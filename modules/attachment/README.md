@@ -24,12 +24,13 @@ module "create_scc_profile_attachment " {
   # Configure the scope for the attachment - below scope will scan the whole account
   scope = [{
     environment = "ibm-cloud"
+    # supported property names are "scope_type" and "scope_id"
     properties = [{
         name  = "scope_type"
-        value = "account"
+        value = "account" # "scope_type" supports values: "account", "account.resource_group", "enterprise", "enterprise.account" and "enterprise.account_group"
       },
       {
-        name  = "scope_id"
+        name  = "scope_id" # "scope_id" value will be the id of the "scope_type" (eg. "account" will be the ID of the IBM Cloud account)
         value = "<account-id>"
       }]
   }]
