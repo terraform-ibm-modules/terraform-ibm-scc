@@ -103,6 +103,15 @@ resource "ibm_scc_instance_settings" "scc_instance_settings" {
   }
 }
 
+resource "ibm_iam_authorization_policy" "en_s2s_policy" {
+  count                       = var.skip_en_s2s_auth_policy || var.existing_scc_instance_crn != null ? 0 : 1
+  source_service_name         = "compliance"
+  source_resource_group_id    = var.resource_group_id
+  target_service_name         = "event-notifications"
+  target_resource_instance_id = var.en_instance_crn
+  roles                       = ["Event Source Manager"]
+}
+
 resource "ibm_iam_authorization_policy" "scc_wp_s2s_access" {
   count                       = var.attach_wp_to_scc_instance && !var.skip_scc_wp_auth_policy ? 1 : 0
   source_service_name         = "compliance"

@@ -97,6 +97,12 @@ variable "en_source_description" {
   description = "Optional description to give for the Event Notifications integration source. Only used if a value is passed for `en_instance_crn`."
 }
 
+variable "skip_en_s2s_auth_policy" {
+  type        = bool
+  default     = false
+  description = "Set to true to skip the creation of an IAM authorization policy that permits the SCC instance created by this solution manager access to the Event Notifications instance. This value will get ignored if an existing SCC instance is passed."
+}
+
 variable "skip_cos_iam_authorization_policy" {
   type        = bool
   default     = false
