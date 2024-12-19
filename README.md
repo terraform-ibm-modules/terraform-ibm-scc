@@ -79,6 +79,7 @@ You need the following permissions to run this module.
 
 | Name | Type |
 |------|------|
+| [ibm_iam_authorization_policy.en_s2s_policy](https://registry.terraform.io/providers/IBM-Cloud/ibm/latest/docs/resources/iam_authorization_policy) | resource |
 | [ibm_iam_authorization_policy.scc_cos_s2s_access](https://registry.terraform.io/providers/IBM-Cloud/ibm/latest/docs/resources/iam_authorization_policy) | resource |
 | [ibm_iam_authorization_policy.scc_wp_s2s_access](https://registry.terraform.io/providers/IBM-Cloud/ibm/latest/docs/resources/iam_authorization_policy) | resource |
 | [ibm_resource_instance.scc_instance](https://registry.terraform.io/providers/IBM-Cloud/ibm/latest/docs/resources/resource_instance) | resource |
@@ -110,6 +111,7 @@ You need the following permissions to run this module.
 | <a name="input_resource_group_id"></a> [resource\_group\_id](#input\_resource\_group\_id) | The id of the resource group to create the SCC instance | `string` | n/a | yes |
 | <a name="input_resource_tags"></a> [resource\_tags](#input\_resource\_tags) | A list of tags applied to the resources created by the module | `list(string)` | `[]` | no |
 | <a name="input_skip_cos_iam_authorization_policy"></a> [skip\_cos\_iam\_authorization\_policy](#input\_skip\_cos\_iam\_authorization\_policy) | Set to true to skip the creation of an IAM authorization policy that permits the SCC instance created by this module to write access to the provided COS instance. This value will get ignored if an existing SCC instance is passed. | `bool` | `false` | no |
+| <a name="input_skip_en_s2s_auth_policy"></a> [skip\_en\_s2s\_auth\_policy](#input\_skip\_en\_s2s\_auth\_policy) | Set to true to skip the creation of an IAM authorization policy that permits the SCC instance created by this solution manager access to the Event Notifications instance. This value will get ignored if an existing SCC instance is passed. | `bool` | `false` | no |
 | <a name="input_skip_scc_wp_auth_policy"></a> [skip\_scc\_wp\_auth\_policy](#input\_skip\_scc\_wp\_auth\_policy) | Set to true to skip the creation of an IAM authorization policy that permits the SCC instance created by this solution read access to the workload protection instance. Only used if `attach_wp_to_scc_instance` is set to true. | `bool` | `false` | no |
 | <a name="input_wp_instance_crn"></a> [wp\_instance\_crn](#input\_wp\_instance\_crn) | Optionally pass the CRN of an existing SCC Workload Protection instance to attach it to the SCC instance. | `string` | `null` | no |
 
