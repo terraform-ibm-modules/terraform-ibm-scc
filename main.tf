@@ -106,7 +106,7 @@ resource "ibm_scc_instance_settings" "scc_instance_settings" {
 resource "ibm_iam_authorization_policy" "en_s2s_policy" {
   count                       = var.skip_en_s2s_auth_policy || var.existing_scc_instance_crn != null ? 0 : 1
   source_service_name         = "compliance"
-  source_resource_instance_id = var.scc_instance_guid
+  source_resource_instance_id = local.scc_instance_guid
   target_service_name         = "event-notifications"
   target_resource_instance_id = var.en_instance_crn
   roles                       = ["Event Source Manager"]
