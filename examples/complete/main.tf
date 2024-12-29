@@ -16,7 +16,7 @@ module "resource_group" {
 module "cos" {
   count                  = var.existing_scc_instance_crn == null ? 1 : 0
   source                 = "terraform-ibm-modules/cos/ibm"
-  version                = "8.16.0"
+  version                = "8.16.2"
   cos_instance_name      = "${var.prefix}-cos"
   kms_encryption_enabled = false
   retention_enabled      = false
