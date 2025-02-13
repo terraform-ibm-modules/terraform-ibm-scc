@@ -39,16 +39,16 @@ cbr_rules = [
     "description"     : "SCC Instance can be accessed from xyz"
     "account_id"      : "defc0df06b644a9cabc6e44f55b3880s."
     "rule_contexts"   : [{
-        "attributes"  : [
-          {
-            "name" : "endpointType",
-            "value" : "private"
-          },
-          {
-            "name"  : "networkZoneId"
-            "value" : "93a51a1debe2674193217209601dde6f" # pragma: allowlist secret
-          }
-        ]
+      "attributes"  : [
+        {
+          "name" : "endpointType",
+          "value" : "private"
+        },
+        {
+          "name"  : "networkZoneId"
+          "value" : "93a51a1debe2674193217209601dde6f" # pragma: allowlist secret
+        }
+      ]
     }]
     "enforcement_mode" : "enabled"
     "operations" : [{
