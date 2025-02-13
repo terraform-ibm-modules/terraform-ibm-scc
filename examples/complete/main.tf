@@ -73,7 +73,7 @@ module "create_scc_instance" {
   attach_wp_to_scc_instance         = true
   skip_scc_wp_auth_policy           = false
   wp_instance_crn                   = module.scc_wp.crn
-  cbr_rules = [
+  cbr_rules = concat([
     {
       description      = "${var.prefix}-scc access only from vpc"
       enforcement_mode = "report"
@@ -90,7 +90,7 @@ module "create_scc_instance" {
         }]
       }]
     }
-  ]
+  ], var.cbr_rules)
 }
 
 ##############################################################################
