@@ -99,7 +99,7 @@ resource "time_sleep" "wait_for_scc_cos_authorization_policy" {
 
 # Attach a COS bucket and an event notifications instance
 resource "ibm_scc_instance_settings" "scc_instance_settings" {
-  depends_on  = [time_sleep.wait_for_scc_cos_authorization_policy, time_sleep.wait_for_scc_en_authorization_policy]
+  depends_on  = [time_sleep.wait_for_scc_cos_authorization_policy, ibm_iam_authorization_policy.en_s2s_policy]
   count       = var.existing_scc_instance_crn == null ? 1 : 0
   instance_id = resource.ibm_resource_instance.scc_instance[0].guid
   event_notifications {
@@ -113,12 +113,6 @@ resource "ibm_scc_instance_settings" "scc_instance_settings" {
   }
 }
 
-resource "time_sleep" "wait_for_scc_en_authorization_policy" {
-  depends_on = [ibm_iam_authorization_policy.en_s2s_policy]
-
-  create_duration = "30s"
-}
-
 module "en_crn_parser" {
   count   = var.en_instance_crn != null ? 1 : 0
   source  = "terraform-ibm-modules/common-utilities/ibm//modules/crn-parser"
@@ -127,7 +121,7 @@ module "en_crn_parser" {
 }
 
 resource "ibm_iam_authorization_policy" "en_s2s_policy" {
-  count                       = var.skip_en_s2s_auth_policy || var.existing_scc_instance_crn != null ? 0 : 1
+  count                       = var.skip_en_s2s_auth_policy || var.en_instance_crn == null || var.existing_scc_instance_crn != null ? 0 : 1
   source_service_name         = "compliance"
   source_resource_instance_id = local.scc_instance_guid
   target_service_name         = "event-notifications"
