@@ -87,11 +87,11 @@ You need the following permissions to run this module.
 | [ibm_resource_instance.scc_instance](https://registry.terraform.io/providers/IBM-Cloud/ibm/latest/docs/resources/resource_instance) | resource |
 | [ibm_resource_tag.access_tags](https://registry.terraform.io/providers/IBM-Cloud/ibm/latest/docs/resources/resource_tag) | resource |
 | [ibm_scc_instance_settings.scc_instance_settings](https://registry.terraform.io/providers/IBM-Cloud/ibm/latest/docs/resources/scc_instance_settings) | resource |
+| [ibm_scc_provider_type_instance.custom_integrations](https://registry.terraform.io/providers/IBM-Cloud/ibm/latest/docs/resources/scc_provider_type_instance) | resource |
 | [ibm_scc_provider_type_instance.scc_provider_type_instance](https://registry.terraform.io/providers/IBM-Cloud/ibm/latest/docs/resources/scc_provider_type_instance) | resource |
 | [time_sleep.wait_for_scc_cos_authorization_policy](https://registry.terraform.io/providers/hashicorp/time/latest/docs/resources/sleep) | resource |
 | [time_sleep.wait_for_scc_en_authorization_policy](https://registry.terraform.io/providers/hashicorp/time/latest/docs/resources/sleep) | resource |
 | [time_sleep.wait_for_scc_wp_authorization_policy](https://registry.terraform.io/providers/hashicorp/time/latest/docs/resources/sleep) | resource |
-| [ibm_iam_account_settings.iam_account_settings](https://registry.terraform.io/providers/IBM-Cloud/ibm/latest/docs/data-sources/iam_account_settings) | data source |
 | [ibm_resource_instance.scc_instance](https://registry.terraform.io/providers/IBM-Cloud/ibm/latest/docs/data-sources/resource_instance) | data source |
 | [ibm_scc_provider_types.scc_provider_types](https://registry.terraform.io/providers/IBM-Cloud/ibm/latest/docs/data-sources/scc_provider_types) | data source |
 
@@ -104,6 +104,7 @@ You need the following permissions to run this module.
 | <a name="input_cbr_rules"></a> [cbr\_rules](#input\_cbr\_rules) | (Optional, list) List of CBR rules to create | <pre>list(object({<br/>    description = string<br/>    account_id  = string<br/>    rule_contexts = list(object({<br/>      attributes = optional(list(object({<br/>        name  = string<br/>        value = string<br/>    }))) }))<br/>    enforcement_mode = string<br/>    operations = optional(list(object({<br/>      api_types = list(object({<br/>        api_type_id = string<br/>      }))<br/>    })))<br/>  }))</pre> | `[]` | no |
 | <a name="input_cos_bucket"></a> [cos\_bucket](#input\_cos\_bucket) | The name of the Cloud Object Storage bucket to be used in SCC instance. Required when creating a new SCC instance. | `string` | `null` | no |
 | <a name="input_cos_instance_crn"></a> [cos\_instance\_crn](#input\_cos\_instance\_crn) | CRN of the Cloud Object Storage to store SCC data. Required when creating a new SCC instance. | `string` | `null` | no |
+| <a name="input_custom_integrations"></a> [custom\_integrations](#input\_custom\_integrations) | A list of custom provider integrations to associate with the SCC instance. | <pre>list(object({<br/>    attributes       = optional(map(string), {})<br/>    provider_name    = string<br/>    integration_name = string<br/>  }))</pre> | `[]` | no |
 | <a name="input_en_instance_crn"></a> [en\_instance\_crn](#input\_en\_instance\_crn) | The CRN of Event Notifications instance to be used with SCC. If no value is provided, Event Notifications will not be enabled for this SCC instance | `string` | `null` | no |
 | <a name="input_en_source_description"></a> [en\_source\_description](#input\_en\_source\_description) | Optional description to give for the Event Notifications integration source. Only used if a value is passed for `en_instance_crn`. | `string` | `null` | no |
 | <a name="input_en_source_name"></a> [en\_source\_name](#input\_en\_source\_name) | The source name to use for the Event Notifications integration. Required if a value is passed for `en_instance_crn`. This name must be unique per SCC instance that is integrated with the Event Notfications instance. | `string` | `"compliance"` | no |
@@ -122,6 +123,7 @@ You need the following permissions to run this module.
 
 | Name | Description |
 |------|-------------|
+| <a name="output_account_id"></a> [account\_id](#output\_account\_id) | The SCC account ID. |
 | <a name="output_crn"></a> [crn](#output\_crn) | The CRN of the SCC instance. |
 | <a name="output_guid"></a> [guid](#output\_guid) | The GUID of the SCC instance. |
 | <a name="output_id"></a> [id](#output\_id) | The id of the SCC instance. |
