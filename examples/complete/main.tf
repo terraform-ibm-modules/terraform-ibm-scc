@@ -76,16 +76,10 @@ module "create_scc_instance" {
   wp_instance_crn           = module.scc_wp.crn
   # example on how to add custom provider integration
   custom_integrations = [
-    # example of custom integration with no required attributes
+    # example of custom integration
     {
       provider_name    = "Caveonix"
       integration_name = "${var.prefix}-caveonix"
-    },
-    # example of custom integration with attributes
-    {
-      provider_name    = "Toolchain"
-      integration_name = "${var.prefix}-toolchain"
-      attributes       = { "description" : "this is a sample" }
     }
   ]
   cbr_rules = [

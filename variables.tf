@@ -117,6 +117,8 @@ variable "custom_integrations" {
   }))
   description = "A list of custom provider integrations to associate with the SCC instance."
   default     = []
+  # Since this list is used in a for_each, add nullable = false to prevent error if user passes null
+  nullable = false
 }
 
 ##############################################################

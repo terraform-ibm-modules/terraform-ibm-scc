@@ -4,7 +4,7 @@
 
 locals {
   # tflint-ignore: terraform_unused_declarations
-  validate_new_scc_instance_cos_setting = var.existing_scc_instance_crn == null && anytrue([var.cos_bucket == null, var.cos_instance_crn == null]) ? tobool("when creating a new SCC instance, both both `var.cos_instance_crn` and `var.cos_bucket` are required.") : false
+  validate_new_scc_instance_cos_setting = var.existing_scc_instance_crn == null && anytrue([var.cos_bucket == null, var.cos_instance_crn == null]) ? tobool("when creating a new SCC instance, both `var.cos_instance_crn` and `var.cos_bucket` are required.") : false
   # tflint-ignore: terraform_unused_declarations
   validate_en_integration = var.en_instance_crn != null && var.en_source_name == null ? tobool("When passing a value for 'en_instance_crn', a value must also be passed for 'en_source_name'.") : false
 }
@@ -65,13 +65,6 @@ resource "ibm_resource_tag" "access_tags" {
 # Configure COS and Event Notification integration
 ##############################################################################
 
-# workaround for https://github.com/IBM-Cloud/terraform-provider-ibm/issues/4478
-resource "time_sleep" "wait_for_scc_cos_authorization_policy" {
-  count           = var.existing_scc_instance_crn != null || var.skip_cos_iam_authorization_policy ? 0 : 1
-  depends_on      = [ibm_iam_authorization_policy.scc_cos_s2s_access]
-  create_duration = "30s"
-}
-
 # Create s2s auth policy for COS
 resource "ibm_iam_authorization_policy" "scc_cos_s2s_access" {
   count                       = var.existing_scc_instance_crn != null || var.skip_cos_iam_authorization_policy ? 0 : 1
@@ -98,6 +91,13 @@ resource "ibm_iam_authorization_policy" "scc_cos_s2s_access" {
   }
 }
 
+# workaround for https://github.com/IBM-Cloud/terraform-provider-ibm/issues/4478
+resource "time_sleep" "wait_for_scc_cos_authorization_policy" {
+  count           = var.existing_scc_instance_crn != null || var.skip_cos_iam_authorization_policy ? 0 : 1
+  depends_on      = [ibm_iam_authorization_policy.scc_cos_s2s_access]
+  create_duration = "30s"
+}
+
 # Attach a COS bucket and an event notifications instance
 resource "ibm_scc_instance_settings" "scc_instance_settings" {
   depends_on  = [time_sleep.wait_for_scc_cos_authorization_policy]
@@ -117,13 +117,6 @@ resource "ibm_scc_instance_settings" "scc_instance_settings" {
 ##############################################################################
 # Workload Protection integration
 ##############################################################################
-
-# workaround for https://github.com/IBM-Cloud/terraform-provider-ibm/issues/4478
-resource "time_sleep" "wait_for_scc_wp_authorization_policy" {
-  count           = var.attach_wp_to_scc_instance ? 1 : 0
-  depends_on      = [ibm_iam_authorization_policy.scc_wp_s2s_access]
-  create_duration = "30s"
-}
 
 # create WP s2s auth policy
 resource "ibm_iam_authorization_policy" "scc_wp_s2s_access" {
@@ -149,6 +142,18 @@ resource "ibm_iam_authorization_policy" "scc_wp_s2s_access" {
     operator = "stringEquals"
     value    = local.scc_account_id
   }
+}
+
+# workaround for https://github.com/IBM-Cloud/terraform-provider-ibm/issues/4478
+resource "time_sleep" "wait_for_scc_wp_authorization_policy" {
+  count           = var.attach_wp_to_scc_instance && !var.skip_scc_wp_auth_policy ? 1 : 0
+  depends_on      = [ibm_iam_authorization_policy.scc_wp_s2s_access]
+  create_duration = "30s"
+}
+
+moved {
+  from = time_sleep.wait_for_scc_wp_authorization_policy
+  to   = time_sleep.wait_for_scc_wp_authorization_policy[0]
 }
 
 # Lookup all supported provider types
@@ -197,7 +202,7 @@ resource "ibm_scc_provider_type_instance" "custom_integrations" {
   instance_id      = local.scc_instance_guid
   attributes       = each.value.attributes
   name             = each.value.integration_name
-  provider_type_id = lookup(local.provider_types_map, each.value.provider_name, null).id
+  provider_type_id = lookup(local.provider_types_map, each.value.provider_name, null) == null ? tobool("Unable to find provider named '${each.value.provider_name}' for your instance. You can use the provider_types api to list all supported providers. See https://cloud.ibm.com/apidocs/security-compliance#list-provider-types") : lookup(local.provider_types_map, each.value.provider_name, null).id
 }
 
 ##############################################################################
