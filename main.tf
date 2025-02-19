@@ -8,14 +8,17 @@ data "ibm_resource_instance" "scc_instance" {
 }
 
 locals {
-  parsed_existing_scc_instance_crn = var.existing_scc_instance_crn != null ? split(":", var.existing_scc_instance_crn) : []
-  existing_scc_instance_guid       = length(local.parsed_existing_scc_instance_crn) > 0 ? local.parsed_existing_scc_instance_crn[7] : null
-  existing_scc_instance_region     = length(local.parsed_existing_scc_instance_crn) > 0 ? local.parsed_existing_scc_instance_crn[5] : null
-
   scc_instance_crn    = var.existing_scc_instance_crn == null ? resource.ibm_resource_instance.scc_instance[0].crn : var.existing_scc_instance_crn
-  scc_instance_guid   = var.existing_scc_instance_crn == null ? resource.ibm_resource_instance.scc_instance[0].guid : local.existing_scc_instance_guid
-  scc_instance_region = var.existing_scc_instance_crn == null ? var.region : local.existing_scc_instance_region
+  scc_instance_guid   = module.scc_crn_parser.service_instance
+  scc_instance_region = module.scc_crn_parser.region
 }
+
+module "scc_crn_parser" {
+  source  = "terraform-ibm-modules/common-utilities/ibm//modules/crn-parser"
+  version = "1.1.0"
+  crn     = var.existing_scc_instance_crn == null ? resource.ibm_resource_instance.scc_instance[0].crn : var.existing_scc_instance_crn
+}
+
 resource "ibm_resource_instance" "scc_instance" {
   count             = var.existing_scc_instance_crn == null ? 1 : 0
   name              = var.instance_name
@@ -89,7 +92,7 @@ locals {
 
 # attach a COS bucket and an event notifications instance
 resource "ibm_scc_instance_settings" "scc_instance_settings" {
-  depends_on  = [time_sleep.wait_for_scc_cos_authorization_policy]
+  depends_on  = [time_sleep.wait_for_scc_cos_authorization_policy, time_sleep.wait_for_scc_en_authorization_policy]
   count       = var.existing_scc_instance_crn == null ? 1 : 0
   instance_id = resource.ibm_resource_instance.scc_instance[0].guid
   event_notifications {
@@ -103,12 +106,25 @@ resource "ibm_scc_instance_settings" "scc_instance_settings" {
   }
 }
 
+resource "time_sleep" "wait_for_scc_en_authorization_policy" {
+  depends_on = [ibm_iam_authorization_policy.en_s2s_policy]
+
+  create_duration = "30s"
+}
+
+module "en_crn_parser" {
+  count   = var.en_instance_crn != null ? 1 : 0
+  source  = "terraform-ibm-modules/common-utilities/ibm//modules/crn-parser"
+  version = "1.1.0"
+  crn     = var.en_instance_crn
+}
+
 resource "ibm_iam_authorization_policy" "en_s2s_policy" {
   count                       = var.skip_en_s2s_auth_policy || var.existing_scc_instance_crn != null ? 0 : 1
   source_service_name         = "compliance"
   source_resource_instance_id = local.scc_instance_guid
   target_service_name         = "event-notifications"
-  target_resource_instance_id = var.en_instance_crn
+  target_resource_instance_id = module.en_crn_parser[0].service_instance
   roles                       = ["Event Source Manager"]
 }
 

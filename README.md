@@ -74,6 +74,8 @@ You need the following permissions to run this module.
 | Name | Source | Version |
 |------|--------|---------|
 | <a name="module_cbr_rule"></a> [cbr\_rule](#module\_cbr\_rule) | terraform-ibm-modules/cbr/ibm//modules/cbr-rule-module | 1.29.0 |
+| <a name="module_en_crn_parser"></a> [en\_crn\_parser](#module\_en\_crn\_parser) | terraform-ibm-modules/common-utilities/ibm//modules/crn-parser | 1.1.0 |
+| <a name="module_scc_crn_parser"></a> [scc\_crn\_parser](#module\_scc\_crn\_parser) | terraform-ibm-modules/common-utilities/ibm//modules/crn-parser | 1.1.0 |
 
 ### Resources
 
@@ -87,6 +89,7 @@ You need the following permissions to run this module.
 | [ibm_scc_instance_settings.scc_instance_settings](https://registry.terraform.io/providers/IBM-Cloud/ibm/latest/docs/resources/scc_instance_settings) | resource |
 | [ibm_scc_provider_type_instance.scc_provider_type_instance](https://registry.terraform.io/providers/IBM-Cloud/ibm/latest/docs/resources/scc_provider_type_instance) | resource |
 | [time_sleep.wait_for_scc_cos_authorization_policy](https://registry.terraform.io/providers/hashicorp/time/latest/docs/resources/sleep) | resource |
+| [time_sleep.wait_for_scc_en_authorization_policy](https://registry.terraform.io/providers/hashicorp/time/latest/docs/resources/sleep) | resource |
 | [time_sleep.wait_for_scc_wp_authorization_policy](https://registry.terraform.io/providers/hashicorp/time/latest/docs/resources/sleep) | resource |
 | [ibm_iam_account_settings.iam_account_settings](https://registry.terraform.io/providers/IBM-Cloud/ibm/latest/docs/data-sources/iam_account_settings) | data source |
 | [ibm_resource_instance.scc_instance](https://registry.terraform.io/providers/IBM-Cloud/ibm/latest/docs/data-sources/resource_instance) | data source |
