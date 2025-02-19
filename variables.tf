@@ -109,6 +109,18 @@ variable "skip_scc_wp_auth_policy" {
   description = "Set to true to skip the creation of an IAM authorization policy that permits the SCC instance created by this solution read access to the workload protection instance. Only used if `attach_wp_to_scc_instance` is set to true."
 }
 
+variable "custom_integrations" {
+  type = list(object({
+    attributes       = optional(map(string), {})
+    provider_name    = string
+    integration_name = string
+  }))
+  description = "A list of custom provider integrations to associate with the SCC instance."
+  default     = []
+  # Since this list is used in a for_each, add nullable = false to prevent error if user passes null
+  nullable = false
+}
+
 ##############################################################
 # Context-based restriction (CBR)
 ##############################################################

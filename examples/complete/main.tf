@@ -70,9 +70,18 @@ module "create_scc_instance" {
   en_instance_crn                   = module.event_notification.crn
   en_source_name                    = "${var.prefix}-en-integration" # This name must be unique per SCC instance that is integrated with the Event Notfications instance.
   skip_cos_iam_authorization_policy = false
-  attach_wp_to_scc_instance         = true
   skip_scc_wp_auth_policy           = false
-  wp_instance_crn                   = module.scc_wp.crn
+  # enable workload protection integration
+  attach_wp_to_scc_instance = true
+  wp_instance_crn           = module.scc_wp.crn
+  # example on how to add custom provider integration
+  custom_integrations = [
+    # example of custom integration
+    {
+      provider_name    = "Caveonix"
+      integration_name = "${var.prefix}-caveonix"
+    }
+  ]
   cbr_rules = [
     {
       description      = "${var.prefix}-scc access only from vpc"
