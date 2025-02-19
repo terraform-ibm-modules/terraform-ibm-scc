@@ -16,9 +16,9 @@ locals {
 locals {
   service_name        = "compliance"
   scc_instance_crn    = var.existing_scc_instance_crn == null ? resource.ibm_resource_instance.scc_instance[0].crn : var.existing_scc_instance_crn
-  scc_instance_guid   = module.scc_crn_parser.service_instance
-  scc_instance_region = module.scc_crn_parser.region
-  scc_account_id      = module.scc_crn_parser.account_id
+  scc_instance_guid   = module.crn_parser.service_instance
+  scc_instance_region = module.crn_parser.region
+  scc_account_id      = module.crn_parser.account_id
   cos_instance_guid   = var.cos_instance_crn != null ? element(split(":", var.cos_instance_crn), length(split(":", var.cos_instance_crn)) - 3) : null
   wp_instance_guid    = var.wp_instance_crn != null ? element(split(":", var.wp_instance_crn), length(split(":", var.wp_instance_crn)) - 3) : null
   lookup_providers    = var.attach_wp_to_scc_instance || length(var.custom_integrations) > 0 ? true : false
@@ -33,7 +33,7 @@ data "ibm_resource_instance" "scc_instance" {
   identifier = local.scc_instance_guid
 }
 
-module "scc_crn_parser" {
+module "crn_parser" {
   source  = "terraform-ibm-modules/common-utilities/ibm//modules/crn-parser"
   version = "1.1.0"
   crn     = local.scc_instance_crn
