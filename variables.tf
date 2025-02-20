@@ -79,6 +79,13 @@ variable "cos_bucket" {
   description = "The name of the Cloud Object Storage bucket to be used in SCC instance. Required when creating a new SCC instance."
 }
 
+variable "enable_event_notifications_integration" {
+  type        = bool
+  default     = false
+  nullable    = false
+  description = "Set to true if using Event Notifications."
+}
+
 variable "en_instance_crn" {
   type        = string
   default     = null

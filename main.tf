@@ -7,6 +7,10 @@ locals {
   validate_new_scc_instance_cos_setting = var.existing_scc_instance_crn == null && anytrue([var.cos_bucket == null, var.cos_instance_crn == null]) ? tobool("when creating a new SCC instance, both `var.cos_instance_crn` and `var.cos_bucket` are required.") : false
   # tflint-ignore: terraform_unused_declarations
   validate_en_integration = var.en_instance_crn != null && var.en_source_name == null ? tobool("When passing a value for 'en_instance_crn', a value must also be passed for 'en_source_name'.") : false
+  # tflint-ignore: terraform_unused_declarations
+  validate_enabling_en = var.enable_event_notifications_integration && var.en_instance_crn == null ? tobool("If 'enable_event_notifications_integration' is true, then a value must be passed for 'en_instance_crn'.") : false
+  # tflint-ignore: terraform_unused_declarations
+  validate_en_integration_bool = var.en_instance_crn != null && !var.enable_event_notifications_integration ? tobool("If passing a value for 'en_instance_crn', 'enable_event_notifications_integration' must be set to true.") : false
 }
 
 ##############################################################################
@@ -114,14 +118,14 @@ resource "ibm_scc_instance_settings" "scc_instance_settings" {
 }
 
 module "en_crn_parser" {
-  count   = var.en_instance_crn != null ? 1 : 0
+  count   = var.enable_event_notifications_integration ? 1 : 0
   source  = "terraform-ibm-modules/common-utilities/ibm//modules/crn-parser"
   version = "1.1.0"
   crn     = var.en_instance_crn
 }
 
 resource "ibm_iam_authorization_policy" "en_s2s_policy" {
-  count                       = var.skip_en_s2s_auth_policy || var.en_instance_crn == null || var.existing_scc_instance_crn != null ? 0 : 1
+  count                       = var.skip_en_s2s_auth_policy || !var.enable_event_notifications_integration || var.existing_scc_instance_crn != null ? 0 : 1
   source_service_name         = "compliance"
   source_resource_instance_id = local.scc_instance_guid
   target_service_name         = "event-notifications"
