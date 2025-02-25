@@ -89,7 +89,7 @@ variable "enable_event_notifications_integration" {
 variable "en_instance_crn" {
   type        = string
   default     = null
-  description = "The CRN of Event Notifications instance to be used with SCC. If no value is provided, Event Notifications will not be enabled for this SCC instance"
+  description = "The CRN of Event Notifications instance to be used with SCC. Required if 'enable_event_notifications_integration' is set to true."
 }
 
 variable "en_source_name" {
