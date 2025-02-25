@@ -83,7 +83,7 @@ variable "enable_event_notifications_integration" {
   type        = bool
   default     = false
   nullable    = false
-  description = "Set to true if using Event Notifications."
+  description = "Set to true to enable Event Notifications integration. If setting to true, ensure that a value is passed for the 'en_instance_crn' input."
 }
 
 variable "en_instance_crn" {
