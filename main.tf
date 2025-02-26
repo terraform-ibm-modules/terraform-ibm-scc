@@ -7,6 +7,10 @@ locals {
   validate_new_scc_instance_cos_setting = var.existing_scc_instance_crn == null && anytrue([var.cos_bucket == null, var.cos_instance_crn == null]) ? tobool("when creating a new SCC instance, both `var.cos_instance_crn` and `var.cos_bucket` are required.") : false
   # tflint-ignore: terraform_unused_declarations
   validate_en_integration = var.en_instance_crn != null && var.en_source_name == null ? tobool("When passing a value for 'en_instance_crn', a value must also be passed for 'en_source_name'.") : false
+  # tflint-ignore: terraform_unused_declarations
+  validate_enabling_en = var.enable_event_notifications_integration && var.en_instance_crn == null ? tobool("If 'enable_event_notifications_integration' is true, then a value must be passed for 'en_instance_crn'.") : false
+  # tflint-ignore: terraform_unused_declarations
+  validate_en_integration_bool = var.en_instance_crn != null && !var.enable_event_notifications_integration ? tobool("If passing a value for 'en_instance_crn', 'enable_event_notifications_integration' must be set to true.") : false
 }
 
 ##############################################################################
@@ -16,9 +20,9 @@ locals {
 locals {
   service_name        = "compliance"
   scc_instance_crn    = var.existing_scc_instance_crn == null ? resource.ibm_resource_instance.scc_instance[0].crn : var.existing_scc_instance_crn
-  scc_instance_guid   = var.existing_scc_instance_crn == null ? resource.ibm_resource_instance.scc_instance[0].guid : module.crn_parser[0].service_instance
-  scc_instance_region = var.existing_scc_instance_crn == null ? var.region : module.crn_parser[0].region
-  scc_account_id      = var.existing_scc_instance_crn == null ? resource.ibm_resource_instance.scc_instance[0].account_id : module.crn_parser[0].account_id
+  scc_instance_guid   = module.crn_parser.service_instance
+  scc_instance_region = module.crn_parser.region
+  scc_account_id      = module.crn_parser.account_id
   cos_instance_guid   = var.cos_instance_crn != null ? element(split(":", var.cos_instance_crn), length(split(":", var.cos_instance_crn)) - 3) : null
   wp_instance_guid    = var.wp_instance_crn != null ? element(split(":", var.wp_instance_crn), length(split(":", var.wp_instance_crn)) - 3) : null
   lookup_providers    = var.attach_wp_to_scc_instance || length(var.custom_integrations) > 0 ? true : false
@@ -34,10 +38,9 @@ data "ibm_resource_instance" "scc_instance" {
 }
 
 module "crn_parser" {
-  count   = var.existing_scc_instance_crn == null ? 0 : 1
   source  = "terraform-ibm-modules/common-utilities/ibm//modules/crn-parser"
   version = "1.1.0"
-  crn     = var.existing_scc_instance_crn
+  crn     = local.scc_instance_crn
 }
 
 ##############################################################################
@@ -100,7 +103,7 @@ resource "time_sleep" "wait_for_scc_cos_authorization_policy" {
 
 # Attach a COS bucket and an event notifications instance
 resource "ibm_scc_instance_settings" "scc_instance_settings" {
-  depends_on  = [time_sleep.wait_for_scc_cos_authorization_policy]
+  depends_on  = [time_sleep.wait_for_scc_cos_authorization_policy, ibm_iam_authorization_policy.en_s2s_policy]
   count       = var.existing_scc_instance_crn == null ? 1 : 0
   instance_id = resource.ibm_resource_instance.scc_instance[0].guid
   event_notifications {
@@ -112,6 +115,22 @@ resource "ibm_scc_instance_settings" "scc_instance_settings" {
     instance_crn = var.cos_instance_crn
     bucket       = var.cos_bucket
   }
+}
+
+module "en_crn_parser" {
+  count   = var.enable_event_notifications_integration ? 1 : 0
+  source  = "terraform-ibm-modules/common-utilities/ibm//modules/crn-parser"
+  version = "1.1.0"
+  crn     = var.en_instance_crn
+}
+
+resource "ibm_iam_authorization_policy" "en_s2s_policy" {
+  count                       = var.skip_en_s2s_auth_policy || !var.enable_event_notifications_integration || var.existing_scc_instance_crn != null ? 0 : 1
+  source_service_name         = "compliance"
+  source_resource_instance_id = local.scc_instance_guid
+  target_service_name         = "event-notifications"
+  target_resource_instance_id = module.en_crn_parser[0].service_instance
+  roles                       = ["Event Source Manager"]
 }
 
 ##############################################################################

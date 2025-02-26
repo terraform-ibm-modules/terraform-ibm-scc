@@ -79,10 +79,17 @@ variable "cos_bucket" {
   description = "The name of the Cloud Object Storage bucket to be used in SCC instance. Required when creating a new SCC instance."
 }
 
+variable "enable_event_notifications_integration" {
+  type        = bool
+  default     = false
+  nullable    = false
+  description = "Set to true to enable Event Notifications integration. If setting to true, ensure that a value is passed for the 'en_instance_crn' input."
+}
+
 variable "en_instance_crn" {
   type        = string
   default     = null
-  description = "The CRN of Event Notifications instance to be used with SCC. If no value is provided, Event Notifications will not be enabled for this SCC instance"
+  description = "The CRN of Event Notifications instance to be used with SCC. Required if 'enable_event_notifications_integration' is set to true."
 }
 
 variable "en_source_name" {
@@ -97,15 +104,24 @@ variable "en_source_description" {
   description = "Optional description to give for the Event Notifications integration source. Only used if a value is passed for `en_instance_crn`."
 }
 
+variable "skip_en_s2s_auth_policy" {
+  type        = bool
+  default     = false
+  nullable    = false
+  description = "Set to true to skip the creation of an IAM authorization policy that permits the SCC instance created by this module 'Event Source Manager' access to the Event Notifications instance. This value will get ignored if an existing SCC instance is passed, or if 'enable_event_notifications_integration' is false."
+}
+
 variable "skip_cos_iam_authorization_policy" {
   type        = bool
   default     = false
+  nullable    = false
   description = "Set to true to skip the creation of an IAM authorization policy that permits the SCC instance created by this module to write access to the provided COS instance. This value will get ignored if an existing SCC instance is passed."
 }
 
 variable "skip_scc_wp_auth_policy" {
   type        = bool
   default     = false
+  nullable    = false
   description = "Set to true to skip the creation of an IAM authorization policy that permits the SCC instance created by this solution read access to the workload protection instance. Only used if `attach_wp_to_scc_instance` is set to true."
 }
 

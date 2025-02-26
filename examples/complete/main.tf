@@ -58,19 +58,20 @@ module "scc_wp" {
 ##############################################################################
 
 module "create_scc_instance" {
-  source                            = "../.."
-  instance_name                     = "${var.prefix}-instance"
-  region                            = var.region
-  resource_group_id                 = module.resource_group.resource_group_id
-  resource_tags                     = var.resource_tags
-  existing_scc_instance_crn         = var.existing_scc_instance_crn
-  access_tags                       = var.access_tags
-  cos_bucket                        = var.existing_scc_instance_crn == null ? module.cos[0].bucket_name : null
-  cos_instance_crn                  = var.existing_scc_instance_crn == null ? module.cos[0].cos_instance_id : null
-  en_instance_crn                   = module.event_notification.crn
-  en_source_name                    = "${var.prefix}-en-integration" # This name must be unique per SCC instance that is integrated with the Event Notfications instance.
-  skip_cos_iam_authorization_policy = false
-  skip_scc_wp_auth_policy           = false
+  source                                 = "../.."
+  instance_name                          = "${var.prefix}-instance"
+  region                                 = var.region
+  resource_group_id                      = module.resource_group.resource_group_id
+  resource_tags                          = var.resource_tags
+  existing_scc_instance_crn              = var.existing_scc_instance_crn
+  access_tags                            = var.access_tags
+  cos_bucket                             = var.existing_scc_instance_crn == null ? module.cos[0].bucket_name : null
+  cos_instance_crn                       = var.existing_scc_instance_crn == null ? module.cos[0].cos_instance_id : null
+  en_instance_crn                        = module.event_notification.crn
+  en_source_name                         = "${var.prefix}-en-integration" # This name must be unique per SCC instance that is integrated with the Event Notfications instance.
+  enable_event_notifications_integration = true
+  skip_cos_iam_authorization_policy      = false
+  skip_scc_wp_auth_policy                = false
   # enable workload protection integration
   attach_wp_to_scc_instance = true
   wp_instance_crn           = module.scc_wp.crn
