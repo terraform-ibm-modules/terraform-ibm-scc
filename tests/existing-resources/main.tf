@@ -7,7 +7,7 @@ module "resource_group" {
 
 module "cos" {
   source                 = "terraform-ibm-modules/cos/ibm"
-  version                = "8.19.4"
+  version                = "8.19.5"
   cos_instance_name      = "${var.prefix}-cos"
   kms_encryption_enabled = false
   retention_enabled      = false
