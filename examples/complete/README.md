@@ -7,4 +7,5 @@ A complete example that will provision the following:
 - A new Security and Compliance Center instance with COS bucket and event notifications enabled.
 - Integration configured with the newly provisioned Workload Protection instance.
 - Custom integration with the Caveonix provider.
-- An SCC attachment scoped to a resource group.
+- An SCC scope targeted to a resource group.
+- An SCC attachment using the resource group scope.

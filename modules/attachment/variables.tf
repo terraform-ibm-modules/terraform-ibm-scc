@@ -11,7 +11,7 @@ variable "profile_version" {
 
 variable "scc_instance_id" {
   type        = string
-  description = "ID of the SCC instance in which to create the attachment."
+  description = "GUID of the SCC instance in which to create the attachment."
 }
 
 variable "attachment_name" {
@@ -35,25 +35,25 @@ variable "attachment_schedule" {
   }
 }
 
-variable "scope" {
-  description = "The scope to set for the SCC profile attachment."
-  type = list(object({
-    environment = optional(string, "ibm-cloud")
-    properties = list(object({
-      name  = string
-      value = string
-    }))
-  }))
+variable "scope_ids" {
+  type        = list(string)
+  description = "A list of scope IDs to include in the attachment."
+  nullable    = false
+
+  validation {
+    condition     = length(var.scope_ids) > 0
+    error_message = "At least 1 scope ID must be passed in the 'scope_ids' input to be able to create an attachment."
+  }
 }
 
 variable "use_profile_default_parameters" {
-  description = "A boolean indicating whether to use the profiles default parameters. If set to false, a value must be passed for the `custum_attachment_parameters` input variable."
+  description = "A boolean indicating whether to use the profiles default parameters. If set to false, a value must be passed for the `custom_attachment_parameters` input variable."
   type        = bool
   default     = true
 }
 
 variable "custom_attachment_parameters" {
-  description = "A list of custom attachement parameters to use. Only used if 'use_profile_default_parameters' is set to false."
+  description = "A list of custom attachment parameters to use. Only used if 'use_profile_default_parameters' is set to false."
   type = list(object({
     parameter_name          = string
     parameter_display_name  = string
@@ -73,7 +73,7 @@ variable "enable_notification" {
 
 variable "notify_failed_control_ids" {
   type        = list(string)
-  description = "A list of control IDs to send notifcations for when they fail."
+  description = "A list of control IDs to send notifications for when they fail."
   default     = []
 }
 
