@@ -68,7 +68,7 @@ module "create_scc_instance" {
   cos_bucket                             = var.existing_scc_instance_crn == null ? module.cos[0].bucket_name : null
   cos_instance_crn                       = var.existing_scc_instance_crn == null ? module.cos[0].cos_instance_id : null
   en_instance_crn                        = module.event_notification.crn
-  en_source_name                         = "${var.prefix}-en-integration" # This name must be unique per SCC instance that is integrated with the Event Notfications instance.
+  en_source_name                         = "${var.prefix}-en-integration" # This name must be unique per SCC instance that is integrated with the Event Notifications instance.
   enable_event_notifications_integration = true
   skip_cos_iam_authorization_policy      = false
   skip_scc_wp_auth_policy                = false
@@ -104,8 +104,19 @@ module "create_scc_instance" {
 }
 
 ##############################################################################
-# SCC attachment
+# SCC scope + attachment
 ##############################################################################
+
+resource "ibm_scc_scope" "scope" {
+  description = "A scope targeting a resource group"
+  environment = "ibm-cloud"
+  name        = "Terraform sample resource group scope"
+  properties = {
+    scope_type = "account.resource_group"
+    scope_id   = module.resource_group.resource_group_id
+  }
+  instance_id = module.create_scc_instance.guid
+}
 
 module "create_profile_attachment" {
   source                 = "../../modules/attachment"
@@ -115,20 +126,7 @@ module "create_profile_attachment" {
   attachment_name        = "${var.prefix}-attachment"
   attachment_description = "profile-attachment-description"
   attachment_schedule    = "every_7_days"
-  # scope the attachment to a specific resource group
-  scope = [{
-    environment = "ibm-cloud"
-    properties = [
-      {
-        name  = "scope_type"
-        value = "account.resource_group"
-      },
-      {
-        name  = "scope_id"
-        value = module.resource_group.resource_group_id
-      }
-    ]
-  }]
+  scope_ids              = [ibm_scc_scope.scope.scope_id]
 }
 
 ##############################################################################

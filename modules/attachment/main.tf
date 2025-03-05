@@ -63,7 +63,7 @@ locals {
 }
 
 # Create the attachment
-resource "ibm_scc_profile_attachment" "scc_profile_attachment" {
+resource "ibm_scc_profile_attachment" "profile_attachment" {
   profile_id  = local.profile.id
   instance_id = var.scc_instance_id
   name        = var.attachment_name
@@ -74,16 +74,9 @@ resource "ibm_scc_profile_attachment" "scc_profile_attachment" {
   status   = var.attachment_schedule == "none" ? "disabled" : "enabled"
 
   dynamic "scope" {
-    for_each = var.scope
+    for_each = var.scope_ids
     content {
-      environment = scope.value["environment"]
-      dynamic "properties" {
-        for_each = scope.value["properties"]
-        content {
-          name  = properties.value["name"]
-          value = properties.value["value"]
-        }
-      }
+      id = scope.value
     }
   }
 
@@ -106,4 +99,15 @@ resource "ibm_scc_profile_attachment" "scc_profile_attachment" {
       threshold_limit    = var.notification_threshold_limit
     }
   }
+
+  lifecycle {
+    replace_triggered_by = [terraform_data.replacement]
+  }
+
+}
+
+# workaround for https://github.com/IBM-Cloud/terraform-provider-ibm/issues/6044
+# approach based on https://developer.hashicorp.com/terraform/language/resources/terraform-data#example-usage-data-for-replace_triggered_by
+resource "terraform_data" "replacement" {
+  input = var.scope_ids
 }
