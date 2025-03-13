@@ -2,7 +2,7 @@
 
 Custom provider integrations can be configured for the Security and Compliance Center instance using the `custom_integrations` input.
 
-:information_source: If you wan't to integrate with an SCC Workload Protection instance, simply use the `existing_scc_workload_protection_instance_crn` input instead. 
+:information_source: If you wan't to integrate with an SCC Workload Protection instance, simply use the `existing_scc_workload_protection_instance_crn` input instead.
 
 ## Options for custom_integrations
 The `custom_integrations` input a list type input which supporting configuring multiple integrations. Each entry in the list is a map object with the following options:
@@ -29,7 +29,7 @@ The `custom_integrations` input a list type input which supporting configuring m
       {
         provider_name    = "Sample"
         integration_name = "sample-integration"
-        attributes       = {"description": "this is a sample"} 
+        attributes       = {"description": "this is a sample"}
       }
     ]
     ```

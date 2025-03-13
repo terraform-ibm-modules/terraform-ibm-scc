@@ -17,8 +17,8 @@ This module configures an IBM Cloud Security and Compliance instance.
 * [Submodules](./modules)
     * [attachment](./modules/attachment)
 * [Examples](./examples)
+    * [Advanced example with CBR rules](./examples/advanced)
     * [Basic example](./examples/basic)
-    * [Complete example with CBR rules](./examples/complete)
 * [Contributing](#contributing)
 <!-- END OVERVIEW HOOK -->
 

@@ -23,8 +23,8 @@
       ],
       "short_description": "Creates and configures IBM Security and Compliance Center resources",
       "long_description": "This architecture supports creating and configuring IBM Security and Compliance Center resources.",
-      "offering_docs_url": "https://github.com/terraform-ibm-modules/terraform-ibm-scc-da/blob/main/solutions/instances/README.md",
-      "offering_icon_url": "https://raw.githubusercontent.com/terraform-ibm-modules/terraform-ibm-scc-da/main/images/scc-icon.svg",
+      "offering_docs_url": "https://github.com/terraform-ibm-modules/terraform-ibm-scc/blob/main/README.md",
+      "offering_icon_url": "https://raw.githubusercontent.com/terraform-ibm-modules/terraform-ibm-scc/main/images/scc-icon.svg",
       "provider_name": "IBM",
       "features": [
         {
@@ -33,14 +33,26 @@
         },
         {
           "title": "Object Storage bucket for Security and Compliance Center",
-          "description": "Creates and configures a KMS-encrypted Object Storage bucket required for the Security and Compliance Center instance."
+          "description": "Creates and configures an Object Storage bucket required for the Security and Compliance Center instance."
         },
         {
-          "title": "Security and Compliance Center Workload Protection",
-          "description": "Creates and configures a Security and Compliance Center Workload Protection instance."
+          "title": "KMS encryption",
+          "description": "Supports creating a new key, or using an existing one to encrypt the Object Storage bucket."
+        },
+        {
+          "title": "Scopes and attachments",
+          "description": "Supports creating scopes and attachments."
+        },
+        {
+          "title": "Event Notifications",
+          "description": "Supports integration with Event Notifications, including the creation of destination, topic and email subscription."
+        },
+        {
+          "title": "Provider integration",
+          "description": "Supports integration with providers such as Workload Protection."
         }
       ],
-      "support_details": "This product is in the community registry, as such support is handled through the originated repo. If you experience issues please open an issue in that repository [https://github.com/terraform-ibm-modules/terraform-ibm-scc-da/issues](https://github.com/terraform-ibm-modules/terraform-ibm-scc-da/issues). Please note this product is not supported via the IBM Cloud Support Center.",
+      "support_details": "This product is in the community registry, as such support is handled through the originated repo. If you experience issues please open an issue in that repository [https://github.com/terraform-ibm-modules/terraform-ibm-scc/issues](https://github.com/terraform-ibm-modules/terraform-ibm-scc/issues). Please note this product is not supported via the IBM Cloud Support Center.",
       "flavors": [
         {
           "label": "Fully configurable",
@@ -67,6 +79,7 @@
             },
             {
               "key": "existing_resource_group_name",
+              "required": true,
               "custom_config": {
                   "type": "resource_group",
                   "grouping": "deployment",
@@ -77,8 +90,22 @@
               }
             },
             {
-              "key": "resource_group_name",
+              "key": "existing_cos_instance_crn",
               "required": true
+            },
+            {
+              "key": "scc_service_plan",
+              "required": true,
+              "options": [
+                {
+                  "displayname": "Standard",
+                  "value": "security-compliance-center-standard-plan"
+                },
+                {
+                  "displayname": "Trial",
+                  "value": "security-compliance-center-trial-plan"
+                }
+              ]
             },
             {
               "key": "scc_region",
@@ -103,10 +130,6 @@
               ]
             },
             {
-              "key": "existing_kms_instance_crn",
-              "required": true
-            },
-            {
               "key": "provider_visibility",
               "options": [
                 {
@@ -127,7 +150,7 @@
               "key": "scc_instance_name"
             },
             {
-              "key": "scc_instance_tags",
+              "key": "scc_instance_resource_tags",
               "custom_config": {
                 "grouping": "deployment",
                 "original_grouping": "deployment",
@@ -137,46 +160,38 @@
               }
             },
             {
-              "key": "scc_service_plan",
-              "options": [
-                {
-                  "displayname": "Standard",
-                  "value": "security-compliance-center-standard-plan"
-                },
-                {
-                  "displayname": "Trial",
-                  "value": "security-compliance-center-trial-plan"
+              "key": "scc_instance_access_tags",
+              "custom_config": {
+                "grouping": "deployment",
+                "original_grouping": "deployment",
+                "config_constraints": {
+                  "type": "string"
                 }
-              ]
+              }
             },
             {
               "key": "existing_scc_instance_crn"
             },
             {
-              "key": "cos_instance_name"
+              "key": "scopes"
             },
             {
-              "key": "cos_instance_tags",
-              "custom_config": {
-                "grouping": "deployment",
-                "original_grouping": "deployment",
-                "config_constraints": {
-                  "type": "string"
-                }
-              }
+              "key": "attachments"
             },
             {
-              "key": "cos_instance_access_tags",
-              "custom_config": {
-                "grouping": "deployment",
-                "original_grouping": "deployment",
-                "config_constraints": {
-                  "type": "string"
-                }
-              }
+              "key": "existing_scc_workload_protection_instance_crn"
+            },
+            {
+              "key": "skip_scc_workload_protection_iam_auth_policy"
+            },
+            {
+              "key": "custom_integrations"
             },
             {
               "key": "scc_cos_bucket_name"
+            },
+            {
+              "key": "kms_encryption_enabled_bucket"
             },
             {
               "key": "scc_cos_bucket_region",
@@ -266,9 +281,6 @@
               ]
             },
             {
-              "key": "existing_scc_cos_bucket_name"
-            },
-            {
               "key": "management_endpoint_type_for_bucket",
               "options": [
                 {
@@ -286,16 +298,16 @@
               ]
             },
             {
-              "key": "existing_cos_instance_crn"
-            },
-            {
               "key": "existing_monitoring_crn"
             },
             {
               "key": "skip_scc_cos_iam_auth_policy"
             },
             {
-              "key": "existing_scc_cos_kms_key_crn"
+              "key": "existing_kms_instance_crn"
+            },
+            {
+              "key": "existing_kms_key_crn"
             },
             {
               "key": "ibmcloud_kms_api_key"
@@ -323,83 +335,7 @@
               "key": "scc_cos_key_name"
             },
             {
-              "key": "profile_attachments"
-            },
-            {
-              "key": "resource_groups_scope"
-            },
-            {
-              "key": "attachment_schedule",
-              "options": [
-                {
-                  "displayname": "Daily",
-                  "value": "daily"
-                },
-                {
-                  "displayname": "Weekly",
-                  "value": "every_7_days"
-                },
-                {
-                  "displayname": "Monthly",
-                  "value": "every_30_days"
-                },
-                {
-                  "displayname": "Never",
-                  "value": "none"
-                }
-              ]
-            },
-            {
-              "key": "provision_scc_workload_protection"
-            },
-            {
-              "key": "scc_workload_protection_instance_name"
-            },
-            {
-              "key": "scc_workload_protection_service_plan",
-              "options": [
-                {
-                  "displayname": "Free trial",
-                  "value": "free-trial"
-                },
-                {
-                  "displayname": "Graduated tier",
-                  "value": "graduated-tier"
-                }
-              ]
-            },
-            {
-              "key": "scc_workload_protection_instance_tags",
-              "custom_config": {
-                "grouping": "deployment",
-                "original_grouping": "deployment",
-                "config_constraints": {
-                  "type": "string"
-                }
-              }
-            },
-            {
-              "key": "scc_workload_protection_resource_key_tags",
-              "custom_config": {
-                "grouping": "deployment",
-                "original_grouping": "deployment",
-                "config_constraints": {
-                  "type": "string"
-                }
-              }
-            },
-            {
-              "key": "scc_workload_protection_access_tags",
-              "custom_config": {
-                "grouping": "deployment",
-                "original_grouping": "deployment",
-                "config_constraints": {
-                  "type": "string"
-                }
-              }
-            },
-            {
-              "key": "skip_scc_workload_protection_iam_auth_policy"
+              "key": "force_delete_kms_key"
             },
             {
               "key": "existing_event_notifications_crn"
@@ -446,26 +382,70 @@
             }
           ],
           "architecture": {
-            "descriptions": "This architecture supports creating and configuring a Security and Compliance Center Workload Protection instance.",
+            "descriptions": "This architecture supports creating and configuring a Security and Compliance Center instance.",
             "features": [
               {
-                "title": "Creates a Security and Compliance Center instance",
-                "description": "Creates and configures a Security and Compliance Center instance."
+                "title": "SCC instance creation",
+                "description": "Yes"
               },
               {
-                "title": "Creates an Object Storage bucket",
-                "description": "Creates and configures a KMS-encrypted Object Storage bucket required for the Security and Compliance Center instance."
+                "title": "Use existing SCC instance",
+                "description": "Yes"
               },
               {
-                "title": "Creates a Security and Compliance Center Workload Protection instance",
-                "description": "Creates and configures a Security and Compliance Center Workload Protection instance."
+                "title": "New resource group creation",
+                "description": "No"
+              },
+              {
+                "title": "Use existing resource group",
+                "description": "Yes"
+              },
+              {
+                "title": "COS instance creation",
+                "description": "No"
+              },
+              {
+                "title": "COS bucket creation",
+                "description": "Yes"
+              },
+              {
+                "title": "Enforced KMS encryption",
+                "description": "No"
+              },
+              {
+                "title": "KMS instance creation",
+                "description": "No"
+              },
+              {
+                "title": "KMS key ring and key creation",
+                "description": "Yes"
+              },
+              {
+                "title": "Use existing KMS key",
+                "description": "Yes"
+              },
+              {
+                "title": "IAM s2s auth policies creation",
+                "description": "Yes"
+              },
+              {
+                "title": "SCC scope creation",
+                "description": "Yes"
+              },
+              {
+                "title": "SCC attachment creation",
+                "description": "Yes"
+              },
+              {
+                "title": "Event Notifications integration",
+                "description": "Yes"
               }
             ],
             "diagrams": [
               {
                 "diagram": {
                   "caption": "Security and Compliance Center",
-                  "url": "https://raw.githubusercontent.com/terraform-ibm-modules/terraform-ibm-scc-da/main/reference-architecture/scc.svg",
+                  "url": "https://raw.githubusercontent.com/terraform-ibm-modules/terraform-ibm-scc/main/reference-architecture/scc.svg",
                   "type": "image/svg+xml"
                 },
                 "description": "This architecture supports creating and configuring IBM Security and Compliance Center resources"

@@ -25,4 +25,4 @@ repository:
   description: "Configures an IBM Cloud Security and Compliance instance"
 
   # Use a comma-separated list of topics to set on the repo (ensure not to use any caps in the topic string).
-  topics: terraform, ibm-cloud, terraform-module, core-team, supported, stable, scc, security, compliance
+  topics: terraform, ibm-cloud, terraform-module, core-team, supported, stable, scc, security, compliance, deployable-architecture

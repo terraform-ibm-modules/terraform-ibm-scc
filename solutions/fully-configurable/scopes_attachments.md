@@ -18,7 +18,7 @@ The `scopes` input can be used to create multiple scopes, which can then be used
 - The following example shows how to create a scope for the full account:
   ```
   {
-    full-account = {
+    all = {
       name = "Full account"
       description = "Scope to scan the whole account"
       environment = "ibm-cloud"
@@ -29,12 +29,12 @@ The `scopes` input can be used to create multiple scopes, which can then be used
     }
   }
   ```
-  - The key identifier for above example is `full-account`. This can be referenced when creating attachments using the `scope_key_references` attribute of the [attachments](#attachments) input.
+  - The key identifier for above example is `all`. This can be referenced when creating attachments using the `scope_key_references` attribute of the [attachments](#attachments) input.
 
 - The following example shows how to exclude a resource group from the scope:
   ```
   {
-    exclude-group = {
+    exclude = {
       name = "Exclude Default resource group"
       description = "Scope to exclude the Default resource group"
       environment = "ibm-cloud"
@@ -49,7 +49,7 @@ The `scopes` input can be used to create multiple scopes, which can then be used
     }
   }
   ```
-  - The key identifier for above example is `exclude-group`. This can be referenced when creating attachments using the `scope_key_references` attribute of the [attachments](#attachments) input.
+  - The key identifier for above example is `exclude`. This can be referenced when creating attachments using the `scope_key_references` attribute of the [attachments](#attachments) input.
 
 ## Attachments
 The `attachments` input can be used to create multiple attachments using either pre-existing scopes, or scopes that were created with the [scopes](#scopes) input. The input type is a list of objects with the following attributes:
@@ -74,7 +74,7 @@ The `attachments` input can be used to create multiple attachments using either 
     attachment_name = "SOC 2 full account"
     attachment_description = "SOC 2 full account"
     attachment_schedule = "daily"
-    scope_key_references = ["full-account"]
+    scope_key_references = ["all"]
     notifications = {
       enabled = true
       failed_control_ids = ["c51c5094-6f6b-4fee-b0f6-ad51ca68e18a"]
@@ -99,4 +99,3 @@ The `attachments` input can be used to create multiple attachments using either 
     }
   }]
   ```
-  

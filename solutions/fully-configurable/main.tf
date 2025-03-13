@@ -20,27 +20,27 @@ module "existing_kms_crn_parser" {
 }
 
 module "existing_kms_key_crn_parser" {
-  count   = var.kms_encryption_enabled_bucket ? 1 : 0
+  count   = var.existing_kms_key_crn != null ? 1 : 0
   source  = "terraform-ibm-modules/common-utilities/ibm//modules/crn-parser"
   version = "1.1.0"
-  crn     = var.existing_kms_key_crn != null ? var.existing_kms_key_crn : module.kms[0].keys[format("%s.%s", local.scc_cos_key_ring_name, local.scc_cos_key_name)].crn
+  crn     = var.existing_kms_key_crn
 }
 
 locals {
-  prefix = var.prefix != null ? (var.prefix != "" ? var.prefix : null) : null
-  kms_region        = var.existing_scc_instance_crn == null && var.kms_encryption_enabled_bucket ? var.existing_kms_instance_crn != null ? module.existing_kms_crn_parser[0].region : null : null
-  existing_kms_guid = var.existing_scc_instance_crn == null && var.kms_encryption_enabled_bucket ? var.existing_kms_instance_crn != null ? module.existing_kms_crn_parser[0].service_instance : null : null
-  kms_service_name  = var.existing_scc_instance_crn == null && var.kms_encryption_enabled_bucket ? var.existing_kms_instance_crn != null ? module.existing_kms_crn_parser[0].service_name : null : null
-  kms_account_id    = var.existing_scc_instance_crn == null && var.kms_encryption_enabled_bucket ? var.existing_kms_instance_crn != null ? module.existing_kms_crn_parser[0].account_id : null : null
-  kms_key_id        = var.existing_scc_instance_crn == null && var.kms_encryption_enabled_bucket && length(module.existing_kms_key_crn_parser) > 0 ? module.existing_kms_key_crn_parser[0].resource : null
-  scc_cos_key_ring_name                     = try("${local.prefix}-${var.scc_cos_key_ring_name}", var.scc_cos_key_ring_name)
-  scc_cos_key_name                          = try("${local.prefix}-${var.scc_cos_key_name}", var.scc_cos_key_name)
-  scc_cos_bucket_region                     = var.scc_cos_bucket_region != null && var.scc_cos_bucket_region != "" ? var.scc_cos_bucket_region : var.scc_region
-  scc_instance_name                         = try("${local.prefix}-${var.scc_instance_name}", var.scc_instance_name)
+  prefix                = var.prefix != null ? (var.prefix != "" ? var.prefix : null) : null
+  kms_region            = var.existing_kms_instance_crn != null ? module.existing_kms_crn_parser[0].region : var.existing_kms_key_crn != null ? module.existing_kms_key_crn_parser[0].region : null
+  existing_kms_guid     = var.existing_kms_instance_crn != null ? module.existing_kms_crn_parser[0].service_instance : var.existing_kms_key_crn != null ? module.existing_kms_key_crn_parser[0].service_instance : null
+  kms_service_name      = var.existing_kms_instance_crn != null ? module.existing_kms_crn_parser[0].service_name : var.existing_kms_key_crn != null ? module.existing_kms_key_crn_parser[0].service_name : null
+  kms_account_id        = var.existing_kms_instance_crn != null ? module.existing_kms_crn_parser[0].account_id : var.existing_kms_key_crn != null ? module.existing_kms_key_crn_parser[0].account_id : null
+  kms_key_id            = var.existing_kms_instance_crn != null ? module.kms[0].keys[format("%s.%s", local.scc_cos_key_ring_name, local.scc_cos_key_name)].key_id : var.existing_kms_key_crn != null ? module.existing_kms_key_crn_parser[0].resource : null
+  scc_cos_key_ring_name = try("${local.prefix}-${var.scc_cos_key_ring_name}", var.scc_cos_key_ring_name)
+  scc_cos_key_name      = try("${local.prefix}-${var.scc_cos_key_name}", var.scc_cos_key_name)
+  scc_cos_bucket_region = var.scc_cos_bucket_region != null && var.scc_cos_bucket_region != "" ? var.scc_cos_bucket_region : var.scc_region
+  scc_instance_name     = try("${local.prefix}-${var.scc_instance_name}", var.scc_instance_name)
   # Bucket name to be passed to the COS module to create a bucket
   created_scc_cos_bucket_name = try("${local.prefix}-${var.scc_cos_bucket_name}", var.scc_cos_bucket_name)
   # Final COS bucket name after being created by COS module (as it might have suffix added to it)
-  scc_cos_bucket_name =  module.buckets[0].buckets[local.created_scc_cos_bucket_name].bucket_name
+  scc_cos_bucket_name              = var.existing_scc_instance_crn == null ? module.buckets[0].buckets[local.created_scc_cos_bucket_name].bucket_name : null
   create_cross_account_auth_policy = var.existing_scc_instance_crn == null ? !var.skip_cos_kms_iam_auth_policy && var.ibmcloud_kms_api_key == null ? false : (module.scc.account_id != module.existing_kms_crn_parser[0].account_id) : false
 }
 
@@ -98,7 +98,7 @@ module "kms" {
   providers = {
     ibm = ibm.kms
   }
-  count                       = var.kms_encryption_enabled_bucket && var.existing_kms_key_crn == null ? 1 : 0
+  count                       = var.existing_scc_instance_crn == null && var.kms_encryption_enabled_bucket && var.existing_kms_key_crn == null ? 1 : 0
   source                      = "terraform-ibm-modules/kms-all-inclusive/ibm"
   version                     = "4.21.2"
   create_key_protect_instance = false
@@ -116,7 +116,7 @@ module "kms" {
           standard_key             = false
           rotation_interval_month  = 3
           dual_auth_delete_enabled = false
-          force_delete             = false # TBC
+          force_delete             = var.force_delete_kms_key
         }
       ]
     }
@@ -128,7 +128,7 @@ module "kms" {
 #######################################################################################################################
 
 module "existing_cos_crn_parser" {
-  count   = var.existing_cos_instance_crn != null ? 1 : 0
+  count   = var.existing_scc_instance_crn == null && var.existing_cos_instance_crn != null ? 1 : 0
   source  = "terraform-ibm-modules/common-utilities/ibm//modules/crn-parser"
   version = "1.1.0"
   crn     = var.existing_cos_instance_crn
@@ -149,7 +149,7 @@ locals {
     storage_class                 = var.scc_cos_bucket_class
     resource_instance_id          = var.existing_cos_instance_crn
     region_location               = local.scc_cos_bucket_region
-    force_delete                  = false # TBC
+    force_delete                  = true # If this is set to false, and the bucket contains data, the destroy will fail. Setting it to false on destroy has no impact, it has to be set on apply, so hence hard coding to true."
     activity_tracking = {
       read_data_events  = true
       write_data_events = true
@@ -187,13 +187,12 @@ module "existing_scc_crn_parser" {
 }
 
 locals {
-  scc_instance_region          = var.existing_scc_instance_crn == null ? var.scc_region : module.existing_scc_crn_parser[0].region
+  scc_instance_region = var.existing_scc_instance_crn == null ? var.scc_region : module.existing_scc_crn_parser[0].region
 }
 
 module "scc" {
-  source                                 = "terraform-ibm-modules/scc/ibm"
+  source                                 = "../.."
   existing_scc_instance_crn              = var.existing_scc_instance_crn
-  version                                = "2.0.1"
   resource_group_id                      = module.resource_group.resource_group_id
   region                                 = var.scc_region
   instance_name                          = local.scc_instance_name
@@ -225,7 +224,7 @@ resource "ibm_scc_scope" "scc_scopes" {
   instance_id = module.scc.guid
   name        = each.value.name
   properties  = each.value.properties
-  
+
   dynamic "exclusions" {
     for_each = each.value.exclusions
     content {
@@ -241,13 +240,12 @@ resource "ibm_scc_scope" "scc_scopes" {
 
 module "scc_attachment" {
 
-  for_each   = {
-    for index, attachment in var.attachments:
+  for_each = {
+    for index, attachment in var.attachments :
     attachment.attachment_name => attachment
   }
 
-  source                 = "terraform-ibm-modules/scc/ibm//modules/attachment"
-  version                = "2.0.1"
+  source                 = "../../modules/attachment"
   profile_name           = each.value.profile_name
   profile_version        = each.value.profile_version
   scc_instance_id        = module.scc.guid
@@ -256,7 +254,7 @@ module "scc_attachment" {
   attachment_schedule    = each.value.attachment_schedule
   # lookup the scope ID created using 'scope_key_references' value
   # concat the 'scope_key_references' computed IDs with the IDs listed in the 'scope_ids' attribute
-  scope_ids              = concat([for s in each.value.scope_key_references : ibm_scc_scope.scc_scopes[s].id], each.value.scope_ids)
+  scope_ids = concat([for s in each.value.scope_key_references : ibm_scc_scope.scc_scopes[s].scope_id], each.value.scope_ids)
 }
 
 #######################################################################################################################
@@ -271,8 +269,8 @@ module "existing_en_crn_parser" {
 }
 
 locals {
-  existing_en_guid      = var.existing_event_notifications_crn != null ? module.existing_en_crn_parser[0].service_instance : null
-  existing_en_region    = var.existing_event_notifications_crn != null ? module.existing_en_crn_parser[0].region : null
+  existing_en_guid   = var.existing_event_notifications_crn != null ? module.existing_en_crn_parser[0].service_instance : null
+  existing_en_region = var.existing_event_notifications_crn != null ? module.existing_en_crn_parser[0].region : null
 }
 
 data "ibm_en_destinations" "en_destinations" {
@@ -283,7 +281,7 @@ data "ibm_en_destinations" "en_destinations" {
 
 # workaround for https://github.com/IBM-Cloud/terraform-provider-ibm/issues/5533.
 resource "time_sleep" "wait_for_scc" {
-  count = var.existing_event_notifications_crn != null && var.existing_scc_instance_crn == null ? 1 : 0
+  count      = var.existing_event_notifications_crn != null && var.existing_scc_instance_crn == null ? 1 : 0
   depends_on = [module.scc]
 
   create_duration = "60s"

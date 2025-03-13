@@ -1,9 +1,9 @@
-# Cloud automation for Security and Compliance Center (Fully configurable)
+# Cloud automation for Security and Compliance Center (Security-enforced)
 
 ## Prerequisites
 - An existing resource group
 - An existing COS instance
-- An existing KMS instance (or key) if you wan't to encrypt the COS bucket created for use with SCC
+- An existing KMS instance (or key) to encrypt the COS bucket created for use with SCC
 
 This solution supports provisioning and configuring the following infrastructure:
 - A Security and Compliance Center instance.

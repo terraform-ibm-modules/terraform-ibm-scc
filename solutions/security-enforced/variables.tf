@@ -29,17 +29,6 @@ variable "prefix" {
   }
 }
 
-variable "provider_visibility" {
-  description = "Set the visibility value for the IBM terraform provider. Supported values are `public`, `private`, `public-and-private`. [Learn more](https://registry.terraform.io/providers/IBM-Cloud/ibm/latest/docs/guides/custom-service-endpoints)."
-  type        = string
-  default     = "private"
-
-  validation {
-    condition     = contains(["public", "private", "public-and-private"], var.provider_visibility)
-    error_message = "Invalid value for 'provider_visibility'. Allowed values are 'public', 'private', or 'public-and-private'."
-  }
-}
-
 ########################################################################################################################
 # SCC variables
 ########################################################################################################################
@@ -162,32 +151,6 @@ variable "skip_scc_workload_protection_iam_auth_policy" {
 # KMS variables
 ########################################################################################################################
 
-variable "kms_encryption_enabled_bucket" {
-  description = "Set to true to enable KMS encryption on the Object Storage bucket created for the Security and Compliance Center instance. When set to true, a value must be passed for either `existing_kms_key_crn` or `existing_kms_instance_crn` (to create a new key). Can not be set to true if passing a value for `existing_scc_instance_crn`."
-  type        = bool
-  default     = false
-
-  validation {
-    condition     = var.kms_encryption_enabled_bucket ? var.existing_scc_instance_crn == null : true
-    error_message = "'kms_encryption_enabled_bucket' should be false if passing a value for 'existing_scc_instance_crn' as existing SCC instance will already have a bucket attached."
-  }
-
-  validation {
-    condition     = var.existing_kms_instance_crn != null ? var.kms_encryption_enabled_bucket : true
-    error_message = "If passing a value for 'existing_kms_instance_crn', you should set 'kms_encryption_enabled_bucket' to true."
-  }
-
-  validation {
-    condition     = var.existing_kms_key_crn != null ? var.kms_encryption_enabled_bucket : true
-    error_message = "If passing a value for 'existing_kms_key_crn', you should set 'kms_encryption_enabled_bucket' to true."
-  }
-
-  validation {
-    condition     = var.kms_encryption_enabled_bucket ? ((var.existing_kms_key_crn != null || var.existing_kms_instance_crn != null) ? true : false) : true
-    error_message = "Either 'existing_kms_key_crn' or 'existing_kms_instance_crn' is required if 'kms_encryption_enabled_bucket' is set to true."
-  }
-}
-
 variable "existing_kms_instance_crn" {
   type        = string
   default     = null
@@ -236,16 +199,6 @@ variable "existing_kms_key_crn" {
     error_message = "A value should not be passed for 'existing_kms_instance_crn' when passing an existing key value using the 'existing_kms_key_crn' input."
   }
 
-}
-
-variable "kms_endpoint_type" {
-  type        = string
-  description = "The endpoint for communicating with the KMS instance. Possible values: `public`, `private`. Applies only if `kms_encryption_enabled_bucket` is true"
-  default     = "private"
-  validation {
-    condition     = can(regex("public|private", var.kms_endpoint_type))
-    error_message = "The kms_endpoint_type value must be 'public' or 'private'."
-  }
 }
 
 variable "scc_cos_key_ring_name" {
@@ -332,16 +285,6 @@ variable "skip_cos_kms_iam_auth_policy" {
   type        = bool
   description = "Set to `true` to skip the creation of an IAM authorization policy that permits the Object Storage instance created to read the encryption key from the KMS instance. If set to false, pass in a value for the KMS instance in the `existing_kms_instance_crn` variable. If a value is specified for `ibmcloud_kms_api_key`, the policy is created in the KMS account. Applies only if `existing_scc_instance_crn` is not provided."
   default     = false
-}
-
-variable "management_endpoint_type_for_bucket" {
-  description = "The type of endpoint for the IBM Terraform provider to use to manage Object Storage buckets. Possible values: `public`, `private`m `direct`. If you specify `private`, enable virtual routing and forwarding in your account, and the Terraform runtime must have access to the the IBM Cloud private network. Applies only if `existing_scc_instance_crn` is not provided."
-  type        = string
-  default     = "private"
-  validation {
-    condition     = contains(["public", "private", "direct"], var.management_endpoint_type_for_bucket)
-    error_message = "The specified management_endpoint_type_for_bucket is not a valid selection!"
-  }
 }
 
 variable "existing_monitoring_crn" {
