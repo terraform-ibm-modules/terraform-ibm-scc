@@ -22,35 +22,16 @@ This solution supports provisioning and configuring the following infrastructure
 | Name | Version |
 |------|---------|
 | <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) | >= 1.9.0 |
-| <a name="requirement_ibm"></a> [ibm](#requirement\_ibm) | 1.76.1 |
-| <a name="requirement_time"></a> [time](#requirement\_time) | 0.12.1 |
 
 ### Modules
 
 | Name | Source | Version |
 |------|--------|---------|
-| <a name="module_buckets"></a> [buckets](#module\_buckets) | terraform-ibm-modules/cos/ibm//modules/buckets | 8.19.8 |
-| <a name="module_existing_cos_crn_parser"></a> [existing\_cos\_crn\_parser](#module\_existing\_cos\_crn\_parser) | terraform-ibm-modules/common-utilities/ibm//modules/crn-parser | 1.1.0 |
-| <a name="module_existing_en_crn_parser"></a> [existing\_en\_crn\_parser](#module\_existing\_en\_crn\_parser) | terraform-ibm-modules/common-utilities/ibm//modules/crn-parser | 1.1.0 |
-| <a name="module_existing_kms_crn_parser"></a> [existing\_kms\_crn\_parser](#module\_existing\_kms\_crn\_parser) | terraform-ibm-modules/common-utilities/ibm//modules/crn-parser | 1.1.0 |
-| <a name="module_existing_kms_key_crn_parser"></a> [existing\_kms\_key\_crn\_parser](#module\_existing\_kms\_key\_crn\_parser) | terraform-ibm-modules/common-utilities/ibm//modules/crn-parser | 1.1.0 |
-| <a name="module_existing_scc_crn_parser"></a> [existing\_scc\_crn\_parser](#module\_existing\_scc\_crn\_parser) | terraform-ibm-modules/common-utilities/ibm//modules/crn-parser | 1.1.0 |
-| <a name="module_kms"></a> [kms](#module\_kms) | terraform-ibm-modules/kms-all-inclusive/ibm | 4.21.2 |
-| <a name="module_resource_group"></a> [resource\_group](#module\_resource\_group) | terraform-ibm-modules/resource-group/ibm | 1.1.6 |
-| <a name="module_scc"></a> [scc](#module\_scc) | ../.. | n/a |
-| <a name="module_scc_attachment"></a> [scc\_attachment](#module\_scc\_attachment) | ../../modules/attachment | n/a |
+| <a name="module_scc_da"></a> [scc\_da](#module\_scc\_da) | ../fully-configurable | n/a |
 
 ### Resources
 
-| Name | Type |
-|------|------|
-| [ibm_en_subscription_email.email_subscription](https://registry.terraform.io/providers/IBM-Cloud/ibm/1.76.1/docs/resources/en_subscription_email) | resource |
-| [ibm_en_topic.en_topic](https://registry.terraform.io/providers/IBM-Cloud/ibm/1.76.1/docs/resources/en_topic) | resource |
-| [ibm_iam_authorization_policy.cos_kms_policy](https://registry.terraform.io/providers/IBM-Cloud/ibm/1.76.1/docs/resources/iam_authorization_policy) | resource |
-| [ibm_scc_scope.scc_scopes](https://registry.terraform.io/providers/IBM-Cloud/ibm/1.76.1/docs/resources/scc_scope) | resource |
-| [time_sleep.wait_for_authorization_policy](https://registry.terraform.io/providers/hashicorp/time/0.12.1/docs/resources/sleep) | resource |
-| [time_sleep.wait_for_scc](https://registry.terraform.io/providers/hashicorp/time/0.12.1/docs/resources/sleep) | resource |
-| [ibm_en_destinations.en_destinations](https://registry.terraform.io/providers/IBM-Cloud/ibm/1.76.1/docs/data-sources/en_destinations) | data source |
+No resources.
 
 ### Inputs
 
@@ -72,11 +53,7 @@ This solution supports provisioning and configuring the following infrastructure
 | <a name="input_force_delete_kms_key"></a> [force\_delete\_kms\_key](#input\_force\_delete\_kms\_key) | If creating a new KMS key, toggle whether is should be force deleted or not on undeploy. | `bool` | `false` | no |
 | <a name="input_ibmcloud_api_key"></a> [ibmcloud\_api\_key](#input\_ibmcloud\_api\_key) | The IBM Cloud API key used to provision resources. | `string` | n/a | yes |
 | <a name="input_ibmcloud_kms_api_key"></a> [ibmcloud\_kms\_api\_key](#input\_ibmcloud\_kms\_api\_key) | The IBM Cloud API key that can create a root key and key ring in the key management service (KMS) instance. If not specified, the 'ibmcloud\_api\_key' variable is used. Specify this key if the instance in `existing_kms_instance_crn` is in an account that's different from the Security and Compliance Centre instance. Leave this input empty if the same account owns both instances. | `string` | `null` | no |
-| <a name="input_kms_encryption_enabled_bucket"></a> [kms\_encryption\_enabled\_bucket](#input\_kms\_encryption\_enabled\_bucket) | Set to true to enable KMS encryption on the Object Storage bucket created for the Security and Compliance Center instance. When set to true, a value must be passed for either `existing_kms_key_crn` or `existing_kms_instance_crn` (to create a new key). Can not be set to true if passing a value for `existing_scc_instance_crn`. | `bool` | `false` | no |
-| <a name="input_kms_endpoint_type"></a> [kms\_endpoint\_type](#input\_kms\_endpoint\_type) | The endpoint for communicating with the KMS instance. Possible values: `public`, `private`. Applies only if `kms_encryption_enabled_bucket` is true | `string` | `"private"` | no |
-| <a name="input_management_endpoint_type_for_bucket"></a> [management\_endpoint\_type\_for\_bucket](#input\_management\_endpoint\_type\_for\_bucket) | The type of endpoint for the IBM Terraform provider to use to manage Object Storage buckets. Possible values: `public`, `private`m `direct`. If you specify `private`, enable virtual routing and forwarding in your account, and the Terraform runtime must have access to the the IBM Cloud private network. Applies only if `existing_scc_instance_crn` is not provided. | `string` | `"private"` | no |
 | <a name="input_prefix"></a> [prefix](#input\_prefix) | The prefix to add to all resources that this solution creates (e.g `prod`, `test`, `dev`). To not use any prefix value, you can set this value to `null` or an empty string. | `string` | n/a | yes |
-| <a name="input_provider_visibility"></a> [provider\_visibility](#input\_provider\_visibility) | Set the visibility value for the IBM terraform provider. Supported values are `public`, `private`, `public-and-private`. [Learn more](https://registry.terraform.io/providers/IBM-Cloud/ibm/latest/docs/guides/custom-service-endpoints). | `string` | `"private"` | no |
 | <a name="input_scc_cos_bucket_access_tags"></a> [scc\_cos\_bucket\_access\_tags](#input\_scc\_cos\_bucket\_access\_tags) | The list of access tags to add to the Security and Compliance Center Object Storage bucket. Applies only if `existing_scc_instance_crn` is not provided. | `list(string)` | `[]` | no |
 | <a name="input_scc_cos_bucket_class"></a> [scc\_cos\_bucket\_class](#input\_scc\_cos\_bucket\_class) | The storage class of the newly provisioned Security and Compliance Center Object Storage bucket. Possible values: `standard`, `vault`, `cold`, `smart`, `onerate_active`. [Learn more](https://cloud.ibm.com/docs/cloud-object-storage?topic=cloud-object-storage-classes). Applies only if `existing_scc_instance_crn` is not provided. | `string` | `"smart"` | no |
 | <a name="input_scc_cos_bucket_name"></a> [scc\_cos\_bucket\_name](#input\_scc\_cos\_bucket\_name) | The name for the Security and Compliance Center Object Storage bucket. Bucket names must globally unique. If `add_bucket_name_suffix` is true, a 4-character string is added to this name to  ensure it's globally unique. If a prefix input variable is specified, the prefix is added to the name in the `<prefix>-<name>` format. Applies only if `existing_scc_instance_crn` is not provided. | `string` | `"scc-cos-bucket"` | no |
