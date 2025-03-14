@@ -156,7 +156,7 @@ func TestExistingKeyFullyConfigurable(t *testing.T) {
 	options := testschematic.TestSchematicOptionsDefault(&testschematic.TestSchematicOptions{
 		Testing: t,
 		Region:  region,
-		Prefix:  "scc-da-exist-key",
+		Prefix:  "scc-key",
 		TarIncludePatterns: []string{
 			"*.tf",
 			"modules/*/*.tf",
