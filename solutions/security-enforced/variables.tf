@@ -168,6 +168,11 @@ variable "existing_kms_instance_crn" {
     condition     = var.existing_kms_instance_crn != null ? var.existing_scc_instance_crn == null : true
     error_message = "A value should not be passed for 'existing_kms_instance_crn' when passing an existing SCC instance using the 'existing_scc_instance_crn' input."
   }
+
+  validation {
+    condition     = var.existing_kms_instance_crn == null ? var.existing_kms_instance_crn != null : true
+    error_message = "A value must be passed for either 'existing_kms_instance_crn' (to create a new key) or 'existing_kms_key_crn' (to use existing key) to encrypt the COS bucket."
+  }
 }
 
 variable "force_delete_kms_key" {
@@ -199,6 +204,10 @@ variable "existing_kms_key_crn" {
     error_message = "A value should not be passed for 'existing_kms_instance_crn' when passing an existing key value using the 'existing_kms_key_crn' input."
   }
 
+  validation {
+    condition     = var.existing_kms_key_crn == null ? var.existing_kms_instance_crn != null : true
+    error_message = "A value must be passed for either 'existing_kms_instance_crn' (to create a new key) or 'existing_kms_key_crn' (to use existing key) to encrypt the COS bucket."
+  }
 }
 
 variable "scc_cos_key_ring_name" {
