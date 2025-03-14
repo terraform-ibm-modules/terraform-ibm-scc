@@ -175,7 +175,7 @@ func TestExistingKeyFullyConfigurable(t *testing.T) {
 		{Name: "scc_instance_resource_tags", Value: options.Tags, DataType: "list(string)"},
 		{Name: "prefix", Value: options.Prefix, DataType: "string"},
 		{Name: "existing_cos_instance_crn", Value: permanentResources["general_test_storage_cos_instance_crn"], DataType: "string"},
-		{Name: "existing_cos_instance_crn", Value: permanentResources["hpcs_south_root_key_crn"], DataType: "string"},
+		{Name: "existing_kms_key_crn", Value: permanentResources["hpcs_south_root_key_crn"], DataType: "string"},
 		{Name: "kms_encryption_enabled_bucket", Value: true, DataType: "bool"},
 	}
 
