@@ -27,18 +27,18 @@ module "existing_kms_key_crn_parser" {
 }
 
 locals {
-  prefix                = var.prefix != null ? (var.prefix != "" ? var.prefix : null) : null
+  prefix                = (var.prefix != null && trimspace(var.prefix) != "" ? "${var.prefix}-" : "")
   kms_region            = var.existing_kms_instance_crn != null ? module.existing_kms_crn_parser[0].region : var.existing_kms_key_crn != null ? module.existing_kms_key_crn_parser[0].region : null
   existing_kms_guid     = var.existing_kms_instance_crn != null ? module.existing_kms_crn_parser[0].service_instance : var.existing_kms_key_crn != null ? module.existing_kms_key_crn_parser[0].service_instance : null
   kms_service_name      = var.existing_kms_instance_crn != null ? module.existing_kms_crn_parser[0].service_name : var.existing_kms_key_crn != null ? module.existing_kms_key_crn_parser[0].service_name : null
   kms_account_id        = var.existing_kms_instance_crn != null ? module.existing_kms_crn_parser[0].account_id : var.existing_kms_key_crn != null ? module.existing_kms_key_crn_parser[0].account_id : null
   kms_key_id            = var.existing_kms_instance_crn != null ? module.kms[0].keys[format("%s.%s", local.scc_cos_key_ring_name, local.scc_cos_key_name)].key_id : var.existing_kms_key_crn != null ? module.existing_kms_key_crn_parser[0].resource : null
-  scc_cos_key_ring_name = try("${local.prefix}-${var.scc_cos_key_ring_name}", var.scc_cos_key_ring_name)
-  scc_cos_key_name      = try("${local.prefix}-${var.scc_cos_key_name}", var.scc_cos_key_name)
+  scc_cos_key_ring_name = "${local.prefix}${var.scc_cos_key_ring_name}"
+  scc_cos_key_name      = "${local.prefix}${var.scc_cos_key_name}"
   scc_cos_bucket_region = var.scc_cos_bucket_region != null && var.scc_cos_bucket_region != "" ? var.scc_cos_bucket_region : var.scc_region
-  scc_instance_name     = try("${local.prefix}-${var.scc_instance_name}", var.scc_instance_name)
+  scc_instance_name     = "${local.prefix}${var.scc_instance_name}"
   # Bucket name to be passed to the COS module to create a bucket
-  created_scc_cos_bucket_name = try("${local.prefix}-${var.scc_cos_bucket_name}", var.scc_cos_bucket_name)
+  created_scc_cos_bucket_name = "${local.prefix}${var.scc_cos_bucket_name}"
   # Final COS bucket name after being created by COS module (as it might have suffix added to it)
   scc_cos_bucket_name              = var.existing_scc_instance_crn == null ? module.buckets[0].buckets[local.created_scc_cos_bucket_name].bucket_name : null
   create_cross_account_auth_policy = var.existing_scc_instance_crn == null ? !var.skip_cos_kms_iam_auth_policy && var.ibmcloud_kms_api_key == null ? false : (module.scc.account_id != module.existing_kms_crn_parser[0].account_id) : false
