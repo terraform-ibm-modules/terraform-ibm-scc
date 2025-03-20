@@ -489,6 +489,10 @@
               }
             },
             {
+              "key": "existing_kms_instance_crn",
+              "required": true
+            },
+            {
               "key": "existing_cos_instance_crn",
               "required": true
             },
@@ -664,9 +668,6 @@
             },
             {
               "key": "skip_scc_cos_iam_auth_policy"
-            },
-            {
-              "key": "existing_kms_instance_crn"
             },
             {
               "key": "existing_kms_key_crn"

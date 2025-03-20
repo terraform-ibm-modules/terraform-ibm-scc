@@ -12,6 +12,7 @@ variable "existing_resource_group_name" {
   type        = string
   description = "The name of an existing resource group to provision resource in."
   default     = "Default"
+  nullable    = false
 }
 
 variable "prefix" {
@@ -33,6 +34,7 @@ variable "provider_visibility" {
   description = "Set the visibility value for the IBM terraform provider. Supported values are `public`, `private`, `public-and-private`. [Learn more](https://registry.terraform.io/providers/IBM-Cloud/ibm/latest/docs/guides/custom-service-endpoints)."
   type        = string
   default     = "private"
+  nullable    = false
 
   validation {
     condition     = contains(["public", "private", "public-and-private"], var.provider_visibility)
@@ -48,18 +50,21 @@ variable "scc_instance_name" {
   type        = string
   default     = "scc"
   description = "The name for the Security and Compliance Center instance provisioned by this solution. If a prefix input variable is specified, the prefix is added to the name in the `<prefix>-<name>` format. Applies only if `existing_scc_instance_crn` is not provided."
+  nullable    = false
 }
 
 variable "scc_region" {
   type        = string
   default     = "us-south"
   description = "The region to provision Security and Compliance Center resources in. If passing a value for `existing_scc_instance_crn`, ensure to select the region of the existing instance. Applies only if `existing_scc_instance_crn` is not provided."
+  nullable    = false
 }
 
 variable "scc_service_plan" {
   type        = string
   description = "The pricing plan to use when creating a new Security Compliance Center instance. Possible values: `security-compliance-center-standard-plan`, `security-compliance-center-trial-plan`."
   default     = "security-compliance-center-standard-plan"
+  nullable    = false
   validation {
     condition     = contains(["security-compliance-center-standard-plan", "security-compliance-center-trial-plan"], var.scc_service_plan)
     error_message = "Allowed values for scc_service_plan are \"security-compliance-center-standard-plan\" and \"security-compliance-center-trial-plan\"."
@@ -90,7 +95,7 @@ variable "custom_integrations" {
     provider_name    = string
     integration_name = string
   }))
-  description = "A list of custom provider integrations to associate with the Security and Compliance Center instance. [Learn more](https://github.com/terraform-ibm-modules/terraform-ibm-scc-da/tree/main/solutions/fully-configurable/custom_integrations.md)."
+  description = "A list of custom provider integrations to associate with the Security and Compliance Center instance. [Learn more](https://github.com/terraform-ibm-modules/terraform-ibm-scc/tree/main/solutions/fully-configurable/custom_integrations.md)."
   default     = []
   # Since this list is used in a for_each, add nullable = false to prevent error if user passes null
   nullable = false
@@ -112,7 +117,7 @@ variable "scopes" {
   }))
   default     = {}
   nullable    = false
-  description = "A key map of scopes to create. The key name of each scope can be referenced in the attachments input using the 'scope_key_references' attribute. [Learn more](https://github.com/terraform-ibm-modules/terraform-ibm-scc-da/tree/main/solutions/fully-configurable/scopes_attachments.md)."
+  description = "A key map of scopes to create. The key name of each scope can be referenced in the attachments input using the 'scope_key_references' attribute. [Learn more](https://github.com/terraform-ibm-modules/terraform-ibm-scc/tree/main/solutions/fully-configurable/scopes_attachments.md)."
 }
 
 variable "attachments" {
@@ -131,7 +136,8 @@ variable "attachments" {
     })
   }))
   default     = []
-  description = "A list of attachments to create. A value must be passed for 'scope_ids' (to use pre-existing scopes) and/or 'scope_key_references' (to use scopes created in the 'scopes' input). [Learn more](https://github.com/terraform-ibm-modules/terraform-ibm-scc-da/tree/main/solutions/fully-configurable/scopes_attachments.md)."
+  nullable    = false
+  description = "A list of attachments to create. A value must be passed for 'scope_ids' (to use pre-existing scopes) and/or 'scope_key_references' (to use scopes created in the 'scopes' input). [Learn more](https://github.com/terraform-ibm-modules/terraform-ibm-scc/tree/main/solutions/fully-configurable/scopes_attachments.md)."
 
   validation {
     condition = alltrue([for attachments in var.attachments :
@@ -155,6 +161,7 @@ variable "existing_scc_workload_protection_instance_crn" {
 variable "skip_scc_workload_protection_iam_auth_policy" {
   type        = bool
   default     = false
+  nullable    = false
   description = "Set to `true` to skip creating an IAM authorization policy that permits the Security and Compliance Center instance to read from the Workload Protection instance. Applies only if a value is passed for `existing_scc_workload_protection_instance_crn`."
 }
 
@@ -166,6 +173,7 @@ variable "kms_encryption_enabled_bucket" {
   description = "Set to true to enable KMS encryption on the Object Storage bucket created for the Security and Compliance Center instance. When set to true, a value must be passed for either `existing_kms_key_crn` or `existing_kms_instance_crn` (to create a new key). Can not be set to true if passing a value for `existing_scc_instance_crn`."
   type        = bool
   default     = false
+  nullable    = false
 
   validation {
     condition     = var.kms_encryption_enabled_bucket ? var.existing_scc_instance_crn == null : true
@@ -210,6 +218,7 @@ variable "existing_kms_instance_crn" {
 variable "force_delete_kms_key" {
   type        = bool
   default     = false
+  nullable    = false
   description = "If creating a new KMS key, toggle whether is should be force deleted or not on undeploy."
 }
 
@@ -242,6 +251,7 @@ variable "kms_endpoint_type" {
   type        = string
   description = "The endpoint for communicating with the KMS instance. Possible values: `public`, `private`. Applies only if `kms_encryption_enabled_bucket` is true"
   default     = "private"
+  nullable    = false
   validation {
     condition     = can(regex("public|private", var.kms_endpoint_type))
     error_message = "The kms_endpoint_type value must be 'public' or 'private'."
@@ -325,12 +335,14 @@ variable "scc_cos_bucket_class" {
 variable "skip_scc_cos_iam_auth_policy" {
   type        = bool
   default     = false
+  nullable    = false
   description = "Set to `true` to skip creation of an IAM authorization policy that permits the Security and Compliance Center to write to the Object Storage instance created by this solution. Applies only if `existing_scc_instance_crn` is not provided."
 }
 
 variable "skip_cos_kms_iam_auth_policy" {
   type        = bool
   description = "Set to `true` to skip the creation of an IAM authorization policy that permits the Object Storage instance created to read the encryption key from the KMS instance. If set to false, pass in a value for the KMS instance in the `existing_kms_instance_crn` variable. If a value is specified for `ibmcloud_kms_api_key`, the policy is created in the KMS account. Applies only if `existing_scc_instance_crn` is not provided."
+  nullable    = false
   default     = false
 }
 
@@ -417,6 +429,7 @@ variable "scc_instance_cbr_rules" {
       }))
     })))
   }))
-  description = "(Optional, list) List of context-based restrictions rules to create. [Learn more](https://github.com/terraform-ibm-modules/terraform-ibm-scc-da/tree/main/solutions/fully-configurable/DA-cbr_rules.md)."
+  description = "(Optional, list) List of context-based restrictions rules to create. [Learn more](https://github.com/terraform-ibm-modules/terraform-ibm-scc/tree/main/solutions/fully-configurable/DA-cbr_rules.md)."
   default     = []
+  nullable    = false
 }
