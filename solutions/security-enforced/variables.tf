@@ -12,6 +12,7 @@ variable "existing_resource_group_name" {
   type        = string
   description = "The name of an existing resource group to provision resource in."
   default     = "Default"
+  nullable    = false
 }
 
 variable "prefix" {
@@ -37,12 +38,14 @@ variable "scc_instance_name" {
   type        = string
   default     = "scc"
   description = "The name for the Security and Compliance Center instance provisioned by this solution. If a prefix input variable is specified, the prefix is added to the name in the `<prefix>-<name>` format. Applies only if `existing_scc_instance_crn` is not provided."
+  nullable    = false
 }
 
 variable "scc_region" {
   type        = string
   default     = "us-south"
   description = "The region to provision Security and Compliance Center resources in. If passing a value for `existing_scc_instance_crn`, ensure to select the region of the existing instance. Applies only if `existing_scc_instance_crn` is not provided."
+  nullable    = false
 }
 
 variable "scc_service_plan" {
@@ -79,7 +82,7 @@ variable "custom_integrations" {
     provider_name    = string
     integration_name = string
   }))
-  description = "A list of custom provider integrations to associate with the Security and Compliance Center instance. [Learn more](https://github.com/terraform-ibm-modules/terraform-ibm-scc-da/tree/main/solutions/fully-configurable/custom_integrations.md)."
+  description = "A list of custom provider integrations to associate with the Security and Compliance Center instance. [Learn more](https://github.com/terraform-ibm-modules/terraform-ibm-scc/tree/main/solutions/fully-configurable/custom_integrations.md)."
   default     = []
   # Since this list is used in a for_each, add nullable = false to prevent error if user passes null
   nullable = false
@@ -101,7 +104,7 @@ variable "scopes" {
   }))
   default     = {}
   nullable    = false
-  description = "A key map of scopes to create. The key name of each scope can be referenced in the attachments input using the 'scope_key_references' attribute. [Learn more](https://github.com/terraform-ibm-modules/terraform-ibm-scc-da/tree/main/solutions/fully-configurable/scopes_attachments.md)."
+  description = "A key map of scopes to create. The key name of each scope can be referenced in the attachments input using the 'scope_key_references' attribute. [Learn more](https://github.com/terraform-ibm-modules/terraform-ibm-scc/tree/main/solutions/fully-configurable/scopes_attachments.md)."
 }
 
 variable "attachments" {
@@ -120,7 +123,8 @@ variable "attachments" {
     })
   }))
   default     = []
-  description = "A list of attachments to create. A value must be passed for 'scope_ids' (to use pre-existing scopes) and/or 'scope_key_references' (to use scopes created in the 'scopes' input). [Learn more](https://github.com/terraform-ibm-modules/terraform-ibm-scc-da/tree/main/solutions/fully-configurable/scopes_attachments.md)."
+  nullable    = false
+  description = "A list of attachments to create. A value must be passed for 'scope_ids' (to use pre-existing scopes) and/or 'scope_key_references' (to use scopes created in the 'scopes' input). [Learn more](https://github.com/terraform-ibm-modules/terraform-ibm-scc/tree/main/solutions/fully-configurable/scopes_attachments.md)."
 
   validation {
     condition = alltrue([for attachments in var.attachments :
@@ -144,6 +148,7 @@ variable "existing_scc_workload_protection_instance_crn" {
 variable "skip_scc_workload_protection_iam_auth_policy" {
   type        = bool
   default     = false
+  nullable    = false
   description = "Set to `true` to skip creating an IAM authorization policy that permits the Security and Compliance Center instance to read from the Workload Protection instance. Applies only if a value is passed for `existing_scc_workload_protection_instance_crn`."
 }
 
@@ -178,6 +183,7 @@ variable "existing_kms_instance_crn" {
 variable "force_delete_kms_key" {
   type        = bool
   default     = false
+  nullable    = false
   description = "If creating a new KMS key, toggle whether is should be force deleted or not on undeploy."
 }
 
@@ -287,12 +293,14 @@ variable "scc_cos_bucket_class" {
 variable "skip_scc_cos_iam_auth_policy" {
   type        = bool
   default     = false
+  nullable    = false
   description = "Set to `true` to skip creation of an IAM authorization policy that permits the Security and Compliance Center to write to the Object Storage instance created by this solution. Applies only if `existing_scc_instance_crn` is not provided."
 }
 
 variable "skip_cos_kms_iam_auth_policy" {
   type        = bool
   description = "Set to `true` to skip the creation of an IAM authorization policy that permits the Object Storage instance created to read the encryption key from the KMS instance. If set to false, pass in a value for the KMS instance in the `existing_kms_instance_crn` variable. If a value is specified for `ibmcloud_kms_api_key`, the policy is created in the KMS account. Applies only if `existing_scc_instance_crn` is not provided."
+  nullable    = false
   default     = false
 }
 
@@ -369,6 +377,7 @@ variable "scc_instance_cbr_rules" {
       }))
     })))
   }))
-  description = "(Optional, list) List of context-based restrictions rules to create. [Learn more](https://github.com/terraform-ibm-modules/terraform-ibm-scc-da/tree/main/solutions/fully-configurable/DA-cbr_rules.md)."
+  description = "(Optional, list) List of context-based restrictions rules to create. [Learn more](https://github.com/terraform-ibm-modules/terraform-ibm-scc/tree/main/solutions/fully-configurable/DA-cbr_rules.md)."
   default     = []
+  nullable    = false
 }
