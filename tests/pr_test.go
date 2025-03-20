@@ -287,7 +287,7 @@ func TestUpgradeSecurityEnforced(t *testing.T) {
 	// Provision COS, Sysdig, WP and EN first
 	// ------------------------------------------------------------------------------------
 
-	prefix := fmt.Sprintf("scc-da-upg-%s", strings.ToLower(random.UniqueId()))
+	prefix := fmt.Sprintf("da-upg-%s", strings.ToLower(random.UniqueId()))
 	realTerraformDir := preReqDir
 	tempTerraformDir, _ := files.CopyTerraformFolderToTemp(realTerraformDir, fmt.Sprintf(prefix+"-%s", strings.ToLower(random.UniqueId())))
 	tags := common.GetTagsFromTravis()
