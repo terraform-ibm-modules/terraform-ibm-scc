@@ -41,7 +41,7 @@ locals {
   created_scc_cos_bucket_name = "${local.prefix}${var.scc_cos_bucket_name}"
   # Final COS bucket name after being created by COS module (as it might have suffix added to it)
   scc_cos_bucket_name              = var.existing_scc_instance_crn == null ? module.buckets[0].buckets[local.created_scc_cos_bucket_name].bucket_name : null
-  create_cross_account_auth_policy = var.existing_scc_instance_crn == null ? !var.skip_cos_kms_iam_auth_policy && var.ibmcloud_kms_api_key == null ? false : (module.scc.account_id != module.existing_kms_crn_parser[0].account_id) : false
+  create_cross_account_auth_policy = var.existing_scc_instance_crn == null ? !var.skip_cos_kms_iam_auth_policy && var.ibmcloud_kms_api_key == null ? false : (module.scc.account_id != local.kms_account_id) : false
 }
 
 # Create IAM Authorization Policy to allow COS to access KMS for the encryption key, if cross account KMS is passed in
