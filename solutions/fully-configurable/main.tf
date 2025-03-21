@@ -27,7 +27,7 @@ module "existing_kms_key_crn_parser" {
 }
 
 locals {
-  prefix                = (var.prefix != null && trimspace(var.prefix) != "" ? "${var.prefix}-" : "")
+  prefix                = var.prefix != null ? trimspace(var.prefix) != "" ? "${var.prefix}-" : "" : ""
   kms_region            = var.existing_kms_instance_crn != null ? module.existing_kms_crn_parser[0].region : var.existing_kms_key_crn != null ? module.existing_kms_key_crn_parser[0].region : null
   existing_kms_guid     = var.existing_kms_instance_crn != null ? module.existing_kms_crn_parser[0].service_instance : var.existing_kms_key_crn != null ? module.existing_kms_key_crn_parser[0].service_instance : null
   kms_service_name      = var.existing_kms_instance_crn != null ? module.existing_kms_crn_parser[0].service_name : var.existing_kms_key_crn != null ? module.existing_kms_key_crn_parser[0].service_name : null
