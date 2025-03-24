@@ -16,7 +16,7 @@ module "resource_group" {
 
 module "cos" {
   source                 = "terraform-ibm-modules/cos/ibm"
-  version                = "8.20.1"
+  version                = "8.21.3"
   cos_instance_name      = "${var.prefix}-cos"
   kms_encryption_enabled = false
   retention_enabled      = false
@@ -30,7 +30,7 @@ module "cos" {
 
 module "scc" {
   source            = "terraform-ibm-modules/scc/ibm"
-  version           = "2.0.1"
+  version           = "2.1.3"
   instance_name     = var.prefix
   region            = var.region
   resource_group_id = module.resource_group.resource_group_id
@@ -45,7 +45,7 @@ module "scc" {
 
 module "scc_wp" {
   source            = "terraform-ibm-modules/scc-workload-protection/ibm"
-  version           = "1.4.3"
+  version           = "1.5.3"
   name              = var.prefix
   region            = var.region
   resource_group_id = module.resource_group.resource_group_id
