@@ -30,7 +30,7 @@ module "cos" {
 
 module "event_notification" {
   source            = "terraform-ibm-modules/event-notifications/ibm"
-  version           = "1.19.11"
+  version           = "1.19.12"
   resource_group_id = module.resource_group.resource_group_id
   name              = "${var.prefix}-en"
   tags              = var.resource_tags
@@ -45,7 +45,7 @@ module "event_notification" {
 
 module "scc_wp" {
   source            = "terraform-ibm-modules/scc-workload-protection/ibm"
-  version           = "1.5.5"
+  version           = "1.5.6"
   name              = "${var.prefix}-wp"
   region            = var.region
   resource_group_id = module.resource_group.resource_group_id
