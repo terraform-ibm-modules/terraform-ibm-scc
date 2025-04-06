@@ -100,7 +100,7 @@ module "kms" {
   }
   count                       = var.existing_scc_instance_crn == null && var.kms_encryption_enabled_bucket && var.existing_kms_key_crn == null ? 1 : 0
   source                      = "terraform-ibm-modules/kms-all-inclusive/ibm"
-  version                     = "4.21.5"
+  version                     = "4.21.6"
   create_key_protect_instance = false
   region                      = local.kms_region
   existing_kms_instance_crn   = var.existing_kms_instance_crn
