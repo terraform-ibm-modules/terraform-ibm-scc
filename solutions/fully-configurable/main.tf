@@ -100,7 +100,7 @@ module "kms" {
   }
   count                       = var.existing_scc_instance_crn == null && var.kms_encryption_enabled_bucket && var.existing_kms_key_crn == null ? 1 : 0
   source                      = "terraform-ibm-modules/kms-all-inclusive/ibm"
-  version                     = "4.21.6"
+  version                     = "4.21.10"
   create_key_protect_instance = false
   region                      = local.kms_region
   existing_kms_instance_crn   = var.existing_kms_instance_crn
@@ -171,7 +171,7 @@ module "buckets" {
   count          = var.existing_scc_instance_crn == null ? 1 : 0
   depends_on     = [time_sleep.wait_for_authorization_policy[0]]
   source         = "terraform-ibm-modules/cos/ibm//modules/buckets"
-  version        = "8.21.8"
+  version        = "8.21.11"
   bucket_configs = local.bucket_config
 }
 
