@@ -30,7 +30,7 @@ module "cos" {
 
 module "scc" {
   source            = "terraform-ibm-modules/scc/ibm"
-  version           = "2.1.15"
+  version           = "2.1.16"
   instance_name     = var.prefix
   region            = var.region
   resource_group_id = module.resource_group.resource_group_id
