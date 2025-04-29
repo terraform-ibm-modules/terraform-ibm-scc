@@ -99,15 +99,4 @@ resource "ibm_scc_profile_attachment" "profile_attachment" {
       threshold_limit    = var.notification_threshold_limit
     }
   }
-
-  lifecycle {
-    replace_triggered_by = [terraform_data.replacement]
-  }
-
-}
-
-# workaround for https://github.com/IBM-Cloud/terraform-provider-ibm/issues/6044
-# approach based on https://developer.hashicorp.com/terraform/language/resources/terraform-data#example-usage-data-for-replace_triggered_by
-resource "terraform_data" "replacement" {
-  input = var.scope_ids
 }
