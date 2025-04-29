@@ -42,7 +42,6 @@ No modules.
 | Name | Type |
 |------|------|
 | [ibm_scc_profile_attachment.profile_attachment](https://registry.terraform.io/providers/IBM-Cloud/ibm/latest/docs/resources/scc_profile_attachment) | resource |
-| [terraform_data.replacement](https://registry.terraform.io/providers/hashicorp/terraform/latest/docs/resources/data) | resource |
 | [ibm_scc_profile.scc_profile](https://registry.terraform.io/providers/IBM-Cloud/ibm/latest/docs/data-sources/scc_profile) | data source |
 | [ibm_scc_profiles.scc_profiles](https://registry.terraform.io/providers/IBM-Cloud/ibm/latest/docs/data-sources/scc_profiles) | data source |
 
