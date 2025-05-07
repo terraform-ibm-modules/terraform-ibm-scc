@@ -209,7 +209,7 @@ func TestExistingKeyFullyConfigurable(t *testing.T) {
 			{Name: "existing_resource_group_name", Value: terraform.Output(t, existingTerraformOptions, "resource_group_name"), DataType: "string"},
 			{Name: "scc_region", Value: options.Region, DataType: "string"},
 			{Name: "scc_instance_resource_tags", Value: options.Tags, DataType: "list(string)"},
-			{Name: "prefix", Value: options.Prefix, DataType: "string"},
+			{Name: "prefix", Value: terraform.Output(t, existingTerraformOptions, "prefix"), DataType: "string"},
 			{Name: "existing_cos_instance_crn", Value: permanentResources["general_test_storage_cos_instance_crn"], DataType: "string"},
 			{Name: "existing_kms_key_crn", Value: terraform.Output(t, existingTerraformOptions, "kms_key_crn"), DataType: "string"},
 			{Name: "kms_encryption_enabled_bucket", Value: true, DataType: "bool"},
