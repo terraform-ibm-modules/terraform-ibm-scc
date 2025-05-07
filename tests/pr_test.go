@@ -153,34 +153,83 @@ func TestExistingKeyFullyConfigurable(t *testing.T) {
 
 	var region = validRegions[rand.Intn(len(validRegions))]
 
-	options := testschematic.TestSchematicOptionsDefault(&testschematic.TestSchematicOptions{
-		Testing: t,
-		Region:  region,
-		Prefix:  "scc-key",
-		TarIncludePatterns: []string{
-			"*.tf",
-			"modules/*/*.tf",
-			fullyConfigFlavorDir + "/*.tf",
+	// ------------------------------------------------------------------------------------
+	// Provision Key Protect + key first
+	// ------------------------------------------------------------------------------------
+
+	prefix := fmt.Sprintf("scc-%s", strings.ToLower(random.UniqueId()))
+	realTerraformDir := "./resources/kms-key"
+	tempTerraformDir, _ := files.CopyTerraformFolderToTemp(realTerraformDir, fmt.Sprintf(prefix+"-%s", strings.ToLower(random.UniqueId())))
+	tags := common.GetTagsFromTravis()
+
+	// Verify ibmcloud_api_key variable is set
+	checkVariable := "TF_VAR_ibmcloud_api_key"
+	val, present := os.LookupEnv(checkVariable)
+	require.True(t, present, checkVariable+" environment variable not set")
+	require.NotEqual(t, "", val, checkVariable+" environment variable is empty")
+
+	logger.Log(t, "Tempdir: ", tempTerraformDir)
+	existingTerraformOptions := terraform.WithDefaultRetryableErrors(t, &terraform.Options{
+		TerraformDir: tempTerraformDir,
+		Vars: map[string]interface{}{
+			"prefix":        prefix,
+			"region":        region,
+			"resource_tags": tags,
 		},
-		TemplateFolder:         fullyConfigFlavorDir,
-		Tags:                   []string{"scc-da-test"},
-		DeleteWorkspaceOnFail:  false,
-		WaitJobCompleteMinutes: 60,
+		// Set Upgrade to true to ensure latest version of providers and modules are used by terratest.
+		// This is the same as setting the -upgrade=true flag with terraform.
+		Upgrade: true,
 	})
 
-	options.TerraformVars = []testschematic.TestSchematicTerraformVar{
-		{Name: "ibmcloud_api_key", Value: options.RequiredEnvironmentVars["TF_VAR_ibmcloud_api_key"], DataType: "string", Secure: true},
-		{Name: "existing_resource_group_name", Value: resourceGroup, DataType: "string"},
-		{Name: "scc_region", Value: options.Region, DataType: "string"},
-		{Name: "scc_instance_resource_tags", Value: options.Tags, DataType: "list(string)"},
-		{Name: "prefix", Value: options.Prefix, DataType: "string"},
-		{Name: "existing_cos_instance_crn", Value: permanentResources["general_test_storage_cos_instance_crn"], DataType: "string"},
-		{Name: "existing_kms_key_crn", Value: permanentResources["hpcs_south_root_key_crn"], DataType: "string"},
-		{Name: "kms_encryption_enabled_bucket", Value: true, DataType: "bool"},
+	terraform.WorkspaceSelectOrNew(t, existingTerraformOptions, prefix)
+	_, existErr := terraform.InitAndApplyE(t, existingTerraformOptions)
+	if existErr != nil {
+		assert.True(t, existErr == nil, "Init and Apply of pre-req resources failed in TestFullyConfigurable test")
+	} else {
+		// ------------------------------------------------------------------------------------
+		// Deploy DA
+		// ------------------------------------------------------------------------------------
+		options := testschematic.TestSchematicOptionsDefault(&testschematic.TestSchematicOptions{
+			Testing: t,
+			Region:  region,
+			Prefix:  prefix,
+			TarIncludePatterns: []string{
+				"*.tf",
+				"modules/*/*.tf",
+				fullyConfigFlavorDir + "/*.tf",
+			},
+			TemplateFolder:         fullyConfigFlavorDir,
+			Tags:                   []string{"scc-da-test"},
+			DeleteWorkspaceOnFail:  false,
+			WaitJobCompleteMinutes: 60,
+		})
+
+		options.TerraformVars = []testschematic.TestSchematicTerraformVar{
+			{Name: "ibmcloud_api_key", Value: options.RequiredEnvironmentVars["TF_VAR_ibmcloud_api_key"], DataType: "string", Secure: true},
+			{Name: "existing_resource_group_name", Value: terraform.Output(t, existingTerraformOptions, "resource_group_name"), DataType: "string"},
+			{Name: "scc_region", Value: options.Region, DataType: "string"},
+			{Name: "scc_instance_resource_tags", Value: options.Tags, DataType: "list(string)"},
+			{Name: "prefix", Value: options.Prefix, DataType: "string"},
+			{Name: "existing_cos_instance_crn", Value: permanentResources["general_test_storage_cos_instance_crn"], DataType: "string"},
+			{Name: "existing_kms_key_crn", Value: terraform.Output(t, existingTerraformOptions, "kms_key_crn"), DataType: "string"},
+			{Name: "kms_encryption_enabled_bucket", Value: true, DataType: "bool"},
+		}
+
+		err := options.RunSchematicTest()
+		assert.Nil(t, err, "This should not have errored")
 	}
 
-	err := options.RunSchematicTest()
-	assert.Nil(t, err, "This should not have errored")
+	// Check if "DO_NOT_DESTROY_ON_FAILURE" is set
+	envVal, _ := os.LookupEnv("DO_NOT_DESTROY_ON_FAILURE")
+	// Destroy the temporary existing resources if required
+	if t.Failed() && strings.ToLower(envVal) == "true" {
+		fmt.Println("Terratest failed. Debug the test and delete resources manually.")
+	} else {
+		logger.Log(t, "START: Destroy (prereq resources)")
+		terraform.Destroy(t, existingTerraformOptions)
+		terraform.WorkspaceDelete(t, existingTerraformOptions, prefix)
+		logger.Log(t, "END: Destroy (prereq resources)")
+	}
 }
 
 // Test the security-enforced DA with defaults (pass KMS instance details and create new key)
