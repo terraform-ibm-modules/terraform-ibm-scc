@@ -29,7 +29,7 @@ module "cos" {
 
 module "scc_wp" {
   source            = "terraform-ibm-modules/scc-workload-protection/ibm"
-  version           = "1.5.10"
+  version           = "1.5.11"
   name              = var.prefix
   region            = var.region
   resource_group_id = module.resource_group.resource_group_id
