@@ -80,12 +80,12 @@
               "key": "existing_resource_group_name",
               "required": true,
               "custom_config": {
-                  "type": "resource_group",
-                  "grouping": "deployment",
-                  "original_grouping": "deployment",
-                  "config_constraints": {
-                      "identifier": "rg_name"
-                  }
+                "type": "resource_group",
+                "grouping": "deployment",
+                "original_grouping": "deployment",
+                "config_constraints": {
+                  "identifier": "rg_name"
+                }
               }
             },
             {
@@ -381,7 +381,6 @@
             }
           ],
           "architecture": {
-            "descriptions": "This architecture supports creating and configuring a Security and Compliance Center instance.",
             "features": [
               {
                 "title": "SCC instance creation",
@@ -478,12 +477,12 @@
               "key": "existing_resource_group_name",
               "required": true,
               "custom_config": {
-                  "type": "resource_group",
-                  "grouping": "deployment",
-                  "original_grouping": "deployment",
-                  "config_constraints": {
-                      "identifier": "rg_name"
-                  }
+                "type": "resource_group",
+                "grouping": "deployment",
+                "original_grouping": "deployment",
+                "config_constraints": {
+                  "identifier": "rg_name"
+                }
               }
             },
             {
@@ -730,7 +729,6 @@
             }
           ],
           "architecture": {
-            "descriptions": "This architecture supports creating and configuring a Security and Compliance Center instance.",
             "features": [
               {
                 "title": "SCC instance creation",
