@@ -16,7 +16,7 @@ module "resource_group" {
 
 module "cos" {
   source            = "terraform-ibm-modules/cos/ibm"
-  version           = "8.21.21"
+  version           = "8.21.24"
   resource_group_id = module.resource_group.resource_group_id
   cos_instance_name = "${var.prefix}-cos"
   cos_tags          = var.resource_tags
@@ -29,7 +29,7 @@ module "cos" {
 
 module "scc_wp" {
   source            = "terraform-ibm-modules/scc-workload-protection/ibm"
-  version           = "1.5.10"
+  version           = "1.5.12"
   name              = var.prefix
   region            = var.region
   resource_group_id = module.resource_group.resource_group_id
@@ -42,7 +42,7 @@ module "scc_wp" {
 
 module "cloud_monitoring" {
   source                  = "terraform-ibm-modules/observability-instances/ibm//modules/cloud_monitoring"
-  version                 = "3.5.2"
+  version                 = "3.5.3"
   resource_group_id       = module.resource_group.resource_group_id
   region                  = var.region
   instance_name           = "${var.prefix}-mon"
