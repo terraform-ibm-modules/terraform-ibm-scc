@@ -171,7 +171,7 @@ module "buckets" {
   count          = var.existing_scc_instance_crn == null ? 1 : 0
   depends_on     = [time_sleep.wait_for_authorization_policy[0]]
   source         = "terraform-ibm-modules/cos/ibm//modules/buckets"
-  version        = "8.21.24"
+  version        = "8.21.25"
   bucket_configs = local.bucket_config
 }
 

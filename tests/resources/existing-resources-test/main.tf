@@ -16,7 +16,7 @@ module "resource_group" {
 
 module "cos" {
   source                 = "terraform-ibm-modules/cos/ibm"
-  version                = "8.21.24"
+  version                = "8.21.25"
   cos_instance_name      = "${var.prefix}-cos"
   kms_encryption_enabled = false
   retention_enabled      = false
@@ -30,7 +30,7 @@ module "cos" {
 
 module "scc" {
   source            = "terraform-ibm-modules/scc/ibm"
-  version           = "2.1.18"
+  version           = "2.1.19"
   instance_name     = var.prefix
   region            = var.region
   resource_group_id = module.resource_group.resource_group_id
