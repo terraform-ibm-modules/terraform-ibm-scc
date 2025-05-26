@@ -16,7 +16,7 @@ module "resource_group" {
 module "cos" {
   count                  = var.existing_scc_instance_crn == null ? 1 : 0
   source                 = "terraform-ibm-modules/cos/ibm"
-  version                = "9.0.3"
+  version                = "9.0.4"
   cos_instance_name      = "${var.prefix}-cos"
   kms_encryption_enabled = false
   retention_enabled      = false
@@ -30,7 +30,7 @@ module "cos" {
 
 module "event_notification" {
   source            = "terraform-ibm-modules/event-notifications/ibm"
-  version           = "2.2.5"
+  version           = "2.3.6"
   resource_group_id = module.resource_group.resource_group_id
   name              = "${var.prefix}-en"
   tags              = var.resource_tags
@@ -45,7 +45,7 @@ module "event_notification" {
 
 module "scc_wp" {
   source            = "terraform-ibm-modules/scc-workload-protection/ibm"
-  version           = "1.5.12"
+  version           = "1.6.1"
   name              = "${var.prefix}-wp"
   region            = var.region
   resource_group_id = module.resource_group.resource_group_id
