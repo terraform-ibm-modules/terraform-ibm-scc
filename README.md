@@ -7,6 +7,12 @@
 [![Renovate enabled](https://img.shields.io/badge/renovate-enabled-brightgreen.svg)](https://renovatebot.com/)
 [![semantic-release](https://img.shields.io/badge/%20%20%F0%9F%93%A6%F0%9F%9A%80-semantic--release-e10079.svg)](https://github.com/semantic-release/semantic-release)
 
+---
+
+:warning: **Deprecated**: As of 16 June 2025, you cannot create new instances of Security and Compliance Center. All of the functionality is now available in the updated experience of [Security and Compliance Center Workload Protection](https://cloud.ibm.com/docs/workload-protection?topic=workload-protection-getting-started). The [terraform-ibm-scc-workload-protection](https://github.com/terraform-ibm-modules/terraform-ibm-scc-workload-protection) module can be used to create and configure this service.
+
+---
+
 <!-- Add a description of module(s) in this repo -->
 This module configures an IBM Cloud Security and Compliance instance.
 
